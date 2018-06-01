@@ -2,8 +2,8 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://yoursite.com/tags/Test/</loc>
-        <lastmod>2018-06-01T09:53:47.950Z</lastmod>
+        <loc>http://yoursite.com/tags/%E6%A0%87%E7%AD%BE%E6%B5%8B%E8%AF%95/</loc>
+        <lastmod>2018-06-01T10:12:38.483Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
