@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-01T06:25:44.917Z</updated>
+  <updated>2018-06-01T09:45:47.586Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://yoursite.com/2018/05/29/%E8%BF%99%E6%98%AF%E4%B8%80%E7%AF%87%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2%EF%BC%81/"/>
     <id>http://yoursite.com/2018/05/29/这是一篇测试博客！/</id>
     <published>2018-05-29T10:50:13.000Z</published>
-    <updated>2018-06-01T06:25:44.917Z</updated>
+    <updated>2018-06-01T09:45:47.586Z</updated>
     
     <content type="html"><![CDATA[<p>博客，仅音译，英文名为Blogger,为Web Log的混成词。它的正式名称为网络日记；又音译为部落格或部落阁等，是使用特定的软件，在网络上出版、发表和张贴个人文章的人，或者是一种通常由个人管理、不定期张贴新的文章的网站。博客上的文章通常以网员形式出现，并根据张贴时间，以倒序排列。博客是继MSN.BBS.ICQ之后出现的第4种网络交流方式，现已受到大家的欢迎，是网络时代的个人“读者文摘”，是以超级链接为武器的网络日记，它代表着新的生活、工作和学习方式。许多博客专注在特定的课题上提供评论或新闻，其他则被作为比较个人的日记。一个典型的博客结合了文字、图像、其他博客或网站的链接及其它与主题相关的媒体，能够让读者以互动的方式留下意见，是许多博客的重要要素。大部分的博客内容以文字为主，仍有一些博客专注在艺术、摄影、视频、音乐、播客等各种主题。博客是社会媒体网络的一部分。比较著名的有新浪、网易等博客。</p>]]></content>
     
@@ -33,6 +33,8 @@
       
     
     </summary>
+    
+      <category term="测试" scheme="http://yoursite.com/categories/%E6%B5%8B%E8%AF%95/"/>
     
     
   </entry>
