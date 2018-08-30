@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>小威的博客</title>
   
-  <subtitle>人生苦短，我学嵌入式</subtitle>
+  <subtitle>天下代码，一把Copy</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
