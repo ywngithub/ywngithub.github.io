@@ -82,14 +82,14 @@
 <meta name="description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间    二、Unix体系结构&amp;emsp;&amp;emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 内核（kernel） ,因为它相对较小，而且处于环境的核心。内核接口称为 系统调用，公用函数库 建立于系统调用之上，应用程序可以使用 系统">
 <meta name="keywords" content="学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux笔记1——Unix基础知识">
+<meta property="og:title" content="Unix笔记1—基础知识">
 <meta property="og:url" content="http://yoursite.com/2018/08/30/Linux1/index.html">
 <meta property="og:site_name" content="小威的博客">
 <meta property="og:description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间    二、Unix体系结构&amp;emsp;&amp;emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 内核（kernel） ,因为它相对较小，而且处于环境的核心。内核接口称为 系统调用，公用函数库 建立于系统调用之上，应用程序可以使用 系统">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-30T14:01:56.249Z">
+<meta property="og:updated_time" content="2018-08-31T14:40:04.801Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux笔记1——Unix基础知识">
+<meta name="twitter:title" content="Unix笔记1—基础知识">
 <meta name="twitter:description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间    二、Unix体系结构&amp;emsp;&amp;emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 内核（kernel） ,因为它相对较小，而且处于环境的核心。内核接口称为 系统调用，公用函数库 建立于系统调用之上，应用程序可以使用 系统">
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>Linux笔记1——Unix基础知识 | 小威的博客</title>
+  <title>Unix笔记1—基础知识 | 小威的博客</title>
   
 
 
@@ -316,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux笔记1——Unix基础知识</h1>
+          <h1 class="post-title" itemprop="name headline">Unix笔记1—基础知识</h1>
         
 
         <div class="post-meta">
@@ -368,7 +368,7 @@
 
           
           
-             <span id="/2018/08/30/Linux1/" class="leancloud_visitors" data-flag-title="Linux笔记1——Unix基础知识">
+             <span id="/2018/08/30/Linux1/" class="leancloud_visitors" data-flag-title="Unix笔记1—基础知识">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -394,7 +394,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,683
+                  2,712
                 </span>
               
 
@@ -492,6 +492,7 @@
 <blockquote>
 <p><strong>时钟时间</strong>—进程运行的时间总量。<br><strong>用户CPU时间</strong>—执行用户指令所需时间。<br><strong>系统CPU时间</strong>—该进程执行内核程序所经历的时间。  </p>
 </blockquote>
+<h1 id="十一、小结"><a href="#十一、小结" class="headerlink" title="十一、小结"></a>十一、小结</h1><p>&emsp;&emsp;本文快速浏览了unix系统的全局，对Unix系统有了一个基本印象。</p>
 
       
     </div>
@@ -556,8 +557,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/04/433M无线模块组网应用/" rel="next" title="433M无线模块组网应用">
-                <i class="fa fa-chevron-left"></i> 433M无线模块组网应用
+              <a href="/2018/08/30/Linux2/" rel="next" title="Unix笔记2—文件I/O">
+                <i class="fa fa-chevron-left"></i> Unix笔记2—文件I/O
               </a>
             
           </div>
@@ -645,7 +646,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -700,7 +701,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、引言"><span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Unix体系结构"><span class="nav-text">二、Unix体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、登录"><span class="nav-text">三、登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、shell"><span class="nav-text">四、shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、文件和目录"><span class="nav-text">五、文件和目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、输入和输出"><span class="nav-text">六、输入和输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、程序和进程"><span class="nav-text">七、程序和进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、出错处理"><span class="nav-text">八、出错处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#九、用户标识"><span class="nav-text">九、用户标识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十、信号"><span class="nav-text">十、信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十一、时间值"><span class="nav-text">十一、时间值</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、引言"><span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Unix体系结构"><span class="nav-text">二、Unix体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、登录"><span class="nav-text">三、登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、shell"><span class="nav-text">四、shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、文件和目录"><span class="nav-text">五、文件和目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、输入和输出"><span class="nav-text">六、输入和输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、程序和进程"><span class="nav-text">七、程序和进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、出错处理"><span class="nav-text">八、出错处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#九、用户标识"><span class="nav-text">九、用户标识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十、信号"><span class="nav-text">十、信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十一、时间值"><span class="nav-text">十一、时间值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十一、小结"><span class="nav-text">十一、小结</span></a></li></ol></div>
             
 
           </div>
@@ -749,7 +750,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共3.5k字</span>
+  <span class="post-count">博客全站共6.5k字</span>
 </div>
 
 
