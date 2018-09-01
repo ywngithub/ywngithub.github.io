@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="小威的博客">
 <meta property="og:description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间    二、Unix体系结构&amp;emsp;&amp;emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 内核（kernel） ,因为它相对较小，而且处于环境的核心。内核接口称为 系统调用，公用函数库 建立于系统调用之上，应用程序可以使用 系统">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-31T14:40:04.801Z">
+<meta property="og:updated_time" content="2018-09-01T11:03:41.895Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unix笔记1—基础知识">
 <meta name="twitter:description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间    二、Unix体系结构&amp;emsp;&amp;emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 内核（kernel） ,因为它相对较小，而且处于环境的核心。内核接口称为 系统调用，公用函数库 建立于系统调用之上，应用程序可以使用 系统">
@@ -484,7 +484,7 @@
 <p>忽略信号<br>按系统默认方式处理<br>提供一个函数  </p>
 </blockquote>
 <p>很多情况都会产生信号，终端键盘有两种产生信号的办法，分别称为 <strong>中断键（Delete或Ctrl+C）</strong> 和 <strong>退出键（Ctrl+\）</strong> ，他们被用于终止当前运行的进程，另一种产生信号的办法是调用 <strong>kill函数</strong> ，在一个进程中调用此函数可向另一个进程发送信号，信号函数是 <strong>signal</strong> 。</p>
-<h1 id="十一、时间值"><a href="#十一、时间值" class="headerlink" title="十一、时间值"></a>十一、时间值</h1><p>&emsp;&emsp; <strong>Unix使用过两种不同的时间值：</strong>  </p>
+<h1 id="十一、时间值"><a href="#十一、时间值" class="headerlink" title="十一、时间值"></a>十一、时间值</h1><p>&emsp;&emsp;Unix使用过两种不同的时间值：  </p>
 <blockquote>
 <p><strong>日历时间：</strong> 该值来自UTC，1970-01-01 00:00:00，这个时间所经过的秒数值，系统基本数据类型 <strong>time_t</strong> 用于保存这种时间。<br><strong>进程时间：</strong> 也称为CPU时间，用以度量进程使用的中央处理器资源，以时钟滴答计算，系统基本数据类型 <strong>clock_t</strong> 保存这种时间，使用sysconf可以得到每秒时钟滴答数。  </p>
 </blockquote>
@@ -492,7 +492,7 @@
 <blockquote>
 <p><strong>时钟时间</strong>—进程运行的时间总量。<br><strong>用户CPU时间</strong>—执行用户指令所需时间。<br><strong>系统CPU时间</strong>—该进程执行内核程序所经历的时间。  </p>
 </blockquote>
-<h1 id="十一、小结"><a href="#十一、小结" class="headerlink" title="十一、小结"></a>十一、小结</h1><p>&emsp;&emsp;本文快速浏览了unix系统的全局，对Unix系统有了一个基本印象。</p>
+<h1 id="十二、小结"><a href="#十二、小结" class="headerlink" title="十二、小结"></a>十二、小结</h1><p>&emsp;&emsp;本文快速浏览了unix系统的全局，对Unix系统有了一个基本印象。</p>
 
       
     </div>
@@ -701,7 +701,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、引言"><span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Unix体系结构"><span class="nav-text">二、Unix体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、登录"><span class="nav-text">三、登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、shell"><span class="nav-text">四、shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、文件和目录"><span class="nav-text">五、文件和目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、输入和输出"><span class="nav-text">六、输入和输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、程序和进程"><span class="nav-text">七、程序和进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、出错处理"><span class="nav-text">八、出错处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#九、用户标识"><span class="nav-text">九、用户标识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十、信号"><span class="nav-text">十、信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十一、时间值"><span class="nav-text">十一、时间值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十一、小结"><span class="nav-text">十一、小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、引言"><span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Unix体系结构"><span class="nav-text">二、Unix体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、登录"><span class="nav-text">三、登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、shell"><span class="nav-text">四、shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、文件和目录"><span class="nav-text">五、文件和目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、输入和输出"><span class="nav-text">六、输入和输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、程序和进程"><span class="nav-text">七、程序和进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、出错处理"><span class="nav-text">八、出错处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#九、用户标识"><span class="nav-text">九、用户标识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十、信号"><span class="nav-text">十、信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十一、时间值"><span class="nav-text">十一、时间值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#十二、小结"><span class="nav-text">十二、小结</span></a></li></ol></div>
             
 
           </div>

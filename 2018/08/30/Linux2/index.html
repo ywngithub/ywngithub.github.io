@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/3.1.PNG">
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/3.2.PNG">
-<meta property="og:updated_time" content="2018-09-01T10:57:58.768Z">
+<meta property="og:updated_time" content="2018-09-01T11:07:11.559Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unix笔记2—文件I&#x2F;O">
 <meta name="twitter:description" content="一、引言&amp;emsp;&amp;emsp;①可用的 文件I/O函数 ：打开文件、读文件、写文件。&amp;emsp;&amp;emsp;②常用5个函数： open、read、write、lseek、close （不同缓冲长度影响将不同）。&amp;emsp;&amp;emsp;③ 不带缓冲I/O 是指每个read、write都调用内核中的一个系统函数，需要传入缓存区参数。&amp;emsp;&amp;emsp;④ 原子操作 及 dup、fcntl、syn">
@@ -476,10 +476,10 @@
 </blockquote>
 <p>&emsp;&emsp;每个打开文件都有一个v节点结构(v-node)，v节点包含了 <strong>文件类型</strong> 和对此文件进行各种操作的 <strong>函数指针</strong> 。v节点还包含了从磁盘读取的 <strong>i节点(i-node)</strong> 的信息，i节点信息包含了 <strong>文件的所有者、文件长度、文件所在的设备、指向文件的实际数据块在磁盘上所在位置的指针</strong> 等。<br>&emsp;&emsp;图1表示了三张表之间的关系，该进程有两个不同的打开文件，分别是标准输入和标准输出。</p>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/3.1.PNG" alt="图片"></p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <strong>图1:一个进程打开两个文件的内核数据结构</strong></p>
+<p> <strong>图1:一个进程打开两个文件的内核数据结构</strong></p>
 <p>&emsp;&emsp;图2表示两个进程打开同一个文件的内核数据结构，假定第一个进程在文件描述符3上打开该文件，而另一个进程在文件描述符4上打开该文件，则打开该文件的 <strong>每个进程都得到一个文件表项</strong> ，但对一个给定的文件 <strong>只有一个v节点表项</strong>。</p>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/3.2.PNG" alt="图片"></p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <strong>图2:两个进程打开一个文件的内核数据结构</strong>  </p>
+<p> <strong>图2:两个进程打开一个文件的内核数据结构</strong>  </p>
 <p>&emsp;&emsp;③对前面所述操作的进一步说明。</p>
 <blockquote>
 <p>(a)每个进程都有自己的对打开文件的 <strong>当前偏移量</strong>。<br>(b)在完成每个write后,在文件表项中的当前文件偏移量即增加所写的字节数。如果这使当前文件偏移量超过了当前文件长度，则在i节点表项中的当前文件长度被设置为当前文件偏移量。<br>(c)若一个文件用lseek定位到文件当前的尾端，则文件表项中的当前文件偏移量被设置为i节点表项中的当前文件长度。 <strong>（这与O_APPEND标志打开文件是不同的，使用lseek定位到文件尾端处后，下次调用write写数据不一定是写在该文件的真正尾端，因为lseek和write两个不是原子操作，中间可以有另一个进程已使文件长度变长了。）</strong><br>(d)如果用O_APPEND 标志打开了一个文件，则相应标志被设置到文件表项的文件状态标志中， <strong>每次对这种具有添写标志的文件执行写操作时，在文件表项中的当前文件偏移量首先被设置成i节点表项中的文件长度，这就使得每次写的数据都添加到文件的当前尾端处。</strong><br>(e)lseek 函数只修改文件表项中的当前文件偏移量，没有进行任何I/O操作。  </p>
