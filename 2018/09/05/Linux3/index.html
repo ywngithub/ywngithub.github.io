@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="一、引言&amp;emsp;&amp;emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。 二、函数stat、fstat、fstatat和lstat&amp;emsp;&amp;emsp;①函数原型   12345#include &amp;lt;sys/stat.h&amp;g">
+<meta name="description" content="一、引言&amp;emsp;&amp;emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。 二、函数stat、fstat、fstatat和lstat&amp;emsp;&amp;emsp;①函数原型：   12345#include &amp;lt;sys/stat.h&amp;">
 <meta name="keywords" content="学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unix笔记3—文件与目录">
 <meta property="og:url" content="http://yoursite.com/2018/09/05/Linux3/index.html">
 <meta property="og:site_name" content="小威的博客">
-<meta property="og:description" content="一、引言&amp;emsp;&amp;emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。 二、函数stat、fstat、fstatat和lstat&amp;emsp;&amp;emsp;①函数原型   12345#include &amp;lt;sys/stat.h&amp;g">
+<meta property="og:description" content="一、引言&amp;emsp;&amp;emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。 二、函数stat、fstat、fstatat和lstat&amp;emsp;&amp;emsp;①函数原型：   12345#include &amp;lt;sys/stat.h&amp;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.1.PNG">
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.2.PNG">
@@ -96,10 +96,10 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.7.PNG">
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.8.PNG">
 <meta property="og:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.9.PNG">
-<meta property="og:updated_time" content="2018-09-05T06:05:39.162Z">
+<meta property="og:updated_time" content="2018-09-05T06:17:53.033Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unix笔记3—文件与目录">
-<meta name="twitter:description" content="一、引言&amp;emsp;&amp;emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。 二、函数stat、fstat、fstatat和lstat&amp;emsp;&amp;emsp;①函数原型   12345#include &amp;lt;sys/stat.h&amp;g">
+<meta name="twitter:description" content="一、引言&amp;emsp;&amp;emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。 二、函数stat、fstat、fstatat和lstat&amp;emsp;&amp;emsp;①函数原型：   12345#include &amp;lt;sys/stat.h&amp;">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.1.PNG">
 
 
@@ -442,16 +442,12 @@
 
       
         <h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。</p>
-<h1 id="二、函数stat、fstat、fstatat和lstat"><a href="#二、函数stat、fstat、fstatat和lstat" class="headerlink" title="二、函数stat、fstat、fstatat和lstat"></a>二、函数stat、fstat、fstatat和lstat</h1><p>&emsp;&emsp;①函数原型  </p>
+<h1 id="二、函数stat、fstat、fstatat和lstat"><a href="#二、函数stat、fstat、fstatat和lstat" class="headerlink" title="二、函数stat、fstat、fstatat和lstat"></a>二、函数stat、fstat、fstatat和lstat</h1><p>&emsp;&emsp;①函数原型：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/stat.h&gt;  </span><br><span class="line">int stat(const char *restrict pathname, struct stat *restrict buf);  </span><br><span class="line">int fstat(int fd, struct stat *buf);  </span><br><span class="line">int lstat(const char *restrict pathname, struct stat *restrict buf;  </span><br><span class="line">int fstatat(int fd, const char *restrict pathname, struct stat *restrict buf, int flag);</span><br></pre></td></tr></table></figure>
 <p>&emsp;&emsp;所有4个函数的返回值：成功返回0，出错返回-1。<br>&emsp;&emsp; <strong>小知识：restrict是C99中一种类型限定符，作用是告诉编译器，对象已经被指针所引用，不能通过除该指针外所有其它直接或间接的方式修改该对象的内容。</strong><br>&emsp;&emsp;②函数说明  </p>
 <blockquote>
-<pre><code>1、 **stat函数** 将返回与此命名文件有关的信息结构。  
-2、 **fstat函数** 获得已在描述符fd上打开文件的有关信息。  
-3、 **lstat函数** 类似于stat,但当命名文件是一个符号链接时，lstat返回该符号链接的有关信息，而不是由该符号链接引用的文件信息。  
-4、 **fstatat函数** 为一个相对于当前打开目录(由fd参数指向)的路径名返回文件统计信息。  
-5、 **buf是一个stat指针** ，它指向一个已经定义的结构，函数将buf指向的结构进行填充，stat结构如下： 
-</code></pre></blockquote>
+<p>1、 <strong>stat函数</strong> 将返回与此命名文件有关的信息结构。<br>2、 <strong>fstat函数</strong> 获得已在描述符fd上打开文件的有关信息。<br>3、 <strong>lstat函数</strong> 类似于stat,但当命名文件是一个符号链接时，lstat返回该符号链接的有关信息，而不是由该符号链接引用的文件信息。<br>4、 <strong>fstatat函数</strong> 为一个相对于当前打开目录(由fd参数指向)的路径名返回文件统计信息。<br>5、 <strong>buf是一个stat指针</strong> ，它指向一个已经定义的结构，函数将buf指向的结构进行填充，stat结构如下： </p>
+</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">struct stat&#123;</span><br><span class="line">    mode_t              st_mode;  /* file type &amp; mode (permissions) */</span><br><span class="line">    ino_t               st_ino;   /* i-node number (serial number) */</span><br><span class="line">    dev_t               st_dev;   /* device number (file system) */</span><br><span class="line">    nlink_t             st_rdev;  /* device number for special files */</span><br><span class="line">    uid_t               st_uid;   /* user ID of owner */</span><br><span class="line">    gid_t               st_gid;   /* group ID of owner */</span><br><span class="line">    off_t               st_size;  /* size in bytes, for regular files */</span><br><span class="line">    struct timespec     st_atime; /* time of last access */</span><br><span class="line">    struct timespec     st_mtime; /* time of last modification */</span><br><span class="line">    struct timespec     st_ctime; /* time of last file status change */</span><br><span class="line">    blksize_t           st_blksize;/* best I/O block size */</span><br><span class="line">    blkcnt_t            st_blocks; /* number of disk blocks allocated */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>&emsp;&emsp; <strong>timespec结构</strong> 按照 <strong>秒</strong> 和 <strong>纳秒</strong> 定义了时间，包含以下两个成员：</p>
 <blockquote>
@@ -462,17 +458,13 @@
 <blockquote>
 <p>1、 <strong>普通文件（regular file）</strong> ：最常用的文件类型，这种文件包含某种格式的数据，至于是文本或二进制数据，对于Unix内核而言并无区别，对普通文件内容的解析由处理该文件的应用程序进行（例外是二进制可执行文件，为了执行程序，内核必须解析二进制文件，因此所有二进制可执行文件都有一个标准格式，才能保证内核找到程序和数据的加载位置）。<br>2、 <strong>目录文件（directory file）</strong> ：目录其实也是一种文件，它包含了其它文件的名字以及指向这些文件有关信息的指针，任何具有读权限的进程都可以读取目录文件，但只有内核才可以直接写目录文件，进程必须使用特定函数才更改目录。<br>3、 <strong>块特殊文件（block special file）</strong> ：这种类型的文件提供对设备（如磁盘）带缓冲的访问，每次以固定的长度访问。<br>4、 <strong>字符特殊文件（block special file）</strong> ：这种类型的文件提供对设备不带缓冲的访问，每访问长度可变，系统中所有设备是块特殊文件或字符特殊文件。<br>5、 <strong>FIFO</strong>：这种类型的文件用于进程间通信，也被为命令管道。<br>6、 <strong>套接字（socket）</strong>：这种类型的文件用于进程间的网络通信。<br>7、 <strong>符号链接（symbolic link）</strong> ：这种类型的文件指向另一个文件。  </p>
 </blockquote>
-<p>&emsp;&emsp;②文件类型信息<br>包含在stat结构中的st_mode成员中，用下图中的宏来确定文件类型。</p>
+<p>&emsp;&emsp;②文件类型信息<br>&emsp;&emsp;包含在stat结构中的st_mode成员中，用下图中的宏来确定文件类型。</p>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.1.PNG" alt="图片"></p>
 <p>&emsp;&emsp;③实例程序：读取命令行，对每一个命令行参数打印其文件类型。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;   </span><br><span class="line">    int i; </span><br><span class="line">    struct stat buf;</span><br><span class="line">    char *ptr;</span><br><span class="line">    for(i=1; i&lt;argc; i++)</span><br><span class="line">    &#123;</span><br><span class="line">         printf(&quot;%s:&quot;,argv[i]);</span><br><span class="line">        if(lstat(argv[i], &amp;buf) &lt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            err_ret(&quot;lstat error&quot;);</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        if(S_ISREG(buf.st_mode))</span><br><span class="line">            ptr = &quot;regular&quot;;</span><br><span class="line">         else if(S_ISDIR(buf.st_mode))</span><br><span class="line">            ptr = &quot;directory&quot;;</span><br><span class="line">        else if(S_ISCHR(buf.st_mode))</span><br><span class="line">            ptr = &quot;character special&quot;;</span><br><span class="line">        else if(S_ISBLK(buf.st_mode))</span><br><span class="line">            ptr = &quot;block special&quot;;</span><br><span class="line">        else if(S_ISFIFO(buf.st_mode))</span><br><span class="line">            ptr = &quot;fifo&quot;;</span><br><span class="line">        else if(S_ISLNK(buf.st_mode))</span><br><span class="line">            ptr = &quot;symbolic link&quot;;</span><br><span class="line">         else if(S_ISSOCK(buf.st_mode))</span><br><span class="line">            ptr = &quot;socket&quot;;</span><br><span class="line">        else</span><br><span class="line">            ptr = &quot;unknow mode&quot;;</span><br><span class="line">         printf(&quot;%s\n&quot;,ptr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><strong>注释</strong>:<br>行10：使用stat函数获取文件信息，而不是stat的原因是以便检测符号链接。<br>行15-30：使用宏S_ISxxx检测是哪种类型的文件。  </p>
-</blockquote>
-<blockquote>
 <p><strong>执行命令</strong>：<br>/a.out /etc/passwd /etc /dev/log /dev/tty /var/lib/oprofile/opd_pipe /dev/sr0 /dev/cdrom   </p>
-</blockquote>
-<blockquote>
 <p><strong>结果</strong>：<br>/etc/passwd:regular<br>/etc:directory<br>/dev/log:symbolic link<br>/dev/tty:character special<br>/var/lib/oprofile/opd_pipe:lstat error: No such file or directory<br>/dev/sr0:block special<br>/dev/cdrom:symbolic link<br><strong>小知识：在命令行末端加入”\”可在第二行继续输入当前命令</strong>。  </p>
 </blockquote>
 <p>&emsp;&emsp;④不同类型文件的一个统计值</p>
@@ -481,9 +473,7 @@
 <h1 id="四、设置用户ID和组ID"><a href="#四、设置用户ID和组ID" class="headerlink" title="四、设置用户ID和组ID"></a>四、设置用户ID和组ID</h1><p>&emsp;&emsp;与一个进程相关联的ID有6个或更多（对于进程而言）：</p>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.3.PNG" alt="图片"></p>
 <blockquote>
-<pre><code>1、 **实际用户ID和实际组ID**：取值为口令文件中的登录项，通常在一个登录会话期间这些值并不改变，但是超级用户进程可以改变（进程最初执行时所用ID）。  
-2、 **有效用户ID、有效组ID和附属组ID**：进程执行时对文件的访问权限（进程实际执行中所用ID）。  
-</code></pre><p>   3、 <strong>保存的设置用户ID和保存的设置组ID</strong>：这个概念涉及到可执行程序文件的设置用户ID位，当可执行程序文件passwd的设置用户ID位(s)已经设置时，非root用户进程(exec)启动passwd程序，则该进程的有效用户ID和保存的设置用户ID都将被设置为这个可执行程序文件的所有者(即root)，也就是暂时可以用root的权限来访问文件了。<br>    4、 <strong>通常有效用户ID等于实际用户ID，有效组ID等于实际组ID</strong>。<br>    5、 <strong>每个文件有一个所有者和组所有者，分别由st_uid和st_gid指定</strong>。  </p>
+<p>1、 <strong>实际用户ID和实际组ID</strong> ：取值为口令文件中的登录项，通常在一个登录会话期间这些值并不改变，但是超级用户进程可以改变（进程最初执行时所用ID）。<br>2、 <strong>有效用户ID、有效组ID和附属组ID</strong> ：进程执行时对文件的访问权限（进程实际执行中所用ID）。<br>3、 <strong>保存的设置用户ID和保存的设置组ID</strong> ：这个概念涉及到可执行程序文件的设置用户ID位，当可执行程序文件passwd的设置用户ID位(s)已经设置时，非root用户进程(exec)启动passwd程序，则该进程的有效用户ID和保存的设置用户ID都将被设置为这个可执行程序文件的所有者(即root)，也就是暂时可以用root的权限来访问文件了。<br>4、 <strong>通常有效用户ID等于实际用户ID，有效组ID等于实际组ID</strong> 。<br>5、 <strong>每个文件有一个所有者和组所有者，分别由st_uid和st_gid指定</strong> 。  </p>
 </blockquote>
 <h1 id="五、文件访问权限"><a href="#五、文件访问权限" class="headerlink" title="五、文件访问权限"></a>五、文件访问权限</h1><p>&emsp;&emsp;①    st_mode值（文件模式）包含了对文件的访问权限位（对于文件而言）：</p>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.4.PNG" alt="图片"></p>
@@ -506,21 +496,23 @@
 </code></pre></blockquote>
 <p>&emsp;&emsp;以上4个步骤顺序执行。  </p>
 <h1 id="六、新文件和目录的所有权"><a href="#六、新文件和目录的所有权" class="headerlink" title="六、新文件和目录的所有权"></a>六、新文件和目录的所有权</h1><p>&emsp;&emsp;使用open和create函数创建新文件时，并没有设置文件的用户ID和组ID，以后学习mkdir函数时就会了解到如何创建一个新目录，并设置所有权规则。 <strong>新文件的用户ID将设置为进程的有效用户ID，而组ID将设置为进程的有效组ID或者它所在目录的组ID</strong>。</p>
-<h1 id="七、函数access和faccessat"><a href="#七、函数access和faccessat" class="headerlink" title="七、函数access和faccessat"></a>七、函数access和faccessat</h1><p>&emsp;&emsp;当用open函数打开一个文件时，内核以进程的有效用户ID和有效组ID为基础进行访问测试，有时进程也希望按实际用户ID和实际组ID进行访问测试<br>&emsp;&emsp;①    函数作用：按实际用户ID和实际组ID进行访问测试。<br>&emsp;&emsp;②    函数原型  </p>
+<h1 id="七、函数access和faccessat"><a href="#七、函数access和faccessat" class="headerlink" title="七、函数access和faccessat"></a>七、函数access和faccessat</h1><p>&emsp;&emsp;当用open函数打开一个文件时，内核以进程的有效用户ID和有效组ID为基础进行访问测试，有时进程也希望按实际用户ID和实际组ID进行访问测试<br>&emsp;&emsp;①    函数作用：按实际用户ID和实际组ID进行访问测试。<br>&emsp;&emsp;②    函数原型：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int access(const char *pathname, int mode);</span><br><span class="line">int faccessat(int fd, const char *pathname, int mode, int flag);</span><br></pre></td></tr></table></figure>
 <p>&emsp;&emsp;返回值：0-成功，-1-失败。  </p>
 <blockquote>
 <p><strong>mode参数</strong>：R_OK-测试读权限，W_OK-测试写权限，X_OK-测试执行权限。<br><strong>flag参数</strong>：改变faccessat的行为，取值为AT_EACCESS时，访问检查用的是调用进程的有效用户ID和有效组ID，而不是实际用户ID和实际组ID。  </p>
 </blockquote>
-<h1 id="八、函数umask"><a href="#八、函数umask" class="headerlink" title="八、函数umask"></a>八、函数umask</h1><p>&emsp;&emsp;①    函数作用：每个文件都有9个访问权限位，为进程设置st_mode创建屏蔽字，并返回之前的值。<br>&emsp;&emsp;②    函数原型  </p>
+<h1 id="八、函数umask"><a href="#八、函数umask" class="headerlink" title="八、函数umask"></a>八、函数umask</h1><p>&emsp;&emsp;①    函数作用：每个文件都有9个访问权限位，为进程设置st_mode创建屏蔽字，并返回之前的值。<br>&emsp;&emsp;②    函数原型：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">mode_t umask(mode_t, cmask);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>cmask参数：由五①图中9个常量相”或”组成。</p>
 </blockquote>
-<p>&emsp;&emsp;③    程序示例</p>
+<p>&emsp;&emsp;③    程序示例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &quot;fcntl.h&quot;</span><br><span class="line"></span><br><span class="line">#define RWRWRW (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    umask(0);</span><br><span class="line">    if(creat(&quot;foo&quot;, RWRWRW) &lt; 0)</span><br><span class="line">        err_sys(&quot;creat error for foo&quot;);</span><br><span class="line"></span><br><span class="line">    umask(S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);</span><br><span class="line">    if(creat(&quot;bar&quot;, RWRWRW) &lt; 0)</span><br><span class="line">        err_sys(&quot;creat error for foo&quot;);</span><br><span class="line"></span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p><strong>执行(%表示shell响应)：</strong>:<br>umask<br>%002<br>./a.out<br>ls -l foo bar<br>%-rw——- 1 sar 0 dec 7 21:20 bar<br>%-rw-rw-rw- 1 sar 0 dec 7 21:20 foo<br>umask<br>%002  </p>
+<p><strong>执行(%表示shell响应)：</strong>:<br>umask<br>%002  </p>
+<p>./a.out<br>ls -l foo bar<br>%-rw——- 1 sar 0 dec 7 21:20 bar<br>%-rw-rw-rw- 1 sar 0 dec 7 21:20 foo  </p>
+<p>umask<br>%002  </p>
 </blockquote>
 <p>&emsp;&emsp;④    umask文件访问权限位  </p>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.5.PNG" alt="图片"></p>
@@ -528,7 +520,7 @@
 <blockquote>
 <p>umask–打印当前屏蔽字<br>umask -S–打印符号格式的屏蔽字<br>umask xxxx–修改屏蔽字  </p>
 </blockquote>
-<h1 id="九、函数chmod、fchmod和fchmodat"><a href="#九、函数chmod、fchmod和fchmodat" class="headerlink" title="九、函数chmod、fchmod和fchmodat"></a>九、函数chmod、fchmod和fchmodat</h1><p>&emsp;&emsp;①    函数作用：更改现有文件的访问权限。<br>&emsp;&emsp;②    函数原型  </p>
+<h1 id="九、函数chmod、fchmod和fchmodat"><a href="#九、函数chmod、fchmod和fchmodat" class="headerlink" title="九、函数chmod、fchmod和fchmodat"></a>九、函数chmod、fchmod和fchmodat</h1><p>&emsp;&emsp;①    函数作用：更改现有文件的访问权限。<br>&emsp;&emsp;②    函数原型：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">int chmod(const char *pathname, mode_t mode);</span><br><span class="line">int fchmod(int fd, mode_t mode);</span><br><span class="line">int fchmodat(int fd, const char *pathname, mode_t mode, int flag);</span><br></pre></td></tr></table></figure>
 <p>&emsp;&emsp;返回值：0-成功，-1-失败。  </p>
 <blockquote>
@@ -536,15 +528,13 @@
 </blockquote>
 <p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.6.PNG" alt="图片"></p>
 <h1 id="十、粘着位"><a href="#十、粘着位" class="headerlink" title="十、粘着位"></a>十、粘着位</h1><p>&emsp;&emsp;如果可执行程序的这一位被设置，那么该程序第一次被执行，在其终止时， <strong>程序正文（机器指令）的一个副本仍保存在交换区，使得下一次执行改程序时可以很快的载入内存</strong> ，因此称为”粘着”，也就有了 <strong>常量S_ISVTX</strong> ，但当今Unix系统大多数都配置了 <strong>虚拟存储系统</strong> 以及 <strong>快速文件系统</strong> ，因此不再需要使用这项技术。</p>
-<h1 id="十一、函数chown、fchown、fchownat和lchown"><a href="#十一、函数chown、fchown、fchownat和lchown" class="headerlink" title="十一、函数chown、fchown、fchownat和lchown"></a>十一、函数chown、fchown、fchownat和lchown</h1><p>&emsp;&emsp;①    函数作用：更改文件的用户ID和组ID，如果参数owner和group有一个为-1，则对应的ID不变。<br>&emsp;&emsp;②    函数原型  </p>
+<h1 id="十一、函数chown、fchown、fchownat和lchown"><a href="#十一、函数chown、fchown、fchownat和lchown" class="headerlink" title="十一、函数chown、fchown、fchownat和lchown"></a>十一、函数chown、fchown、fchownat和lchown</h1><p>&emsp;&emsp;①    函数作用：更改文件的用户ID和组ID，如果参数owner和group有一个为-1，则对应的ID不变。<br>&emsp;&emsp;②    函数原型：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int chown(const char *path, uid_t owner, gid_t group);</span><br><span class="line">int fchown(int fd, uid_t owner, gid_t group);</span><br><span class="line">int lchown(const char *path, uid_t owner, gid_t group);</span><br></pre></td></tr></table></figure>
 <p>&emsp;&emsp;返回值：0-成功，-1-失败。</p>
 <h1 id="十二、文件长度"><a href="#十二、文件长度" class="headerlink" title="十二、文件长度"></a>十二、文件长度</h1><p>&emsp;&emsp;①    stat结构中的 <strong>成员st_size</strong> 表示单位为字节的文件长度，此字段只对 <strong>普通文件、目录文件和符号链接</strong> 有意义。</p>
 <blockquote>
-<pre><code>1、 **普通文件**：文件长度可以是0，开始读这种文件时，将得到文件结束标志。  
-2、 **目录文件**：文件长度是16/512的整倍数。  
-3、 **符号链接**：文件长度等于路径名的字符长度。  
-</code></pre></blockquote>
+<p>1、 <strong>普通文件</strong>：文件长度可以是0，开始读这种文件时，将得到文件结束标志。<br>2、 <strong>目录文件</strong>：文件长度是16/512的整倍数。<br>3、 <strong>符号链接</strong>：文件长度等于路径名的字符长度。  </p>
+</blockquote>
 <p>&emsp;&emsp;②     大多数现代Unix系统提供字段 <strong>st_blksize和st_blocks</strong> ，前一个是指 <strong>对文件I/O较合适的块长度</strong> ，后一个是指 <strong>分配的实际512字节块数</strong>。</p>
 <h1 id="十三、文件截断"><a href="#十三、文件截断" class="headerlink" title="十三、文件截断"></a>十三、文件截断</h1><p>&emsp;&emsp;有时需要在文件尾端处截去一些数据以缩短文件，将文件长度截断为0是一个特例，在打开文件时使用O_TRUNC可以实现这一点，为了截断文件可以使用函数truncate和fturncoat。<br>&emsp;&emsp;函数原型：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int truncate(const char *pathname, off_t length);</span><br><span class="line">int ftruncate(int fd, off_t length);</span><br></pre></td></tr></table></figure>
@@ -596,10 +586,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int chdir(constchar*pathname);</span><br><span class="line">int fchdir(int fd);</span><br></pre></td></tr></table></figure>
 <h1 id="二十一、设备特殊文件"><a href="#二十一、设备特殊文件" class="headerlink" title="二十一、设备特殊文件"></a>二十一、设备特殊文件</h1><p>&emsp;&emsp;st_dev和st_rdev这两个字段容易混淆：</p>
 <blockquote>
-<pre><code>1、每个文件系统所在的存储设备都由 **主、次设备号** 表示，设备号所用数据类型为dev_t, **主设备号标识设备驱动程序，有时编码为与其通信的外设板，次设备标识特定的子设备** ，一个磁盘驱动器通常包含多个文件系统，在同一磁盘上各文件系统的主设备号通常相同，但次设备号不同。  
-2、用 **宏major和minor** 来访问主、次设备号。  
-3、 **系统中每个文件名关联的st_dev值是文件系统的设备号** 。  
-</code></pre><p>   4、 <strong>只有字符文件和块文件才有st_rdev值，此值包含实际设备的设备号</strong> 。  </p>
+<p>1、每个文件系统所在的存储设备都由 <strong>主、次设备号</strong> 表示，设备号所用数据类型为dev_t, <strong>主设备号标识设备驱动程序，有时编码为与其通信的外设板，次设备标识特定的子设备</strong> ，一个磁盘驱动器通常包含多个文件系统，在同一磁盘上各文件系统的主设备号通常相同，但次设备号不同。<br>2、用 <strong>宏major和minor</strong> 来访问主、次设备号。<br>3、 <strong>系统中每个文件名关联的st_dev值是文件系统的设备号</strong> 。<br>4、 <strong>只有字符文件和块文件才有st_rdev值，此值包含实际设备的设备号</strong> 。  </p>
 </blockquote>
 <h1 id="二十二、小结"><a href="#二十二、小结" class="headerlink" title="二十二、小结"></a>二十二、小结</h1><p>&emsp;&emsp;本文围绕stat函数，学习了stat结构中的每一个成员，了解了Unix文件和目录的各个属性，学习了有关于文件和目录的大部分函数。</p>
 
