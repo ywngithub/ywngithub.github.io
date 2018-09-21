@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/2018/09/21/Linux4/</loc>
+        <lastmod>2018-09-21T15:26:19.469Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/2018/09/05/Linux3/</loc>
         <lastmod>2018-09-05T06:17:53.033Z</lastmod>
         <changefreq>weekly</changefreq>
