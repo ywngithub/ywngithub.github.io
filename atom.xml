@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>小威的博客</title>
+  <title>南π的博客</title>
   
   <subtitle>天下代码，一把Copy</subtitle>
   <link href="/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>http://yoursite.com/</id>
   
   <author>
-    <name>小威</name>
+    <name>南π</name>
     
   </author>
   
