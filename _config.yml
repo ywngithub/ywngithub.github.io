@@ -4,11 +4,11 @@
 
 # Site
 title: 严薇南的博客
-subtitle: 天下代码，一把Copy
-description: 记录学习过程中的点点滴滴
+subtitle: 记录学习过程中的点点滴滴
+description: 人生为棋，我为卒，行动虽缓，不曾后退半步
 keywords: 关键字
 author: 严薇南
-language: zh-Hans
+language: zh-CN
 timezone: Asia/Shanghai
 
 # URL
@@ -106,3 +106,10 @@ deploy:
   type: git
   repository: git@github.com:ywngithub/ywngithub.github.io.git
   branch: master
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+  
