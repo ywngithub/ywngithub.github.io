@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Unix笔记1—基础知识</title>
+    <url>/2018/08/30/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;操作系统为所运行的程序提供服务，典型服务有：</p>
+<blockquote>
+<p>①执行新程序<br>②打开文件<br>③读取文件<br>④分配存储区<br>⑤获取系统时间<a id="more"></a>  </p>
+</blockquote>
+<h1 id="二、Unix体系结构"><a href="#二、Unix体系结构" class="headerlink" title="二、Unix体系结构"></a>二、Unix体系结构</h1><p>&emsp;&emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 <strong>内核（kernel）</strong> ,因为它相对较小，而且处于环境的核心。内核接口称为 <strong>系统调用，公用函数库</strong> 建立于系统调用之上，应用程序可以使用 <strong>系统调用</strong> 和 <strong>公用函数库</strong> , <strong>Shell</strong> 是一个特殊的应用程序，为运行其它应用程序提供一个接口。</p>
+<h1 id="三、登录"><a href="#三、登录" class="headerlink" title="三、登录"></a>三、登录</h1><p>&emsp;&emsp;登录Unix时，必须键入 <strong>用户名</strong> 和 <strong>密码</strong> ，存在于 <strong>/etc/passwd</strong> 文件。</p>
+<h1 id="四、shell"><a href="#四、shell" class="headerlink" title="四、shell"></a>四、shell</h1><p>&emsp;&emsp;shell是一个 <strong>命令行解释器</strong> ，它读取用户输入，然后执行命令，输入来自终端或者文件（shell脚本）。</p>
+<h1 id="五、文件和目录"><a href="#五、文件和目录" class="headerlink" title="五、文件和目录"></a>五、文件和目录</h1><p>&emsp;&emsp;① <strong>文件系统</strong> 是目录和文件的一种层次结构，起点是根目录（root），符号为”&quot;。<br>&emsp;&emsp;② <strong>目录</strong> 是一个包含目录项的文件，目录项=文件名+文件属性，文件属性包含文件类型（普通文件/目录）、文件大小、文件所有者、文件权限及文件最后修改的时间。<br>&emsp;&emsp;③ <strong>文件名</strong> 是目录项中的各个名字，”/“和” “不能出现在文件名中，创建新目录是会自动创建两个文件名，分别是”.” <strong>当前目录</strong> 和”..” <strong>上一目录</strong> ，处于根目录时，”.”=”..”。<br>&emsp;&emsp;④ <strong>路径名</strong> 是由斜线分割的一个或多个文件名组成的序列，分别 <strong>绝对路径</strong> 和 <strong>相对路径</strong> 。<br>&emsp;&emsp;⑤ <strong>列出目录</strong> 中所有文件名的代码如下： </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &quot;dirent.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[]) </span><br><span class="line">&#123;</span><br><span class="line">  DIR *dp;</span><br><span class="line">  struct dirent *dirp;</span><br><span class="line">  if(argc !&#x3D; 2)</span><br><span class="line">    err_quit(&quot;usage: ls directory_name&quot;);</span><br><span class="line">  if((dp &#x3D; opendir(argv[1])) &#x3D;&#x3D; NULL)</span><br><span class="line">    err_sys(&quot;can&#39;t open %s&quot;, argv[1]);</span><br><span class="line">  while((dirp &#x3D; readdir(dp)) !&#x3D; NULL)</span><br><span class="line">    printf(&quot;%s\n&quot;,dirp-&gt;d_name);</span><br><span class="line">  closedir(dp);</span><br><span class="line">  exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释</strong> ：<br>行1：apue.h为作者自定义头文件，需先下载至系统。<br>行2：系统头文件，/user/include/dirent.h，可以使用 <strong>dirent</strong> 结构和 <strong>opendir</strong> 、 <strong>readdir</strong> 函数。<br>行4：ISO C风格的main函数声明， <strong>argc参数</strong> 是传入命令行的字符串数目， *<strong>argv[]</strong> 是具体的命令行字符。<br>行6：opendir将返回DIR结构指针。<br>行7：readdir将返回dirent结构指针。<br>行8、9：传入命令行字符串数目错误，输出提示信息。<br>行10、11：传入路径为空时，输出提示信息。<br>行12、13：读取每个目录项并打印。<br>行14：释放目录<br>行15：exit终止程序，参数0表示正常结束，1-255表示出错。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行</strong> ：<br>使用 *<em>cc <em>.c</em></em> 进行编译（cc=gcc），默认生成 <strong>a.out</strong> 文件，运行命令行 <strong>./a.out /dir</strong> ，即可列出dir目录下所有文件名，dir为所需目录名。</p>
+</blockquote>
+<h1 id="六、输入和输出"><a href="#六、输入和输出" class="headerlink" title="六、输入和输出"></a>六、输入和输出</h1><p>&emsp;&emsp;① <strong>文件描述符</strong> 是一个小的非负整数，内核用来标定一个特定进程正在访问的文件。当内核打开一个文件或创建一个文件时，它都返回一个文件描述符，在读/写文件时使用这个文件描述符。<br>&emsp;&emsp;② <strong>标准输入、标准输出、标准错误</strong><br>当运行一个新程序时，shell将打开以上三个文件描述符，一般这三个文件描述符都指向终端，shell可以将这些文件描述符重新定向到某个文件，如：ls&gt;file.list。<br>&emsp;&emsp;③ <strong>不带缓冲的I/O</strong><br>函数open、read、lseek、close提供了不带缓冲的I/O，这些函数都使用文件描述符。<br>&emsp;&emsp;④ <strong>复制任一Unix普通文件</strong> 代码如下： </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#define BUFFSIZE 4096</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   int n;</span><br><span class="line">   char buf[BUFFSIZE];</span><br><span class="line">   while((n &#x3D; read(STDIN_FILENO, buf, BUFFSIZE)) &gt; 0)</span><br><span class="line">      if(write(STDOUT_FILENO, buf, n) !&#x3D; n)</span><br><span class="line">         err_sys(&quot;write error!&quot;);</span><br><span class="line">   if(n&lt;0)</span><br><span class="line">      err_sys(&quot;read error!&quot;);</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>行7、8、9：常量STDIN_FILENO和STDOUT_FILENO是POSIX标准的一部分，定义在&lt;unistd.h&gt;中，它们指定了标准输入和输出的文件描述符，值分别为0和1，read函数返回读取的字节数，读到文件尾端时将返回0，如果读错误将返回-1。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行：</strong><br>./a.out &gt; data ：输入是终端（ctrl+D结束），输出是data文件。<br>./a.out <infile >outfile：输入是infile文件，输出是outfile文件。  </p>
+</blockquote>
+<p>&emsp;&emsp;⑤ <strong>标准I/O</strong><br>标准I/O函数为那些不带缓冲的I/O函数提供了一个 <strong>带缓冲的接口</strong> ，使用标准I/O函数无需担心选取最佳缓冲区大小，标准I/O函数还简化了输入行的处理，例如：fgets函数读取一个完整的行，read函数读取指定字节数，printf是我们最熟悉的标准I/O函数之一，&lt;stdio.h&gt;包含了所有标准I/O函数的原型。<br>&emsp;&emsp;⑥ <strong>将标准输入复制到标准输出</strong> 代码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   int c;</span><br><span class="line">   while((c &#x3D; getc(stdin)) !&#x3D; EOF)</span><br><span class="line">      if(putc(c, stdout) &#x3D;&#x3D; EOF)</span><br><span class="line">         err_sys(&quot;output error!&quot;);</span><br><span class="line">      if(ferror(stdin))</span><br><span class="line">         err_sys(&quot;input error!&quot;);</span><br><span class="line">      exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>行5、6：函数getc一次读取一个字符，putc显示在屏幕上，常量EOF（end of file）定义在&lt;stdio.h&gt;中，表示文件结束标志（Ctrl+D），值为-1，stdin和stdout也定义在&lt;stdio.h&gt;，分别表示标准输入和标准输出。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行：</strong><br>./a.out  </p>
+</blockquote>
+<h1 id="七、程序和进程"><a href="#七、程序和进程" class="headerlink" title="七、程序和进程"></a>七、程序和进程</h1><p>&emsp;&emsp;① <strong>程序</strong> 是存储在磁盘中的可执行文件，内核使用 <strong>exec</strong> 函数，将程序 <strong>读入内存</strong> ， <strong>并执行程序</strong> 。<br>&emsp;&emsp;② <strong>进程和进程ID</strong><br>程序的执行实例被称为 <strong>进程（process）</strong> ，某些操作系统用 <strong>任务（task）</strong> 表示正在被执行的程序，Unix系统确保每个进程都有一个唯一的数字标识符，成称为进程ID，它总是一个非负的整数。<br>&emsp;&emsp;③ <strong>打印进程ID号代码如下：</strong>  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   printf(&quot;hello world form process ID %ld\n&quot;,(long)getpid());</span><br><span class="line">   exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>getpid函数用于返回进程ID值，类型为pid_t类型。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行：</strong><br>./a.out  </p>
+</blockquote>
+<p>&emsp;&emsp;④ <strong>进程控制。</strong><br>有3个用于进程控制的主要函数， <strong>fork、exec、waitpid（exec有7种变体）</strong><br>&emsp;&emsp;⑤ <strong>从标准输入读取命令并执行</strong> 代码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &quot;sys&#x2F;wait.h&quot;</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   char buf[MAXLINE];</span><br><span class="line">   pid_t pid;</span><br><span class="line">   int status;</span><br><span class="line">   printf(&quot;%% &quot;);</span><br><span class="line">   while(fgets(buf, MAXLINE, stdin) !&#x3D; NULL)</span><br><span class="line">   &#123;</span><br><span class="line">      if(buf[strlen(buf) - 1] &#x3D;&#x3D; &#39;\n&#39;)</span><br><span class="line">      &#123;</span><br><span class="line">        buf[strlen(buf) - 1] &#x3D; 0;</span><br><span class="line">      &#125;</span><br><span class="line">      if((pid &#x3D; fork()) &lt; 0)</span><br><span class="line">      &#123;</span><br><span class="line">         err_sys(&quot;fork error!&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      else if(pid &#x3D;&#x3D; 0)</span><br><span class="line">      &#123;</span><br><span class="line">         execlp(buf, buf, (char*)0);</span><br><span class="line">         err_ret(&quot;couldn&#39;t execute: %s&quot;, buf);</span><br><span class="line">         exit(127);</span><br><span class="line">      &#125;</span><br><span class="line">      if((pid &#x3D; waitpid(pid, &amp;status, 0)) &lt; 0)</span><br><span class="line">        err_sys(&quot;waitpid error&quot;);</span><br><span class="line">      printf(&quot;%% &quot;);</span><br><span class="line">   &#125;</span><br><span class="line">   exit(0);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>行12、13、14、15：因为fgets每一行都以换行符终止，而execlp函数要以null结尾，因此要替换一下。<br>行16：调用fork创建一个新进程，新进程是调用进程的一个副本，新进程称为 <strong>子进程</strong> ，调用进程称为 <strong>父进程</strong> ，fork对父进程返回子进程的ID，对子进程则返回0，fork调用一次，返回两次。<br>行22：子进程调用execlp（从PATH 环境变量中查找文件并执行， <strong>执行成功函数将不会返回，失败返回-1</strong> ）执行从标准输入的命令，用新的程序文件替换子进程原先执行的程序文件。<br>行27：父进程通过调用waitpid等待子进程执行完毕，其参数1指定要等待的进程，waitpid返回子进程的终止状态（status变量）。  </p>
+</blockquote>
+<p>&emsp;&emsp;⑥ <strong>线程和线程ID</strong><br>一个进程内的所有线程共享同一个地址空间、文件描述符、栈及其进程相关的属性，所以各线程需要采集同步措施，以避免不一致性，线程也有ID，但只在本身进程内起作用。  </p>
+<h1 id="八、出错处理"><a href="#八、出错处理" class="headerlink" title="八、出错处理"></a>八、出错处理</h1><p>&emsp;&emsp;当Unix系统函数出错时，一般返回一个负值，而 <strong>整形变量errno</strong> 被设置为具有特定信息的值，文件&lt;errno.h&gt;定义了errno以及它可以被赋的值，POSIX和ISO C将errno定义为一个符号，它扩展为一个可修改的 <strong>整形左值</strong> ，它可以是一个包含出错编号的 <strong>整数</strong> ，也可以是一个返回出错编号指针的函数，使用应该注意两项：1、如果没有出错，其值不会被清除，因此当函数返回值表明错误时，才需要去检验其值。2、任何函数都不会将errno的值置0。<br>&emsp;&emsp;C标准定义了两个函数，用于打印出错信息。<br> <strong>#include &lt;string.h&gt;</strong><br> <strong>char *strerror(int errnum);**   //返回错误字符串指针，通常errnum就是errno<br> <strong>#include &lt;stdio.h&gt;</strong><br> **void perror(const char *msg);</strong>   //首先输出msg指向的字符串，然后添加冒号和空格，接着输出errno值的出错消息，最后换行。<br>实例代码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">   fprintf(stderr, &quot;EACCES: %s\n&quot;,strerror(EACCES));</span><br><span class="line">   errno &#x3D; ENOENT;</span><br><span class="line">   perror(argv[0]);</span><br><span class="line">   exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="九、用户标识"><a href="#九、用户标识" class="headerlink" title="九、用户标识"></a>九、用户标识</h1><p>&emsp;&emsp;① <strong>用户ID</strong> 是一个数值，用户ID为0的用户是 <strong>根用户</strong> 和 <strong>超级用户</strong> 。<br>&emsp;&emsp;② <strong>组ID</strong> 是一个数值，组用户用于将若干用户集合到项目或部门中去，这种机制允许同组的各个成员之间共享资源，组文件通常是/etc/group。<br>&emsp;&emsp;③ <strong>getuid</strong> 和 <strong>getgid</strong> 用于获取用户ID和组ID。<br>&emsp;&emsp;④ <strong>附属组ID</strong>。</p>
+<h1 id="十、信号"><a href="#十、信号" class="headerlink" title="十、信号"></a>十、信号</h1><p>&emsp;&emsp;信号用于通知进程发生了某种情况，进程有以下三种方式处理：</p>
+<blockquote>
+<p>忽略信号<br>按系统默认方式处理<br>提供一个函数  </p>
+</blockquote>
+<p>很多情况都会产生信号，终端键盘有两种产生信号的办法，分别称为 <strong>中断键（Delete或Ctrl+C）</strong> 和 <strong>退出键（Ctrl+\）</strong> ，他们被用于终止当前运行的进程，另一种产生信号的办法是调用 <strong>kill函数</strong> ，在一个进程中调用此函数可向另一个进程发送信号，信号函数是 <strong>signal</strong> 。</p>
+<h1 id="十一、时间值"><a href="#十一、时间值" class="headerlink" title="十一、时间值"></a>十一、时间值</h1><p>&emsp;&emsp;Unix使用过两种不同的时间值：  </p>
+<blockquote>
+<p><strong>日历时间：</strong> 该值来自UTC，1970-01-01 00:00:00，这个时间所经过的秒数值，系统基本数据类型 <strong>time_t</strong> 用于保存这种时间。<br><strong>进程时间：</strong> 也称为CPU时间，用以度量进程使用的中央处理器资源，以时钟滴答计算，系统基本数据类型 <strong>clock_t</strong> 保存这种时间，使用sysconf可以得到每秒时钟滴答数。  </p>
+</blockquote>
+<p>&emsp;&emsp;Unix系统为一个进程维护了三个进程时间值：  </p>
+<blockquote>
+<p><strong>时钟时间</strong>—进程运行的时间总量。<br><strong>用户CPU时间</strong>—执行用户指令所需时间。<br><strong>系统CPU时间</strong>—该进程执行内核程序所经历的时间。  </p>
+</blockquote>
+<h1 id="十二、小结"><a href="#十二、小结" class="headerlink" title="十二、小结"></a>十二、小结</h1><p>&emsp;&emsp;本文快速浏览了unix系统的全局，对Unix系统有了一个基本印象。</p>
+]]></content>
+      <categories>
+        <category>Linux编程</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unix笔记4—标准I/O</title>
+    <url>/2018/09/21/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A0%87%E5%87%86IO/</url>
+    <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;本文学习标准I/O库，不仅是Unix，很多其它操作系统都实现了标准I/O，标准I/O库处理了很多细节，如缓冲区分配，已优化的块长度执行I/O等，用户无需担心使用正确的块长度，方便用户使用。<a id="more"></a></p>
+<h1 id="二、流和FILE对象"><a href="#二、流和FILE对象" class="headerlink" title="二、流和FILE对象"></a>二、流和FILE对象</h1><p>&emsp;&emsp;①对于标准I/O库而言，所有操作都围绕”流”进行，当用标准I/O库打开一个文件时，那么一个流将与一个文件关联。<br>&emsp;&emsp;②对于ASCII字符集，一个字符用一个字节表示，对于国际字符集（宽字符集），一个字符可用多个字节表示，标准I/O文件可用于单字符集或宽字符集，流的定向决定了所读、写的字符类型，当一个流初次创建时并没有被定向，只有两个函数可以改变流的定向：</p>
+<blockquote>
+<p>freopen函数清除一个流的定向。<br>fwide函数设置流的定向，不改变已定向的流。</p>
+</blockquote>
+<p>函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;wchar.h&gt;</span><br><span class="line">int fwide(FILE *fp, int mode);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>mode&lt;0试图将流指定为字节定向。</p>
+</blockquote>
+<blockquote>
+<p>mode=0不试图设置。   </p>
+</blockquote>
+<blockquote>
+<p>mode&gt;0试图将流指定为宽定向。     </p>
+</blockquote>
+<p>&emsp;&emsp;③打开一个流时，标准I/O函数fopen返回一个FILE对象的指针，该对象通常是一个结构，包含了标准I/O库为管理该流需要的所有信息，包括用于实际I/O的文件描述符、指向用于该流缓冲的指针、缓冲区长度、当前在缓冲区中的字符数以及出错标志。<br>&emsp;&emsp;④为了引用一个流，需要将FILE指针作为参数传递给每个标准I/O函数，我们称指向FILE对象的指针（类型为FILE*）为文件指针。</p>
+<h1 id="三、标准输入、标准输出和标准错误"><a href="#三、标准输入、标准输出和标准错误" class="headerlink" title="三、标准输入、标准输出和标准错误"></a>三、标准输入、标准输出和标准错误</h1><p>&emsp;&emsp;对一个进程预定义了三个流，分别是标准输入、标准输出和标准错误，这些流引用的文件与文件描述符STDIN_FILENO、STDOUT_FILENO和STDERR_FILENO所引用的相同。<br>&emsp;&emsp;这三个标准I/O流通过预定义文件指针stdin、stdout和stderr加以引用，定义在&lt;stdio.h&gt;中。</p>
+<h1 id="四、缓冲"><a href="#四、缓冲" class="headerlink" title="四、缓冲"></a>四、缓冲</h1><p>&emsp;&emsp;①标准I/O库提供缓冲的目的是尽可能的减少read和write调用的次数；还可以对每个I/O流自动的进行缓冲管理，从而避免应用程序考虑开辟缓冲区大小带来的麻烦。<br>&emsp;&emsp;②标准I/O库有三种缓冲：  </p>
+<blockquote>
+<p>全缓冲：填满标准I/O缓冲区才进行实际I/O操作，对于驻留在磁盘上的文件通常是由标准I/O库实施全缓冲的，术语冲洗（flush）说明标准I/O缓冲区的写操作，可由标准I/O例程自动冲洗或者调用fflush函数冲洗一个流。<br>行缓冲：当在输入输出中遇到换行符时，标准I/O库执行I/O操作，只有写了一行之后才进行实际I/O操作，当流涉及一个终端（如标准输入和标准输出）时，通常使用行缓冲。<br>不带缓冲：标准错误stderr通常是不带缓冲的，可使得错误信息可以尽快的显示出来。  </p>
+</blockquote>
+<p>&emsp;&emsp;③函数setbuf和setvbuf<br>函数作用：更改缓冲类型/强制冲洗流。<br>函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">void setbuf(FILE *restrict fp, char *restrict buf);</span><br><span class="line">void setvbuf(FILE *restrict fp, char *restrict buf, int mode, size_t size);</span><br><span class="line">int fflush(FILE *fp);</span><br></pre></td></tr></table></figure>
+<p>函数说明：<br>setbuf函数打开或关闭缓冲机制，参数buf必须指向一个长度为BUFSIZ的缓冲区，一般而言该流被设置为全缓冲，为了关闭缓冲，将buf设置为NULL。使用setvbuf，可以精确地说明所需的缓冲类型，由mode参数指定，_IOFBF(全缓冲)，_IOLBF(行缓冲) ，_IONBF(无缓冲)，size参数指定长度。fflush函数用于强制冲洗一个流（所有未写的数据都被传送至内核）。</p>
+<h1 id="五、打开-关闭流"><a href="#五、打开-关闭流" class="headerlink" title="五、打开/关闭流"></a>五、打开/关闭流</h1><p>&emsp;&emsp;①用下列3个函数打开一个标准I/O流：<br>函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">FILE *fopen(const char *restrict pathname, const char * restrict type);</span><br><span class="line">FILE *freopen(const char *restrict pathname, const char * restrict type, FILE * restrict fp);</span><br><span class="line">FILE *fdopen(int fd, const char *type);</span><br><span class="line">int fclose(FILE *fp);</span><br></pre></td></tr></table></figure>
+<p>函数说明：<br>    fopen函数打开路径名为pathname的一个指定文件。<br>     freopen函数在一个指定的流上打开指定的文件，若该流已打开，则先关闭该流，若该流已定向，则使用freopen清除该定向，此函数一般用于将一个指定的文件打开为一个预定义的流：标准输入、标准输出或标准错误。<br>     fdopen取一个已有的文件描述符（可能从open、dup、dup2、fcntl、pipe、socket、socketpair或accept函数得到此文件描述符），并使一个标准I/O流与该描述符相结合，此函数一般用于创建管道和网络通信函数返回的描述符，因为这些特殊文件不能用fopen打开。<br>     type参数如下图：<br> <img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/5.1.PNG" alt="图片"><br>使用字符b作为type的一部分，使得标准I/O系统可以区分文本文件和二进制文件，因为Unix系统并不对这两种文件进行区分，所以Unix系统环境指定b实际无作用。</p>
+<h1 id="六、读-写流"><a href="#六、读-写流" class="headerlink" title="六、读/写流"></a>六、读/写流</h1><p>&emsp;&emsp;①每次一个字符的I/O</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int getc(FILE *fp);</span><br><span class="line">int fget(FILE *fp);</span><br><span class="line">int getchar(void); (&#x3D;getc(stdin))</span><br><span class="line"></span><br><span class="line">int putc(int c, FILE *fp);</span><br><span class="line">int fputc(int c, FILE *fp);</span><br><span class="line">int putchar(int c); (&#x3D;putc(int c, stdout))</span><br></pre></td></tr></table></figure>
+<p>getc和fgetc的区别是前者可被实现为宏，后者不能，意味着fgetc可得到其函数地址，这就允许将fgetc的地址作为一个参数传送给另一个函数，调用fgetc时间比getc长，因为调用函数时间通常长于调用宏。注意不管出错还是到达文件尾端，这些函数都返回同样的值，为了区分这两种不同的情况，必须调用ferror和feof。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int ferror(FILE *fp);</span><br><span class="line">int feof(FILE *fp);</span><br><span class="line">void clearer(FILE *fp);</span><br></pre></td></tr></table></figure>
+<p>在大多数实现中，为每个流在FILE对象中维护了两个标志：</p>
+<blockquote>
+<p>出错标志<br>文件结束标志</p>
+</blockquote>
+<p>&emsp;&emsp;②每次一行的I/O</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">char *fgets(char *restrict buf, int n, FILE *restrict fp);</span><br><span class="line">char *gets(char *buf);</span><br><span class="line"></span><br><span class="line">int fputs(const char *restrict str, FILE *restrict fp);</span><br><span class="line">int puts(const char *str);</span><br></pre></td></tr></table></figure>
+<p>gets从标准输入读，而fgets从指定的流读，fgets必须指定缓冲的长度n，此函数一直读到下一个换行符为止，读入的字符被送入缓冲区，该缓冲区以null字节结尾。gets不推荐使用，因为不能指定缓冲区长度，这样就可能造成缓冲区溢出，gets和fgets的另一个区别是前者并不将换行符存入缓冲区中。</p>
+<h1 id="七、二进制I-O"><a href="#七、二进制I-O" class="headerlink" title="七、二进制I/O"></a>七、二进制I/O</h1><p>&emsp;&emsp;上面函数以一次一个字符或一行的方式进行读写操作，如果进行二进制I/O操作，那么更希望一次读/写一个完整的结构，如果使用getc或putc读写一个结构，那么必须循环通过整个结构，每次循环处理一个字节，会很麻烦而且效率低，如果使用fputs和fgets，那么因为fputs遇到null字节就停止，而在结构中可能含有null字节，所以不能使用它实现读结构的要求，如果输入数据中含有null字节或换行符，则fgets也不能正常工作，因此提供下列函数执行二进制I/O操作：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">size_t fread(void *restrict ptr, size_t size, size_t nobj, FILE *restrict fp);</span><br><span class="line">size_t fwrite(const void *restrict ptr, size_t size, size_t nobj, FILE *restrict fp);</span><br></pre></td></tr></table></figure>
+<h1 id="八、定位流"><a href="#八、定位流" class="headerlink" title="八、定位流"></a>八、定位流</h1><p>&emsp;&emsp;①方法1：ftell和fseek函数，他们都假设文件的位置可以存放在一个长整型中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">long ftell(FILE *fp);</span><br><span class="line">int fseek(FILE *fp, long offset, int whence);</span><br><span class="line">void rewind(FILE *fp);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;对于一个二进制文件，其文件位置指示器从文件起始位置开始度量，并以字节为度量单位，ftell用于二进制文件时，返回的就是这种字节位置，为了用fseek定位一个二进制文件，必须指定一个字节offset，以及解释这种偏移量的方式。whence取值为：SEEK_SET表示从文件的起始位置开始，SEEK_CUR表示从当前文件位置开始，SEEK_END表示从文件尾端开始。<br>对于一个文本文件，文件位置不能用简单的字节偏移量来度量，因为在非Unix系统中，它们可能以不同的格式存放文本文件，为了定位一个文本文件，whence一定等于SEEK_SET，而且offset只有两种取值：0（后退至文件的起始位置），或是对该文件的ftell所返回的值。使用rewind函数也可以将一个流设置到文件的起始位置。<br>&emsp;&emsp;②方法2：除了偏移量类型是off_t而非long以外，ftello函数与ftell相同，fseeko函数与fseek相同。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">off_t ftello(FILE *fp);</span><br><span class="line">int fseeko(FILE *fp, off_t offset, int whence);</span><br></pre></td></tr></table></figure>
+<p>可将off_set类型定义为长于32位。<br>&emsp;&emsp;③方法3：fgetpos和fsetpos两个函数是ISO C标准引入的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int fgetpos(FILE *restrict fp, fpos_t *restrict pos);</span><br><span class="line">int fsetpos(FILE *fp, const fpos_t *pos);</span><br></pre></td></tr></table></figure>
+<p>fgetpos将文件位置指示器的当前值存入由pos指向的对象中，在以后调用fsetpos时，可以使用此值将流重新定义到该位置。</p>
+<h1 id="九、格式化I-O"><a href="#九、格式化I-O" class="headerlink" title="九、格式化I/O"></a>九、格式化I/O</h1><p>&emsp;&emsp;①格式化输出由5个printf函数处理。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int printf(const char *restrict format, …);</span><br><span class="line">int fprintf(FILE *restrict fp, const char *restrict format, …);</span><br><span class="line">int sprintf(char *restrict buf, const char *restrict format, …);</span><br><span class="line">int dprintf(int fd, const char *restrict format, …);</span><br><span class="line">int snprintf(char *restrict buf, size_t n, const char *restrict format, …);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;printf将格式化的数据写到标准输出，fprintf写至指定的流，dprintf写至指定的文件描述符，sprintf写至数组buf中，且在该数组的尾端自动添加一个null字节，该字符不包含在返回值中，为了防止buf缓冲区溢出，引入了snprintf函数，可指定长度n。  </p>
+<p>&emsp;&emsp;format参数中，转换说明以%开始，除转换说明外，格式字符串中其它字符将按原样输出，一个转换说明有4个可选择的部分，如下面方框中所示：  </p>
+<blockquote>
+<p>[flags][fldwidth][precision][lenmodifier]convtype</p>
+</blockquote>
+<blockquote>
+<p>【标志】【宽度】【精度】【长度】转化类型</p>
+</blockquote>
+<p>flag参数取值如下：<br> <img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/5.2.PNG" alt="图片"> </p>
+<p>&emsp;&emsp;fldwidth参数说明了最小字段宽度，转换后参数字符数若小于宽度，则用空格填充，字段宽度是一个非负十进制数，或者是一个（<em>）号。<br>&emsp;&emsp;precision参数说明整形转换后最少输出数字位数，浮点数转化后小数点后的最少位数，字符串转换后最大字节数。精度是一个（.），其后跟随一个非负十进制数或一个（</em>）。<br>&emsp;&emsp;lenmodified参数说明参数长度，取值如下：  </p>
+<p> <img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/5.3.PNG" alt="图片"> </p>
+<p>&emsp;&emsp;convtype参数不是可选的，它控制如何解释参数，取值如下：</p>
+<p> <img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/5.4.PNG" alt="图片"> </p>
+<p>&emsp;&emsp;②格式化输入由3个scanf函数处理。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int scanf(const char *restrict format, …);</span><br><span class="line">int fscanf(FILE *restrict fp, const char *restrict format, …);</span><br><span class="line">int sscanf(const char *restrict buf, const char *restrict format, …);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;scanf族用于分析输入字符串，并将字符序列转换成指定类型的变量，在格式之后的各参数包含了变量的地址，用转换结果对这些变量赋值。<br>&emsp;&emsp;format参数中，转换说明以%字符开始，有3个可选择的部分，如下所示：</p>
+<blockquote>
+<p>[*][fldwidth][m][lenmodifier]convtype</p>
+</blockquote>
+<p>*参数用于抑制转化，按照说明的其余部分对输入进行转换，但转换结果并不存放在参数中（也就是跳过此数据）。<br>fldwidth参数说明最大宽度（即最大字符数）。<br>lenmodified参数说明要用转换结果赋值的参数大小，如同printf函数族中一样。<br>convtype参数不是可选的，类似于printf函数族的转换类型字段，但两者有差别，一个差别是作为一种选项，输入中带符号的可以赋予无符号类型，例如，输入流中的-1被转换成4294967295。支持的转换类型如下：  </p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/5.5.PNG" alt="图片"> </p>
+<p>m参数是赋值分配符，它可以%c、%s以及%[转化符，迫使内存缓冲区分配空间以接纳转换字符串，在这种情况下，相关的参数必须是指针地址，分配的缓冲区地址必须复制给该指针，如果调用成功，该缓冲区不在使用时，由调用者负责通过调用free函数来释放该缓冲区。</p>
+<h1 id="十、实现细节"><a href="#十、实现细节" class="headerlink" title="十、实现细节"></a>十、实现细节</h1><p>&emsp;&emsp;在Unix中，标准I/O库最终都要调用内核I/O接口函数，每个标准I/O流都有一个与其相关联的文件描述符，可以对一个流调用fileno函数以获得其描述符。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int fileno(FILE * fp);</span><br></pre></td></tr></table></figure>
+<p>如果需要调用dup或fcntl等函数，则需要此函数转化。</p>
+<h1 id="十一、临时文件"><a href="#十一、临时文件" class="headerlink" title="十一、临时文件"></a>十一、临时文件</h1><p>&emsp;&emsp;ISO C标准I/O库提供了两个函数以帮助创建临时文件。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">char *tmpnam(char *ptr);</span><br><span class="line">FILE *tmpfile(void);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;tmpnam函数产生一个与现有文件名不同的一个有效文件名字符串，每次调用它时，都产生一个不同的文件名，一般在/tmp下，最多调用次数是TMP_MAX。<br>tmpfile创建一个临时二进制文件（类型wb+），在关闭该文件或程序结束时将自动删除这种文件，注意，Unix对二进制文件不进行特殊区分。<br>程序示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">        char name[L_tmpnam], line[MAXLINE];</span><br><span class="line">        FILE *fp;</span><br><span class="line">        printf(&quot;%s\n&quot;, tmpnam(NULL));</span><br><span class="line">        tmpnam(name);</span><br><span class="line">        printf(&quot;%s\n&quot;, name);</span><br><span class="line">        if((fp &#x3D; tmpfile()) &#x3D;&#x3D; NULL)</span><br><span class="line">                err_sys(&quot;tmpfile error&quot;);</span><br><span class="line">        fputs(&quot;one line of output\n&quot;, fp);</span><br><span class="line">        rewind(fp);</span><br><span class="line">        if(fgets(line, sizeof(line), fp) &#x3D;&#x3D; NULL)</span><br><span class="line">                err_sys(&quot;fgets error&quot;);</span><br><span class="line">        fputs(line, stdout);</span><br><span class="line">        exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>执行：./a.out<br>/tmp/fileUMleJc<br>/tmp/fileSX9RnR<br>one line of output  </p>
+</blockquote>
+<p>&emsp;&emsp;tmpfile函数经常使用的标准Unix技术是先调用tmpnam函数产生一个唯一的路径名，然后，用该路径名创建一个文件，并立即unlink它，对一个文件解除链接并不删除其内容，关闭文件时才删除其内容，而关闭文件可以是显式的，也可以在程序终止时自动进行。</p>
+<h1 id="十二、内存流"><a href="#十二、内存流" class="headerlink" title="十二、内存流"></a>十二、内存流</h1><p>&emsp;&emsp;可以看到，标准I/O库把数据缓存在内存中，因此每次一个字符和一行字符的I/O更有效，内存流就是标准I/O流，虽然使用FILE指针进行访问，但其实没有底层文件，所有的I/O都是通过在缓冲区与主存来回传送字节来完成的，即便这些流看起来更像文件流，其实它们的某些特征更适用于字符串操作。有3个函数用于创建内存流：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">FILE *fmemopen(void *restrict buf, size_t size, const char *restrict type);</span><br></pre></td></tr></table></figure>
+<p>fmemopen函数允许调用者提供缓冲区用于内存流，buf参数指向缓冲区的开始位置，size参数指定了缓冲区字节的大小，若果buf为空，fmemopen函数分配size字节数的缓冲区，在这种情况下，当流关闭时缓冲区会被释放。<br>type参数控制如何使用流：</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/5.6.PNG" alt="图片"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">FILE *open_memstream(char **bufp, size_t *sizep);</span><br><span class="line">#include &lt;wchar.h&gt;</span><br><span class="line">FILE *open_wmemstream(wchar_t **bufp, size_t *sizep);</span><br></pre></td></tr></table></figure>
+<p>open_memstream函数创建的流是面向字节的，open_wmemstream函数创建的流是面向宽字节的。</p>
+<h1 id="十三、-小结"><a href="#十三、-小结" class="headerlink" title="十三、    小结"></a>十三、    小结</h1><p>&emsp;&emsp;大多数Unix应用程序都是用标准I/O库，它使用缓冲技术，而他正是产生许多问题，引起许多混淆的地方。</p>
+]]></content>
+      <categories>
+        <category>Linux编程</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unix笔记2—系统I/O</title>
+    <url>/2018/09/02/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B3%BB%E7%BB%9FIO/</url>
+    <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;①可用的 <strong>文件I/O函数</strong> ：打开文件、读文件、写文件。<br>&emsp;&emsp;②常用5个函数： <strong>open、read、write、lseek、close</strong> （不同缓冲长度影响将不同）。<br>&emsp;&emsp;③ <strong>不带缓冲I/O</strong> 是指每个read、write都调用内核中的一个系统函数，需要传入缓存区参数。<br>&emsp;&emsp;④ <strong>原子操作</strong> 及 <strong>dup、fcntl、sync、fsync、ioctl</strong> 函数。 <a id="more"></a></p>
+<h1 id="二、文件描述符"><a href="#二、文件描述符" class="headerlink" title="二、文件描述符 "></a>二、文件描述符 </h1><p>&emsp;&emsp;①当打开一个现有文件或创建一个新文件时，内核向进程返回一个 <strong>文件描述符</strong> ，文件描述符（file descriptor）是内核为了高效管理已被打开的文件所创建的 <strong>索引</strong> ，其值是一个非负整数，用于指代被打开的文件，所有执行I/O操作的系统调用都通过文件描述符，程序刚刚启动的时候：</p>
+<blockquote>
+<p><strong>0是标准输入（STDIN_FILENO）<br>1是标准输出（STDOUT_FILENO）<br>2是标准错误（STDERR_FILENO）</strong><br>如果此时去打开一个新的文件，它的文件描述符会是3。  </p>
+</blockquote>
+<p>&emsp;&emsp;②文件描述符变化范围： <strong>0~OPEN_MAX-1</strong> 。</p>
+<h1 id="三、函数open和openat"><a href="#三、函数open和openat" class="headerlink" title="三、函数open和openat"></a>三、函数open和openat</h1><p>&emsp;&emsp;①open、openat打开/创建文件，成功则返回文件描述符，失败返回-1。<br>&emsp;&emsp;②open、opena函数原型。<br>&emsp;&emsp; <strong>#include&lt;fcntl.h&gt;</strong><br>&emsp;&emsp; <strong>int open(const char *path, int oflags, …, mode_t mode);**<br>&emsp;&emsp; **int openat(int fd, const char *path, int oflags, …, mode_t mode);</strong><br>&emsp;&emsp;path-路径名（绝对路径）或者文件名（相对路径）。<br>&emsp;&emsp;oflags-打开文件采取的动作</p>
+<blockquote>
+<p>以下是必选参数（只能一个）：<br>O_RDONLY(只读)<br>O_WRONLY（只写）<br>O_RDWR（可读可写）  </p>
+</blockquote>
+<blockquote>
+<p>以下是可选参数：<br>O_APPEND(每次写操作都写入文件的末尾)<br>O_CREAT(如果指定文件不存在，则创建这个文件)<br>O_EXCL(如果要创建的文件已存在，则返回-1，并且修改errno的值)<br>O_TRUNC(如果文件存在，并且以只写/读写方式打开，则清空文件全部内容)<br>O_NOCTTY(如果路径名指向终端设备，不要把这个设备用作控制终端)<br>O_NONBLOCK(如果路径名指向 FIFO/块文件/字符文件，则把文件的打开和后继I/O设置为非阻塞模式(nonblocking mode))  </p>
+</blockquote>
+<p>&emsp;&emsp;fd-区别open、openat，有3种可能性:  </p>
+<blockquote>
+<p>path是绝对路径名，此时fd无用，open=openat。<br>path是相对路径名，fd指定相对路径起始。<br>path是相对路径名，fd=AT_FDCWD，相对路径起始=当前工作目录。  </p>
+</blockquote>
+<p>&emsp;&emsp;③open、openat函数返回的文件描述符一定是最小未用的。<br>&emsp;&emsp;④openat可以让线程使用相对路径名打开目录中的文件，而不受限于当前目录。  </p>
+<h1 id="四、函数creat"><a href="#四、函数creat" class="headerlink" title="四、函数creat"></a>四、函数creat</h1><p>&emsp;&emsp;①creat函数用于创建新文件，成功则返回文件描述符，失败返回-1。<br>&emsp;&emsp;②creat函数原型。<br>&emsp;&emsp; *<em>int creat (const char <em>path, mode_t mode);</em></em><br>&emsp;&emsp;③类似于open。  </p>
+<h1 id="五、函数close"><a href="#五、函数close" class="headerlink" title="五、函数close"></a>五、函数close</h1><p>&emsp;&emsp;①close函数用于关闭文件，成功则返回文件描述符，失败返回-1。<br>&emsp;&emsp;②close函数原型。<br>&emsp;&emsp; <strong>int close(int fd);</strong><br>&emsp;&emsp;③当一个进程终止时，内核自动关闭它打开的所有文件。  </p>
+<h1 id="六、函数lseek"><a href="#六、函数lseek" class="headerlink" title="六、函数lseek"></a>六、函数lseek</h1><p>&emsp;&emsp;①lseek用于使光标偏移，成功则返回新的偏移量（初始默认为0），失败返回-1。<br>&emsp;&emsp;②lseek函数原型。<br>&emsp;&emsp; <strong>off_t lseek(int fd, off_t offset, int whence);</strong>  </p>
+<blockquote>
+<p>whence=SEEK_SET，该文件偏移至文件开始处offset个字节。<br>whence=SEEK_CUR，该文件偏移至当前偏移量加offset。<br>whence=SEEK_END，该文件偏移至当文件长度加offset。  </p>
+</blockquote>
+<p>&emsp;&emsp;③检测当前偏移量 <strong>off_t currpos = lseek(fd, 0, SEEK_CUR);</strong><br>&emsp;&emsp;④检测标准输入能否设置偏移量。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    if(lseek(STDIN_FILENO, 0, SEEK_CUR) &#x3D;&#x3D; -1)</span><br><span class="line">        printf(&quot;cannot seek!&quot;);</span><br><span class="line">    else</span><br><span class="line">        printf(&quot;seek OK!&quot;);</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;应该测试返回值是否为-1，而不是&lt;0，因为某些设备允许负的偏移量，文件偏移量可以大于文件的当前长度。</p>
+<h1 id="七、函数read"><a href="#七、函数read" class="headerlink" title="七、函数read"></a>七、函数read</h1><p>&emsp;&emsp;①read函数用于打开文件读数据,成功返回字节数，到达文件尾返回0，失败返回-1。<br>&emsp;&emsp;②read函数原型。<br>&emsp;&emsp; *<em>ssize_t read(int fd, void <em>buf, size_t nbytes);</em></em> </p>
+<h1 id="八、函数write"><a href="#八、函数write" class="headerlink" title="八、函数write"></a>八、函数write</h1><p>&emsp;&emsp;①write函数用于打开文件写数据，成功返回写入字节数，失败返回-1。<br>&emsp;&emsp;②write函数原型。<br>&emsp;&emsp; *<em>ssize_t write(int fd, const void <em>buf, size_t nbytes);</em></em><br>&emsp;&emsp;③write返回值通常等于nbytes，它的一个出错原因是磁盘被写满，或者超过了给定一个进程的文件长度限制。<br>&emsp;&emsp;④对于普通文件，写操作从当前偏移量开始，如果打开文件指定了O_APPEND选项，则每次写操作前，将文件偏移量设置到文件尾端，一次写成功后，该文件偏移量增加实际写的字节数。  </p>
+<h1 id="九、I-O的效率"><a href="#九、I-O的效率" class="headerlink" title="九、I/O的效率"></a>九、I/O的效率</h1><p>&emsp;&emsp;①只使用write和read函数将标准输入复制到标准输出。  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#define BUFFSIZE 4096</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    int n;</span><br><span class="line">    char buf[BUFFSIZE];</span><br><span class="line">    while((n &#x3D; read(STDIN_FILENO, buf, BUFFSIZE)) &gt; 0)</span><br><span class="line">        if(write(STDIN_FILENO, buf, n) !&#x3D; n)</span><br><span class="line">            err_sys(&quot;write error!&quot;);</span><br><span class="line">    if(n&lt;0)</span><br><span class="line">        err_sys(&quot;read error!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;②磁盘块长度由 <strong>st_blksize</strong> 表示，缓冲区 <strong>BUFFSIZE</strong> 使用4096（等于st_blksize）时，进程使用系统CPU时间最短。</p>
+<h1 id="十、文件共享"><a href="#十、文件共享" class="headerlink" title="十、文件共享"></a>十、文件共享</h1><p>&emsp;&emsp;①Unix系统支持不同进程间共享打开文件 <strong>（多个进程同时读）</strong>。<br>&emsp;&emsp;②内核使用三种数据结构表示打开文件，分别是 <strong>文件描述符表</strong>、 <strong>文件表</strong>和 <strong>V节点表</strong>。<br>&emsp;&emsp;每个 <strong>进程</strong> 在 <strong>进程表</strong>中都有一个 <strong>记录项</strong>，记录项中包含一张 <strong>打开文件描述符表</strong> ，每个描述符占用一项。与每个文件描述符相关联的是：</p>
+<blockquote>
+<p>(a)    文件描述符标志。<br>(b)    指向一个文件表项的指针。  </p>
+</blockquote>
+<p>&emsp;&emsp;内核为所有打开文件维持一张 <strong>文件表</strong> ，每个文件表项包含:  </p>
+<blockquote>
+<p>(a)    文件状态标志(读、写、添写、同步和非阻塞等)。<br>(b)    当前文件偏移量。<br>(c)    指向该文件 V 节点表项的指针。  </p>
+</blockquote>
+<p>&emsp;&emsp;每个打开文件都有一个v节点结构(v-node)，v节点包含了 <strong>文件类型</strong> 和对此文件进行各种操作的 <strong>函数指针</strong> 。v节点还包含了从磁盘读取的 <strong>i节点(i-node)</strong> 的信息，i节点信息包含了 <strong>文件的所有者、文件长度、文件所在的设备、指向文件的实际数据块在磁盘上所在位置的指针</strong> 等。<br>&emsp;&emsp;图1表示了三张表之间的关系，该进程有两个不同的打开文件，分别是标准输入和标准输出。</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/3.1.PNG" alt="图片"></p>
+<p> <strong>图1:一个进程打开两个文件的内核数据结构</strong></p>
+<p>&emsp;&emsp;图2表示两个进程打开同一个文件的内核数据结构，假定第一个进程在文件描述符3上打开该文件，而另一个进程在文件描述符4上打开该文件，则打开该文件的 <strong>每个进程都得到一个文件表项</strong> ，但对一个给定的文件 <strong>只有一个v节点表项</strong>。</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/3.2.PNG" alt="图片"></p>
+<p> <strong>图2:两个进程打开一个文件的内核数据结构</strong>  </p>
+<p>&emsp;&emsp;③对前面所述操作的进一步说明。</p>
+<blockquote>
+<p>(a)每个进程都有自己的对打开文件的 <strong>当前偏移量</strong>。<br>(b)在完成每个write后,在文件表项中的当前文件偏移量即增加所写的字节数。如果这使当前文件偏移量超过了当前文件长度，则在i节点表项中的当前文件长度被设置为当前文件偏移量。<br>(c)若一个文件用lseek定位到文件当前的尾端，则文件表项中的当前文件偏移量被设置为i节点表项中的当前文件长度。 <strong>（这与O_APPEND标志打开文件是不同的，使用lseek定位到文件尾端处后，下次调用write写数据不一定是写在该文件的真正尾端，因为lseek和write两个不是原子操作，中间可以有另一个进程已使文件长度变长了。）</strong><br>(d)如果用O_APPEND 标志打开了一个文件，则相应标志被设置到文件表项的文件状态标志中， <strong>每次对这种具有添写标志的文件执行写操作时，在文件表项中的当前文件偏移量首先被设置成i节点表项中的文件长度，这就使得每次写的数据都添加到文件的当前尾端处。</strong><br>(e)lseek 函数只修改文件表项中的当前文件偏移量，没有进行任何I/O操作。  </p>
+</blockquote>
+<p>&emsp;&emsp;④以上过程可使得多个进程同时 <strong>读取</strong> 同一个文件，每个进程都有它自己的文件表项和当前偏移量。  </p>
+<h1 id="十一、原子操作"><a href="#十一、原子操作" class="headerlink" title="十一、原子操作"></a>十一、原子操作</h1><p>&emsp;&emsp;①任何多于一个函数调用的操作都不是原子操作，因为两个函数调用之间，内核有可能会临时挂起进程。<br>&emsp;&emsp;②Unix系统提供了一种原子操作方法，即在打开文件时设定 <strong>O_APPEND标志</strong> ，这样做使得每次写操作之前，都将进程的当前偏移量设置为文件尾端，于是每次写操作的时候就不用lseek函数了。<br>&emsp;&emsp;③函数pread和pwrite。<br>&emsp;&emsp;     调用pread相当于先调用lseek后再调用read，但调用pread时，此过程无法被打断，并且不更新当前文件偏移量。<br>&emsp;&emsp;     调用pwrite相当于先调用lseek后再调用write。<br>&emsp;&emsp;④ <strong>一般而言，原子操作是指由多步组成的一个操作，如果该操作原子的执行，则要么执行完所有步骤，要么一步也不执行，原子操作也就是能被打断的最小操作。</strong></p>
+<h1 id="十二、函数dup和dup2"><a href="#十二、函数dup和dup2" class="headerlink" title="十二、函数dup和dup2"></a>十二、函数dup和dup2</h1><p>&emsp;&emsp;①两个函数均用来复制一个现有的文件描述符，成功返回新的文件描述符，失败返回-1。<br>&emsp;&emsp;②函数原型。<br>&emsp;&emsp; <strong>#include &lt;unistd.h&gt;</strong><br>&emsp;&emsp; <strong>int dup(int fd);</strong><br>&emsp;&emsp; <strong>int dup2(int fd, int fd2);</strong><br>&emsp;&emsp;③dup函数返回的一定是当前可用数值最小的文件描述符，dup2函数可以指定新的文件描述符。  </p>
+<h1 id="十三、函数sync、fsync和fdatasync"><a href="#十三、函数sync、fsync和fdatasync" class="headerlink" title="十三、函数sync、fsync和fdatasync"></a>十三、函数sync、fsync和fdatasync</h1><p>&emsp;&emsp;①Unix系统实现设有高速缓冲区，大多数磁盘I/O都通过缓冲区进行，当我们向文件写入数据时，内核通常先将数据复制到缓冲区，然后排入队列，晚些时候再存入磁盘，这种方式成为延迟写，如果内核要重用缓冲区，它会把所有延迟写数据块写入磁盘。<br>&emsp;&emsp;②为了保证磁盘与缓冲区数据一致，Unix系统提供了sync、fsync和fdatasync函数。  </p>
+<blockquote>
+<p>sync函数：只是将修改后的数据排入写队列，然后返回，不等待写入磁盘。<br>fsync函数：只对文件描述符fd指定的文件起作用，并等待写入磁盘。<br>fdatasync函数：类似于fsync，但它只影响文件的数据部分和同步更新文件的属性。  </p>
+</blockquote>
+<h1 id="十四、函数fcntl"><a href="#十四、函数fcntl" class="headerlink" title="十四、函数fcntl"></a>十四、函数fcntl</h1><p>&emsp;&emsp;①用于改变已经打开文件的属性，成功返回由cmd决定，失败返回-1。<br>&emsp;&emsp;②函数原型。<br>&emsp;&emsp; <strong>#include &lt;fcntl.h&gt;</strong><br>&emsp;&emsp; <strong>int fcntl(int fd, int cmd, …/* int arg */);</strong><br>&emsp;&emsp;cmd有11种取值，这里未列出。 </p>
+<h1 id="十五、函数ioctl"><a href="#十五、函数ioctl" class="headerlink" title="十五、函数ioctl"></a>十五、函数ioctl</h1><p>&emsp;&emsp;①ioctl是设备驱动程序中对设备的I/O通道进行管理的函数，即对设备的一些特性进行控制，例如串口的传输波特率、马达的转速等等，需要驱动程序提供对ioctl的支持。<br>&emsp;&emsp;②函数原型。<br>&emsp;&emsp; <strong>#include &lt;sys/ioctl.h&gt;</strong><br>&emsp;&emsp; <strong>int ioctl(int d,int request,….);</strong> </p>
+<h1 id="十六、小结"><a href="#十六、小结" class="headerlink" title="十六、小结"></a>十六、小结</h1><p>&emsp;&emsp;本文学习了文件描述符的定义和基本作用，以及Unix系统提供的基本I/O函数。在多个进程读取文件时，了解了文件共享机制，为了防止多个进程同时写同一文件带来的干扰，学习了原子操作，最后还学习了fcntl和ioctl函数。</p>
+]]></content>
+      <categories>
+        <category>Linux编程</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unix笔记3—文件与目录</title>
+    <url>/2018/09/05/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。<a id="more"></a></p>
+<h1 id="二、函数stat、fstat、fstatat和lstat"><a href="#二、函数stat、fstat、fstatat和lstat" class="headerlink" title="二、函数stat、fstat、fstatat和lstat"></a>二、函数stat、fstat、fstatat和lstat</h1><p>&emsp;&emsp;①函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;sys&#x2F;stat.h&gt;  </span><br><span class="line">int stat(const char *restrict pathname, struct stat *restrict buf);  </span><br><span class="line">int fstat(int fd, struct stat *buf);  </span><br><span class="line">int lstat(const char *restrict pathname, struct stat *restrict buf;  </span><br><span class="line">int fstatat(int fd, const char *restrict pathname, struct stat *restrict buf, int flag);    </span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;所有4个函数的返回值：成功返回0，出错返回-1。<br>&emsp;&emsp; <strong>小知识：restrict是C99中一种类型限定符，作用是告诉编译器，对象已经被指针所引用，不能通过除该指针外所有其它直接或间接的方式修改该对象的内容。</strong><br>&emsp;&emsp;②函数说明  </p>
+<blockquote>
+<p>1、 <strong>stat函数</strong> 将返回与此命名文件有关的信息结构。<br>2、 <strong>fstat函数</strong> 获得已在描述符fd上打开文件的有关信息。<br>3、 <strong>lstat函数</strong> 类似于stat,但当命名文件是一个符号链接时，lstat返回该符号链接的有关信息，而不是由该符号链接引用的文件信息。<br>4、 <strong>fstatat函数</strong> 为一个相对于当前打开目录(由fd参数指向)的路径名返回文件统计信息。<br>5、 <strong>buf是一个stat指针</strong> ，它指向一个已经定义的结构，函数将buf指向的结构进行填充，stat结构如下： </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct stat&#123;</span><br><span class="line">    mode_t              st_mode;  &#x2F;* file type &amp; mode (permissions) *&#x2F;</span><br><span class="line">    ino_t               st_ino;   &#x2F;* i-node number (serial number) *&#x2F;</span><br><span class="line">    dev_t               st_dev;   &#x2F;* device number (file system) *&#x2F;</span><br><span class="line">    nlink_t             st_rdev;  &#x2F;* device number for special files *&#x2F;</span><br><span class="line">    uid_t               st_uid;   &#x2F;* user ID of owner *&#x2F;</span><br><span class="line">    gid_t               st_gid;   &#x2F;* group ID of owner *&#x2F;</span><br><span class="line">    off_t               st_size;  &#x2F;* size in bytes, for regular files *&#x2F;</span><br><span class="line">    struct timespec     st_atime; &#x2F;* time of last access *&#x2F;</span><br><span class="line">    struct timespec     st_mtime; &#x2F;* time of last modification *&#x2F;</span><br><span class="line">    struct timespec     st_ctime; &#x2F;* time of last file status change *&#x2F;</span><br><span class="line">    blksize_t           st_blksize;&#x2F;* best I&#x2F;O block size *&#x2F;</span><br><span class="line">    blkcnt_t            st_blocks; &#x2F;* number of disk blocks allocated *&#x2F;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp; <strong>timespec结构</strong> 按照 <strong>秒</strong> 和 <strong>纳秒</strong> 定义了时间，包含以下两个成员：</p>
+<blockquote>
+<p><strong>time_t tv_sec;</strong><br><strong>long tv_nsec;</strong>  </p>
+</blockquote>
+<p>&emsp;&emsp;使用stat最多的地方应该是ls -l，可以获得一个文件的所有信息。</p>
+<h1 id="三、文件类型"><a href="#三、文件类型" class="headerlink" title="三、文件类型"></a>三、文件类型</h1><p>&emsp;&emsp;①文件类型</p>
+<blockquote>
+<p>1、 <strong>普通文件（regular file）</strong> ：最常用的文件类型，这种文件包含某种格式的数据，至于是文本或二进制数据，对于Unix内核而言并无区别，对普通文件内容的解析由处理该文件的应用程序进行（例外是二进制可执行文件，为了执行程序，内核必须解析二进制文件，因此所有二进制可执行文件都有一个标准格式，才能保证内核找到程序和数据的加载位置）。<br>2、 <strong>目录文件（directory file）</strong> ：目录其实也是一种文件，它包含了其它文件的名字以及指向这些文件有关信息的指针，任何具有读权限的进程都可以读取目录文件，但只有内核才可以直接写目录文件，进程必须使用特定函数才更改目录。<br>3、 <strong>块特殊文件（block special file）</strong> ：这种类型的文件提供对设备（如磁盘）带缓冲的访问，每次以固定的长度访问。<br>4、 <strong>字符特殊文件（block special file）</strong> ：这种类型的文件提供对设备不带缓冲的访问，每访问长度可变，系统中所有设备是块特殊文件或字符特殊文件。<br>5、 <strong>FIFO</strong>：这种类型的文件用于进程间通信，也被为命令管道。<br>6、 <strong>套接字（socket）</strong>：这种类型的文件用于进程间的网络通信。<br>7、 <strong>符号链接（symbolic link）</strong> ：这种类型的文件指向另一个文件。  </p>
+</blockquote>
+<p>&emsp;&emsp;②文件类型信息<br>&emsp;&emsp;包含在stat结构中的st_mode成员中，用下图中的宏来确定文件类型。</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.1.PNG" alt="图片"></p>
+<p>&emsp;&emsp;③实例程序：读取命令行，对每一个命令行参数打印其文件类型。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;   </span><br><span class="line">    int i; </span><br><span class="line">    struct stat buf;</span><br><span class="line">    char *ptr;</span><br><span class="line">    for(i&#x3D;1; i&lt;argc; i++)</span><br><span class="line">    &#123;</span><br><span class="line">         printf(&quot;%s:&quot;,argv[i]);</span><br><span class="line">        if(lstat(argv[i], &amp;buf) &lt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            err_ret(&quot;lstat error&quot;);</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        if(S_ISREG(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;regular&quot;;</span><br><span class="line">         else if(S_ISDIR(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;directory&quot;;</span><br><span class="line">        else if(S_ISCHR(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;character special&quot;;</span><br><span class="line">        else if(S_ISBLK(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;block special&quot;;</span><br><span class="line">        else if(S_ISFIFO(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;fifo&quot;;</span><br><span class="line">        else if(S_ISLNK(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;symbolic link&quot;;</span><br><span class="line">         else if(S_ISSOCK(buf.st_mode))</span><br><span class="line">            ptr &#x3D; &quot;socket&quot;;</span><br><span class="line">        else</span><br><span class="line">            ptr &#x3D; &quot;unknow mode&quot;;</span><br><span class="line">         printf(&quot;%s\n&quot;,ptr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释</strong>:<br>行10：使用stat函数获取文件信息，而不是stat的原因是以便检测符号链接。<br>行15-30：使用宏S_ISxxx检测是哪种类型的文件。  </p>
+<p><strong>执行命令</strong>：<br>/a.out /etc/passwd /etc /dev/log /dev/tty /var/lib/oprofile/opd_pipe /dev/sr0 /dev/cdrom   </p>
+<p><strong>结果</strong>：<br>/etc/passwd:regular<br>/etc:directory<br>/dev/log:symbolic link<br>/dev/tty:character special<br>/var/lib/oprofile/opd_pipe:lstat error: No such file or directory<br>/dev/sr0:block special<br>/dev/cdrom:symbolic link<br><strong>小知识：在命令行末端加入”&quot;可在第二行继续输入当前命令</strong>。  </p>
+</blockquote>
+<p>&emsp;&emsp;④不同类型文件的一个统计值</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.2.PNG" alt="图片"></p>
+<p>&emsp;&emsp;可见 <strong>普通文件</strong> 是最主要的类型。</p>
+<h1 id="四、设置用户ID和组ID"><a href="#四、设置用户ID和组ID" class="headerlink" title="四、设置用户ID和组ID"></a>四、设置用户ID和组ID</h1><p>&emsp;&emsp;与一个进程相关联的ID有6个或更多（对于进程而言）：</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.3.PNG" alt="图片"></p>
+<blockquote>
+<p>1、 <strong>实际用户ID和实际组ID</strong> ：取值为口令文件中的登录项，通常在一个登录会话期间这些值并不改变，但是超级用户进程可以改变（进程最初执行时所用ID）。<br>2、 <strong>有效用户ID、有效组ID和附属组ID</strong> ：进程执行时对文件的访问权限（进程实际执行中所用ID）。<br>3、 <strong>保存的设置用户ID和保存的设置组ID</strong> ：这个概念涉及到可执行程序文件的设置用户ID位，当可执行程序文件passwd的设置用户ID位(s)已经设置时，非root用户进程(exec)启动passwd程序，则该进程的有效用户ID和保存的设置用户ID都将被设置为这个可执行程序文件的所有者(即root)，也就是暂时可以用root的权限来访问文件了。<br>4、 <strong>通常有效用户ID等于实际用户ID，有效组ID等于实际组ID</strong> 。<br>5、 <strong>每个文件有一个所有者和组所有者，分别由st_uid和st_gid指定</strong> 。  </p>
+</blockquote>
+<h1 id="五、文件访问权限"><a href="#五、文件访问权限" class="headerlink" title="五、文件访问权限"></a>五、文件访问权限</h1><p>&emsp;&emsp;①    st_mode值（文件模式）包含了对文件的访问权限位（对于文件而言）：</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.4.PNG" alt="图片"></p>
+<blockquote>
+<pre><code>1、当用路径访问一个文件时，每个目录都应该都具有执行权限。  
+2、目录的执行权限与读权限有区别，读权限允许读目录获取该目录的所有文件列表，执行权限是要执行一个文件时，该文件所在目录需要的权限。  
+3、对于一个文件的读权限决定了我们是否能够打开现有文件进行读操作，这与open函数的O_RDONLY和O_RDWR标志有关。  
+4、对于一个文件的写权限决定了我们是否能够打开现有文件进行写操作，这与open函数的O_WRONLY和O_RDWR标志有关。  
+5、为了在open函数中对一个文件指定O_TRUNC标志，必须对该文件具有写权限。  
+6、为了在一个目录中创建一个新文件，必须对该目录具有写权限和执行权限。  
+7、问了在一个目录中删除一个文件，必须对包含该文件的目录具有写权限和执行权限，对该文件本身的权限并不关心。   
+8、如果用7个exec函数中任何一个执行某文件，都必须对该文件具有执行权限，该文件必须是一个普通文件。  </code></pre>
+</blockquote>
+<p>&emsp;&emsp;②    进程每次打开、新建或删除一个文件时，内核将对该文件进行访问权限测试，文件的所有者（st_uid和st_gid）是文件的性质；有效用户ID、有效组ID和附属组ID则是进程的性质。</p>
+<blockquote>
+<pre><code>1、若进程的有效用户ID是0（即超级用户），则允许访问。  
+2、若进程的有效用户ID等于文件所有者ID（即进程拥有此文件），那么如果所有者适当的访问权限位被设置，则允许访问，否则禁止访问。  
+3、若进程的有效组ID或附属组ID之一等于文件的组ID，那么如果所有者适当的访问权限位被设置，则允许访问，否则禁止访问。  
+4、若其它用户适当的访问权限位被设置，则允许访问，否则禁止访问。  </code></pre>
+</blockquote>
+<p>&emsp;&emsp;以上4个步骤顺序执行。  </p>
+<h1 id="六、新文件和目录的所有权"><a href="#六、新文件和目录的所有权" class="headerlink" title="六、新文件和目录的所有权"></a>六、新文件和目录的所有权</h1><p>&emsp;&emsp;使用open和create函数创建新文件时，并没有设置文件的用户ID和组ID，以后学习mkdir函数时就会了解到如何创建一个新目录，并设置所有权规则。 <strong>新文件的用户ID将设置为进程的有效用户ID，而组ID将设置为进程的有效组ID或者它所在目录的组ID</strong>。</p>
+<h1 id="七、函数access和faccessat"><a href="#七、函数access和faccessat" class="headerlink" title="七、函数access和faccessat"></a>七、函数access和faccessat</h1><p>&emsp;&emsp;当用open函数打开一个文件时，内核以进程的有效用户ID和有效组ID为基础进行访问测试，有时进程也希望按实际用户ID和实际组ID进行访问测试<br>&emsp;&emsp;①    函数作用：按实际用户ID和实际组ID进行访问测试。<br>&emsp;&emsp;②    函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int access(const char *pathname, int mode);</span><br><span class="line">int faccessat(int fd, const char *pathname, int mode, int flag);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;返回值：0-成功，-1-失败。  </p>
+<blockquote>
+<p><strong>mode参数</strong>：R_OK-测试读权限，W_OK-测试写权限，X_OK-测试执行权限。<br><strong>flag参数</strong>：改变faccessat的行为，取值为AT_EACCESS时，访问检查用的是调用进程的有效用户ID和有效组ID，而不是实际用户ID和实际组ID。  </p>
+</blockquote>
+<h1 id="八、函数umask"><a href="#八、函数umask" class="headerlink" title="八、函数umask"></a>八、函数umask</h1><p>&emsp;&emsp;①    函数作用：每个文件都有9个访问权限位，为进程设置st_mode创建屏蔽字，并返回之前的值。<br>&emsp;&emsp;②    函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;sys&#x2F;stat.h&gt;</span><br><span class="line">mode_t umask(mode_t, cmask);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>cmask参数：由五①图中9个常量相”或”组成。</p>
+</blockquote>
+<p>&emsp;&emsp;③    程序示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &quot;fcntl.h&quot;</span><br><span class="line"></span><br><span class="line">#define RWRWRW (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    umask(0);</span><br><span class="line">    if(creat(&quot;foo&quot;, RWRWRW) &lt; 0)</span><br><span class="line">        err_sys(&quot;creat error for foo&quot;);</span><br><span class="line"></span><br><span class="line">    umask(S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);</span><br><span class="line">    if(creat(&quot;bar&quot;, RWRWRW) &lt; 0)</span><br><span class="line">        err_sys(&quot;creat error for foo&quot;);</span><br><span class="line"></span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>执行(%表示shell响应)：</strong>:<br>umask<br>%002  </p>
+<p>./a.out<br>ls -l foo bar<br>%-rw——- 1 sar 0 dec 7 21:20 bar<br>%-rw-rw-rw- 1 sar 0 dec 7 21:20 foo  </p>
+<p>umask<br>%002  </p>
+</blockquote>
+<p>&emsp;&emsp;④    umask文件访问权限位  </p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.5.PNG" alt="图片"></p>
+<p>&emsp;&emsp;⑤    umask命令  </p>
+<blockquote>
+<p>umask–打印当前屏蔽字<br>umask -S–打印符号格式的屏蔽字<br>umask xxxx–修改屏蔽字  </p>
+</blockquote>
+<h1 id="九、函数chmod、fchmod和fchmodat"><a href="#九、函数chmod、fchmod和fchmodat" class="headerlink" title="九、函数chmod、fchmod和fchmodat"></a>九、函数chmod、fchmod和fchmodat</h1><p>&emsp;&emsp;①    函数作用：更改现有文件的访问权限。<br>&emsp;&emsp;②    函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;sys&#x2F;stat.h&gt;</span><br><span class="line">int chmod(const char *pathname, mode_t mode);</span><br><span class="line">int fchmod(int fd, mode_t mode);</span><br><span class="line">int fchmodat(int fd, const char *pathname, mode_t mode, int flag);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;返回值：0-成功，-1-失败。  </p>
+<blockquote>
+<p><strong>参数mode</strong>：下图常量按位或</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.6.PNG" alt="图片"></p>
+<h1 id="十、粘着位"><a href="#十、粘着位" class="headerlink" title="十、粘着位"></a>十、粘着位</h1><p>&emsp;&emsp;如果可执行程序的这一位被设置，那么该程序第一次被执行，在其终止时， <strong>程序正文（机器指令）的一个副本仍保存在交换区，使得下一次执行改程序时可以很快的载入内存</strong> ，因此称为”粘着”，也就有了 <strong>常量S_ISVTX</strong> ，但当今Unix系统大多数都配置了 <strong>虚拟存储系统</strong> 以及 <strong>快速文件系统</strong> ，因此不再需要使用这项技术。</p>
+<h1 id="十一、函数chown、fchown、fchownat和lchown"><a href="#十一、函数chown、fchown、fchownat和lchown" class="headerlink" title="十一、函数chown、fchown、fchownat和lchown"></a>十一、函数chown、fchown、fchownat和lchown</h1><p>&emsp;&emsp;①    函数作用：更改文件的用户ID和组ID，如果参数owner和group有一个为-1，则对应的ID不变。<br>&emsp;&emsp;②    函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int chown(const char *path, uid_t owner, gid_t group);</span><br><span class="line">int fchown(int fd, uid_t owner, gid_t group);</span><br><span class="line">int lchown(const char *path, uid_t owner, gid_t group);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;返回值：0-成功，-1-失败。</p>
+<h1 id="十二、文件长度"><a href="#十二、文件长度" class="headerlink" title="十二、文件长度"></a>十二、文件长度</h1><p>&emsp;&emsp;①    stat结构中的 <strong>成员st_size</strong> 表示单位为字节的文件长度，此字段只对 <strong>普通文件、目录文件和符号链接</strong> 有意义。</p>
+<blockquote>
+<p>1、 <strong>普通文件</strong>：文件长度可以是0，开始读这种文件时，将得到文件结束标志。<br>2、 <strong>目录文件</strong>：文件长度是16/512的整倍数。<br>3、 <strong>符号链接</strong>：文件长度等于路径名的字符长度。  </p>
+</blockquote>
+<p>&emsp;&emsp;②     大多数现代Unix系统提供字段 <strong>st_blksize和st_blocks</strong> ，前一个是指 <strong>对文件I/O较合适的块长度</strong> ，后一个是指 <strong>分配的实际512字节块数</strong>。</p>
+<h1 id="十三、文件截断"><a href="#十三、文件截断" class="headerlink" title="十三、文件截断"></a>十三、文件截断</h1><p>&emsp;&emsp;有时需要在文件尾端处截去一些数据以缩短文件，将文件长度截断为0是一个特例，在打开文件时使用O_TRUNC可以实现这一点，为了截断文件可以使用函数truncate和fturncoat。<br>&emsp;&emsp;函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int truncate(const char *pathname, off_t length);</span><br><span class="line">int ftruncate(int fd, off_t length);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;函数作用：将一个现有文件长度截断为length，如果该文件以前长度大于length，则超过以外的数据就不能再访问，如果小于length，文件长度将增加，新增长度的数据为0。</p>
+<h1 id="十四、文件系统"><a href="#十四、文件系统" class="headerlink" title="十四、文件系统"></a>十四、文件系统</h1><p>&emsp;&emsp;①    可以把一个磁盘分为一个或多个分区，每个分区可包含一个文件系统，i节点是固定长度的记录项，它包含有关文件的大部分信息，此磁盘、分区和文件系统以及具体的柱面组的i节点和数据块示意图如下：</p>
+<p><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.7.PNG" alt="图片"><br><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.8.PNG" alt="图片"></p>
+<p>&emsp;&emsp;②    <strong>i节点</strong> 包含了文件的所有信息，文件类型、文件访问权限位、文件长度和指向文件数据块的指针等，有两项数据存放在目录项中， <strong>文件名和i节点编号（数据类型为ino_t）</strong>。</p>
+<p>&emsp;&emsp;③    对于Linux系统，链接分为两种，分别是硬链接和符号链接，默认ln命令产生硬链接。</p>
+<blockquote>
+<p><strong>硬链接</strong>：硬连接指通过索引节点来进行连接。在Linux的文件系统中，保存在磁盘分区中的文件不管是什么类型都给它分配一个编号，称为索引节点号(Inode Index)。在Linux中，多个文件名指向同一索引节点是存在的。一般这种连接就是硬连接。硬连接的作用是 <strong>允许一个文件拥有多个有效路径名（在stat结构中，链接计数包含在st_nlink成员中，基本系统数据类型为nlink_t，LINK_MAX限制了链接数的最大值）</strong> ，这样用户就可以建立硬连接到重要文件，有防止 <strong>“误删”</strong> 的功能。其原因如上所述，因为对应该目录的索引节点有一个以上的连接。 <strong>只删除一个连接并不影响索引节点本身和其它的连接，只有当最后一个连接被删除后，文件的数据块及目录的连接才会被释放。也就是说，文件真正删除的条件是与之相关的所有硬连接文件均被删除</strong> 。</p>
+</blockquote>
+<blockquote>
+<p><strong>符号链接</strong>：另外一种连接称之为符号连接（Symbolic Link），也叫软连接。软链接文件有 <strong>类似于Windows的快捷方式</strong> 。它实际上是一个特殊的文件。在符号连接中，文件实际上是一个文本文件，其中包含的有另一文件的位置信息。</p>
+</blockquote>
+<h2 id="具体未搞懂"><a href="#具体未搞懂" class="headerlink" title="具体未搞懂"></a><strong><em>具体未搞懂</em></strong></h2><h1 id="十五、函数link、linkat、unlink、unlinkat和remove"><a href="#十五、函数link、linkat、unlink、unlinkat和remove" class="headerlink" title="十五、函数link、linkat、unlink、unlinkat和remove"></a>十五、函数link、linkat、unlink、unlinkat和remove</h1><p>&emsp;&emsp;①link、linkat函数作用：创建一个指向现有文件的链接。<br>&emsp;&emsp;函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int link(const char *existingpath, const char *newpath);</span><br><span class="line">int linkat(int efd, const char *existingpath, const char *newpath, int flag);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;②unlink、unlinkat函数作用：删除一个现有的目录项。<br>&emsp;&emsp;函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int unlink(const char *pathname);</span><br><span class="line">int unlinkat(int fd, const char *pathname, int flag);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;③remove函数作用：解除对一个文件或目录的链接。<br>&emsp;&emsp;函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int remove(const char *pathname);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对于文件–remove与unlink功能相同。<br>对于目录–remove与rmdir功能相同。</p>
+</blockquote>
+<p>&emsp;&emsp;④实例程序如下：打开一个文件，然后解除它的链接，睡眠15s后终止。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    if(open(&quot;tempfile&quot;, O_RDWR) &lt; 0)</span><br><span class="line">        err_sys(&quot;open error&quot;);</span><br><span class="line">    if(unlink(&quot;tempfile&quot;) &lt; 0)</span><br><span class="line">        err_sys(&quot;unlink error&quot;);</span><br><span class="line">    printf(&quot;unlink ok\n&quot;);</span><br><span class="line">    sleep(15);</span><br><span class="line">    printf(&quot;done\n&quot;);</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>执行(%表示shell响应)：</strong><br>ls -l tempfile    查看文件大小<br>%-rw-r–r– 1 yanwn yanwn 10974 9月   4 06:30 tempfile  </p>
+<p>df /home    检查可用空间<br>%文件系统          1K-块    已用     可用 已用% 挂载点<br>%/dev/sda1      20509264 8004032 11440376   42% /  </p>
+<p>./a.out &amp;    后台运行<br>%3088    进程号<br>% unlink ok  </p>
+<p>ls -l tempfile    观察文件是否还存在<br>% ls: 无法访问’tempfile’: 没有那个文件或目录    目录项已经被删除  </p>
+<p>df /home    再次检查可用空间<br>%文件系统          1K-块    已用     可用 已用% 挂载点<br>%/dev/sda1      20509264 8004032 11440376   42% /<br>%done    15s过后，进程结束  </p>
+<p>df /home    最后检查可用空间<br>%文件系统          1K-块    已用     可用 已用% 挂载点<br>%/dev/sda1      20509264 8004024 11440384   42% /  </p>
+</blockquote>
+<p>&emsp;&emsp; <strong>分析：unlink这种特点经常用来确保程序崩溃时，它所创建的临时文件也不会被保存下来，进程用open或create创建一个文件，然后调用unlink，因为该文件是打开的，所以不会被删除，只有当进程关闭该文件或终止时（内核关闭该进程打开的所有文件），该文件的内容将会被清除。如果pathname是符号链接，那么unlink删除的是本身，而不是该链接指向的文件，任何函数都不能删除链接所指向的文件。</strong></p>
+<h1 id="十六、函数rename和renameat"><a href="#十六、函数rename和renameat" class="headerlink" title="十六、函数rename和renameat"></a>十六、函数rename和renameat</h1><p>&emsp;&emsp;函数作用：对文件或目录重命名。<br>&emsp;&emsp;函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int rename(const char *oldname, const char *newname)</span><br><span class="line">int renameat(int oldfd, const char *oldname, int newfd, const char *newname);</span><br></pre></td></tr></table></figure>
+<h1 id="十七、符号链接"><a href="#十七、符号链接" class="headerlink" title="十七、符号链接"></a>十七、符号链接</h1><p>&emsp;&emsp;①符号链接是一个文件的间接指针，以下为各个函数对符号链接的处理情况示意图：<br><img src="https://raw.githubusercontent.com/ywngithub/MyPostImage/master/4.9.PNG" alt="图片"></p>
+<p>&emsp;&emsp;②函数symlink和symlinkat用于创建一个符号链接，readlink和readlinkat用于打开链接本身，并读取链接地址。<br>&emsp;&emsp;函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int symlink(const char*actualpath,const char *sympath);</span><br><span class="line">int symlinkat(const char *actualpath,int fd,const char *sympath);</span><br><span class="line">ssize_t readlink(const char* restrict pathname,char *restrict buf,size_t bufsize);</span><br><span class="line">ssize_t readlinkat(int fd,const char* restrict pathname,char *restrict buf,size_t bufsize);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<pre><code>1、symlink函数创建了一个指向actualpath的新目录项sympath。在创建此符号链接时，并不要求actualpath已经存在。并且actualpath和sympath并不需要位于同一文件系统中。  
+2、symlinkat函数与symlink函数类似，但sympath参数根据相对于打开文件描述符引用的目录(由fd指定)进行计算。如果sympath参数指定的是绝对路径或者fd参数设置了AT_FDCWD值，那么symlinkat就等同于symlink函数。  
+3、readlink和readlinkat函数组合了open、read和close的所有操作。如果函数成功执行，则返回读入buf的字节数。在buf中返回的符号链接的内容不以null字符终止。  
+4、当pathname参数指定的是绝对路径名或者fd参数的值为AT_FDCWD，readlinkat函数的行为与readlink相同。但是，如果fd参数是一个打开目录的有效文件描述符并且pathname参数是相对路径名，则readlinkat计算相对于由fd代表的打开目录的路径。  </code></pre>
+</blockquote>
+<h1 id="十八、-文件时间及相关函数"><a href="#十八、-文件时间及相关函数" class="headerlink" title="十八、    文件时间及相关函数"></a>十八、    文件时间及相关函数</h1><h2 id="暂时忽略"><a href="#暂时忽略" class="headerlink" title="暂时忽略"></a><strong><em>暂时忽略</em></strong></h2><h1 id="十九、-函数mkdir、mkdirat和rmdir"><a href="#十九、-函数mkdir、mkdirat和rmdir" class="headerlink" title="十九、    函数mkdir、mkdirat和rmdir"></a>十九、    函数mkdir、mkdirat和rmdir</h1><p>&emsp;&emsp;函数作用：mkdir、mkdirat用于创建目录，rmdir用于删除空目录。<br>&emsp;&emsp;函数原型：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;sys&#x2F;stat.h&gt;</span><br><span class="line">int mkdir(const char *pathname, mode_t mode);</span><br><span class="line">int mkdirat(int fd, const char *pathname, mode_t mode);</span><br><span class="line">int rmdir(const char *pathname);</span><br></pre></td></tr></table></figure>
+
+<h1 id="二十、函数chdir、fchdir"><a href="#二十、函数chdir、fchdir" class="headerlink" title="二十、函数chdir、fchdir"></a>二十、函数chdir、fchdir</h1><p>&emsp;&emsp;每个进程都有一个当前工作目录，当用户登录Unix系统时，其当前工作目录通常是口令文件（/etc/passwd）中登录项的第6个字段–用户的起始目录。 <strong>当前工作目录是进程的一个属性，起始目录是登录名的一个属性</strong> 。<br>&emsp;&emsp;函数作用：更改当前工作目录 <strong>（只影响调用进程的本身）</strong> 。<br>&emsp;&emsp;函数原型：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int chdir(constchar*pathname);</span><br><span class="line">int fchdir(int fd);</span><br></pre></td></tr></table></figure>
+
+<h1 id="二十一、设备特殊文件"><a href="#二十一、设备特殊文件" class="headerlink" title="二十一、设备特殊文件"></a>二十一、设备特殊文件</h1><p>&emsp;&emsp;st_dev和st_rdev这两个字段容易混淆：</p>
+<blockquote>
+<p>1、每个文件系统所在的存储设备都由 <strong>主、次设备号</strong> 表示，设备号所用数据类型为dev_t, <strong>主设备号标识设备驱动程序，有时编码为与其通信的外设板，次设备标识特定的子设备</strong> ，一个磁盘驱动器通常包含多个文件系统，在同一磁盘上各文件系统的主设备号通常相同，但次设备号不同。<br>2、用 <strong>宏major和minor</strong> 来访问主、次设备号。<br>3、 <strong>系统中每个文件名关联的st_dev值是文件系统的设备号</strong> 。<br>4、 <strong>只有字符文件和块文件才有st_rdev值，此值包含实际设备的设备号</strong> 。  </p>
+</blockquote>
+<h1 id="二十二、小结"><a href="#二十二、小结" class="headerlink" title="二十二、小结"></a>二十二、小结</h1><p>&emsp;&emsp;本文围绕stat函数，学习了stat结构中的每一个成员，了解了Unix文件和目录的各个属性，学习了有关于文件和目录的大部分函数。</p>
+]]></content>
+      <categories>
+        <category>Linux编程</category>
+      </categories>
+  </entry>
+</search>

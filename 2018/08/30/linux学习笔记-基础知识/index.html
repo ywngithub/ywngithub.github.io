@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unix笔记1—基础知识">
+<meta property="og:url" content="http://example.com/2018/08/30/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="严薇南的博客">
+<meta property="og:description" content="一、引言&amp;emsp;&amp;emsp;操作系统为所运行的程序提供服务，典型服务有：  ①执行新程序②打开文件③读取文件④分配存储区⑤获取系统时间">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-30T12:15:34.000Z">
+<meta property="article:modified_time" content="2021-01-31T09:42:18.108Z">
+<meta property="article:author" content="严薇南">
+<meta property="article:tag" content="关键字">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2018/08/30/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>Unix笔记1—基础知识 | 严薇南的博客</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">严薇南的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习过程中的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Unix%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">二、Unix体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%99%BB%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">三、登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81shell"><span class="nav-number">4.</span> <span class="nav-text">四、shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="nav-number">5.</span> <span class="nav-text">五、文件和目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA"><span class="nav-number">6.</span> <span class="nav-text">六、输入和输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%A8%8B%E5%BA%8F%E5%92%8C%E8%BF%9B%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text">七、程序和进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%87%BA%E9%94%99%E5%A4%84%E7%90%86"><span class="nav-number">8.</span> <span class="nav-text">八、出错处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E7%94%A8%E6%88%B7%E6%A0%87%E8%AF%86"><span class="nav-number">9.</span> <span class="nav-text">九、用户标识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E4%BF%A1%E5%8F%B7"><span class="nav-number">10.</span> <span class="nav-text">十、信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E6%97%B6%E9%97%B4%E5%80%BC"><span class="nav-number">11.</span> <span class="nav-text">十一、时间值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">12.</span> <span class="nav-text">十二、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="严薇南"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">严薇南</p>
+  <div class="site-description" itemprop="description">人生为棋，我为卒，行动虽缓，不曾后退半步</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ywngithub" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ywngithub" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/08/30/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="严薇南">
+      <meta itemprop="description" content="人生为棋，我为卒，行动虽缓，不曾后退半步">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="严薇南的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unix笔记1—基础知识
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-08-30 20:15:34" itemprop="dateCreated datePublished" datetime="2018-08-30T20:15:34+08:00">2018-08-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-01-31 17:42:18" itemprop="dateModified" datetime="2021-01-31T17:42:18+08:00">2021-01-31</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux编程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;操作系统为所运行的程序提供服务，典型服务有：</p>
+<blockquote>
+<p>①执行新程序<br>②打开文件<br>③读取文件<br>④分配存储区<br>⑤获取系统时间<a id="more"></a>  </p>
+</blockquote>
+<h1 id="二、Unix体系结构"><a href="#二、Unix体系结构" class="headerlink" title="二、Unix体系结构"></a>二、Unix体系结构</h1><p>&emsp;&emsp;操作系统是一种软件，它控制计算机系统资源，提供程序运行环境，通常称其为 <strong>内核（kernel）</strong> ,因为它相对较小，而且处于环境的核心。内核接口称为 <strong>系统调用，公用函数库</strong> 建立于系统调用之上，应用程序可以使用 <strong>系统调用</strong> 和 <strong>公用函数库</strong> , <strong>Shell</strong> 是一个特殊的应用程序，为运行其它应用程序提供一个接口。</p>
+<h1 id="三、登录"><a href="#三、登录" class="headerlink" title="三、登录"></a>三、登录</h1><p>&emsp;&emsp;登录Unix时，必须键入 <strong>用户名</strong> 和 <strong>密码</strong> ，存在于 <strong>/etc/passwd</strong> 文件。</p>
+<h1 id="四、shell"><a href="#四、shell" class="headerlink" title="四、shell"></a>四、shell</h1><p>&emsp;&emsp;shell是一个 <strong>命令行解释器</strong> ，它读取用户输入，然后执行命令，输入来自终端或者文件（shell脚本）。</p>
+<h1 id="五、文件和目录"><a href="#五、文件和目录" class="headerlink" title="五、文件和目录"></a>五、文件和目录</h1><p>&emsp;&emsp;① <strong>文件系统</strong> 是目录和文件的一种层次结构，起点是根目录（root），符号为”&quot;。<br>&emsp;&emsp;② <strong>目录</strong> 是一个包含目录项的文件，目录项=文件名+文件属性，文件属性包含文件类型（普通文件/目录）、文件大小、文件所有者、文件权限及文件最后修改的时间。<br>&emsp;&emsp;③ <strong>文件名</strong> 是目录项中的各个名字，”/“和” “不能出现在文件名中，创建新目录是会自动创建两个文件名，分别是”.” <strong>当前目录</strong> 和”..” <strong>上一目录</strong> ，处于根目录时，”.”=”..”。<br>&emsp;&emsp;④ <strong>路径名</strong> 是由斜线分割的一个或多个文件名组成的序列，分别 <strong>绝对路径</strong> 和 <strong>相对路径</strong> 。<br>&emsp;&emsp;⑤ <strong>列出目录</strong> 中所有文件名的代码如下： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &quot;dirent.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[]) </span><br><span class="line">&#123;</span><br><span class="line">  DIR *dp;</span><br><span class="line">  struct dirent *dirp;</span><br><span class="line">  if(argc !&#x3D; 2)</span><br><span class="line">    err_quit(&quot;usage: ls directory_name&quot;);</span><br><span class="line">  if((dp &#x3D; opendir(argv[1])) &#x3D;&#x3D; NULL)</span><br><span class="line">    err_sys(&quot;can&#39;t open %s&quot;, argv[1]);</span><br><span class="line">  while((dirp &#x3D; readdir(dp)) !&#x3D; NULL)</span><br><span class="line">    printf(&quot;%s\n&quot;,dirp-&gt;d_name);</span><br><span class="line">  closedir(dp);</span><br><span class="line">  exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释</strong> ：<br>行1：apue.h为作者自定义头文件，需先下载至系统。<br>行2：系统头文件，/user/include/dirent.h，可以使用 <strong>dirent</strong> 结构和 <strong>opendir</strong> 、 <strong>readdir</strong> 函数。<br>行4：ISO C风格的main函数声明， <strong>argc参数</strong> 是传入命令行的字符串数目， *<strong>argv[]</strong> 是具体的命令行字符。<br>行6：opendir将返回DIR结构指针。<br>行7：readdir将返回dirent结构指针。<br>行8、9：传入命令行字符串数目错误，输出提示信息。<br>行10、11：传入路径为空时，输出提示信息。<br>行12、13：读取每个目录项并打印。<br>行14：释放目录<br>行15：exit终止程序，参数0表示正常结束，1-255表示出错。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行</strong> ：<br>使用 *<em>cc <em>.c</em></em> 进行编译（cc=gcc），默认生成 <strong>a.out</strong> 文件，运行命令行 <strong>./a.out /dir</strong> ，即可列出dir目录下所有文件名，dir为所需目录名。</p>
+</blockquote>
+<h1 id="六、输入和输出"><a href="#六、输入和输出" class="headerlink" title="六、输入和输出"></a>六、输入和输出</h1><p>&emsp;&emsp;① <strong>文件描述符</strong> 是一个小的非负整数，内核用来标定一个特定进程正在访问的文件。当内核打开一个文件或创建一个文件时，它都返回一个文件描述符，在读/写文件时使用这个文件描述符。<br>&emsp;&emsp;② <strong>标准输入、标准输出、标准错误</strong><br>当运行一个新程序时，shell将打开以上三个文件描述符，一般这三个文件描述符都指向终端，shell可以将这些文件描述符重新定向到某个文件，如：ls&gt;file.list。<br>&emsp;&emsp;③ <strong>不带缓冲的I/O</strong><br>函数open、read、lseek、close提供了不带缓冲的I/O，这些函数都使用文件描述符。<br>&emsp;&emsp;④ <strong>复制任一Unix普通文件</strong> 代码如下： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#define BUFFSIZE 4096</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   int n;</span><br><span class="line">   char buf[BUFFSIZE];</span><br><span class="line">   while((n &#x3D; read(STDIN_FILENO, buf, BUFFSIZE)) &gt; 0)</span><br><span class="line">      if(write(STDOUT_FILENO, buf, n) !&#x3D; n)</span><br><span class="line">         err_sys(&quot;write error!&quot;);</span><br><span class="line">   if(n&lt;0)</span><br><span class="line">      err_sys(&quot;read error!&quot;);</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>行7、8、9：常量STDIN_FILENO和STDOUT_FILENO是POSIX标准的一部分，定义在&lt;unistd.h&gt;中，它们指定了标准输入和输出的文件描述符，值分别为0和1，read函数返回读取的字节数，读到文件尾端时将返回0，如果读错误将返回-1。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行：</strong><br>./a.out &gt; data ：输入是终端（ctrl+D结束），输出是data文件。<br>./a.out <infile >outfile：输入是infile文件，输出是outfile文件。  </p>
+</blockquote>
+<p>&emsp;&emsp;⑤ <strong>标准I/O</strong><br>标准I/O函数为那些不带缓冲的I/O函数提供了一个 <strong>带缓冲的接口</strong> ，使用标准I/O函数无需担心选取最佳缓冲区大小，标准I/O函数还简化了输入行的处理，例如：fgets函数读取一个完整的行，read函数读取指定字节数，printf是我们最熟悉的标准I/O函数之一，&lt;stdio.h&gt;包含了所有标准I/O函数的原型。<br>&emsp;&emsp;⑥ <strong>将标准输入复制到标准输出</strong> 代码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   int c;</span><br><span class="line">   while((c &#x3D; getc(stdin)) !&#x3D; EOF)</span><br><span class="line">      if(putc(c, stdout) &#x3D;&#x3D; EOF)</span><br><span class="line">         err_sys(&quot;output error!&quot;);</span><br><span class="line">      if(ferror(stdin))</span><br><span class="line">         err_sys(&quot;input error!&quot;);</span><br><span class="line">      exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>行5、6：函数getc一次读取一个字符，putc显示在屏幕上，常量EOF（end of file）定义在&lt;stdio.h&gt;中，表示文件结束标志（Ctrl+D），值为-1，stdin和stdout也定义在&lt;stdio.h&gt;，分别表示标准输入和标准输出。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行：</strong><br>./a.out  </p>
+</blockquote>
+<h1 id="七、程序和进程"><a href="#七、程序和进程" class="headerlink" title="七、程序和进程"></a>七、程序和进程</h1><p>&emsp;&emsp;① <strong>程序</strong> 是存储在磁盘中的可执行文件，内核使用 <strong>exec</strong> 函数，将程序 <strong>读入内存</strong> ， <strong>并执行程序</strong> 。<br>&emsp;&emsp;② <strong>进程和进程ID</strong><br>程序的执行实例被称为 <strong>进程（process）</strong> ，某些操作系统用 <strong>任务（task）</strong> 表示正在被执行的程序，Unix系统确保每个进程都有一个唯一的数字标识符，成称为进程ID，它总是一个非负的整数。<br>&emsp;&emsp;③ <strong>打印进程ID号代码如下：</strong>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   printf(&quot;hello world form process ID %ld\n&quot;,(long)getpid());</span><br><span class="line">   exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>getpid函数用于返回进程ID值，类型为pid_t类型。  </p>
+</blockquote>
+<blockquote>
+<p><strong>执行：</strong><br>./a.out  </p>
+</blockquote>
+<p>&emsp;&emsp;④ <strong>进程控制。</strong><br>有3个用于进程控制的主要函数， <strong>fork、exec、waitpid（exec有7种变体）</strong><br>&emsp;&emsp;⑤ <strong>从标准输入读取命令并执行</strong> 代码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &quot;sys&#x2F;wait.h&quot;</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">   char buf[MAXLINE];</span><br><span class="line">   pid_t pid;</span><br><span class="line">   int status;</span><br><span class="line">   printf(&quot;%% &quot;);</span><br><span class="line">   while(fgets(buf, MAXLINE, stdin) !&#x3D; NULL)</span><br><span class="line">   &#123;</span><br><span class="line">      if(buf[strlen(buf) - 1] &#x3D;&#x3D; &#39;\n&#39;)</span><br><span class="line">      &#123;</span><br><span class="line">        buf[strlen(buf) - 1] &#x3D; 0;</span><br><span class="line">      &#125;</span><br><span class="line">      if((pid &#x3D; fork()) &lt; 0)</span><br><span class="line">      &#123;</span><br><span class="line">         err_sys(&quot;fork error!&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      else if(pid &#x3D;&#x3D; 0)</span><br><span class="line">      &#123;</span><br><span class="line">         execlp(buf, buf, (char*)0);</span><br><span class="line">         err_ret(&quot;couldn&#39;t execute: %s&quot;, buf);</span><br><span class="line">         exit(127);</span><br><span class="line">      &#125;</span><br><span class="line">      if((pid &#x3D; waitpid(pid, &amp;status, 0)) &lt; 0)</span><br><span class="line">        err_sys(&quot;waitpid error&quot;);</span><br><span class="line">      printf(&quot;%% &quot;);</span><br><span class="line">   &#125;</span><br><span class="line">   exit(0);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注释：</strong><br>行12、13、14、15：因为fgets每一行都以换行符终止，而execlp函数要以null结尾，因此要替换一下。<br>行16：调用fork创建一个新进程，新进程是调用进程的一个副本，新进程称为 <strong>子进程</strong> ，调用进程称为 <strong>父进程</strong> ，fork对父进程返回子进程的ID，对子进程则返回0，fork调用一次，返回两次。<br>行22：子进程调用execlp（从PATH 环境变量中查找文件并执行， <strong>执行成功函数将不会返回，失败返回-1</strong> ）执行从标准输入的命令，用新的程序文件替换子进程原先执行的程序文件。<br>行27：父进程通过调用waitpid等待子进程执行完毕，其参数1指定要等待的进程，waitpid返回子进程的终止状态（status变量）。  </p>
+</blockquote>
+<p>&emsp;&emsp;⑥ <strong>线程和线程ID</strong><br>一个进程内的所有线程共享同一个地址空间、文件描述符、栈及其进程相关的属性，所以各线程需要采集同步措施，以避免不一致性，线程也有ID，但只在本身进程内起作用。  </p>
+<h1 id="八、出错处理"><a href="#八、出错处理" class="headerlink" title="八、出错处理"></a>八、出错处理</h1><p>&emsp;&emsp;当Unix系统函数出错时，一般返回一个负值，而 <strong>整形变量errno</strong> 被设置为具有特定信息的值，文件&lt;errno.h&gt;定义了errno以及它可以被赋的值，POSIX和ISO C将errno定义为一个符号，它扩展为一个可修改的 <strong>整形左值</strong> ，它可以是一个包含出错编号的 <strong>整数</strong> ，也可以是一个返回出错编号指针的函数，使用应该注意两项：1、如果没有出错，其值不会被清除，因此当函数返回值表明错误时，才需要去检验其值。2、任何函数都不会将errno的值置0。<br>&emsp;&emsp;C标准定义了两个函数，用于打印出错信息。<br> <strong>#include &lt;string.h&gt;</strong><br> <strong>char *strerror(int errnum);**   //返回错误字符串指针，通常errnum就是errno<br> <strong>#include &lt;stdio.h&gt;</strong><br> **void perror(const char *msg);</strong>   //首先输出msg指向的字符串，然后添加冒号和空格，接着输出errno值的出错消息，最后换行。<br>实例代码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;apue.h&quot;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">   fprintf(stderr, &quot;EACCES: %s\n&quot;,strerror(EACCES));</span><br><span class="line">   errno &#x3D; ENOENT;</span><br><span class="line">   perror(argv[0]);</span><br><span class="line">   exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="九、用户标识"><a href="#九、用户标识" class="headerlink" title="九、用户标识"></a>九、用户标识</h1><p>&emsp;&emsp;① <strong>用户ID</strong> 是一个数值，用户ID为0的用户是 <strong>根用户</strong> 和 <strong>超级用户</strong> 。<br>&emsp;&emsp;② <strong>组ID</strong> 是一个数值，组用户用于将若干用户集合到项目或部门中去，这种机制允许同组的各个成员之间共享资源，组文件通常是/etc/group。<br>&emsp;&emsp;③ <strong>getuid</strong> 和 <strong>getgid</strong> 用于获取用户ID和组ID。<br>&emsp;&emsp;④ <strong>附属组ID</strong>。</p>
+<h1 id="十、信号"><a href="#十、信号" class="headerlink" title="十、信号"></a>十、信号</h1><p>&emsp;&emsp;信号用于通知进程发生了某种情况，进程有以下三种方式处理：</p>
+<blockquote>
+<p>忽略信号<br>按系统默认方式处理<br>提供一个函数  </p>
+</blockquote>
+<p>很多情况都会产生信号，终端键盘有两种产生信号的办法，分别称为 <strong>中断键（Delete或Ctrl+C）</strong> 和 <strong>退出键（Ctrl+\）</strong> ，他们被用于终止当前运行的进程，另一种产生信号的办法是调用 <strong>kill函数</strong> ，在一个进程中调用此函数可向另一个进程发送信号，信号函数是 <strong>signal</strong> 。</p>
+<h1 id="十一、时间值"><a href="#十一、时间值" class="headerlink" title="十一、时间值"></a>十一、时间值</h1><p>&emsp;&emsp;Unix使用过两种不同的时间值：  </p>
+<blockquote>
+<p><strong>日历时间：</strong> 该值来自UTC，1970-01-01 00:00:00，这个时间所经过的秒数值，系统基本数据类型 <strong>time_t</strong> 用于保存这种时间。<br><strong>进程时间：</strong> 也称为CPU时间，用以度量进程使用的中央处理器资源，以时钟滴答计算，系统基本数据类型 <strong>clock_t</strong> 保存这种时间，使用sysconf可以得到每秒时钟滴答数。  </p>
+</blockquote>
+<p>&emsp;&emsp;Unix系统为一个进程维护了三个进程时间值：  </p>
+<blockquote>
+<p><strong>时钟时间</strong>—进程运行的时间总量。<br><strong>用户CPU时间</strong>—执行用户指令所需时间。<br><strong>系统CPU时间</strong>—该进程执行内核程序所经历的时间。  </p>
+</blockquote>
+<h1 id="十二、小结"><a href="#十二、小结" class="headerlink" title="十二、小结"></a>十二、小结</h1><p>&emsp;&emsp;本文快速浏览了unix系统的全局，对Unix系统有了一个基本印象。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/09/02/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B3%BB%E7%BB%9FIO/" rel="next" title="Unix笔记2—系统I/O">
+                  Unix笔记2—系统I/O <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">严薇南</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
