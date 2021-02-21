@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Unix笔记1—基础知识</title>
+    <title>linux基础知识-终端</title>
+    <url>/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/</url>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>&emsp;&emsp;终端是一种特殊的字符设备，用来向计算机输入数据和显示计算机的输出，最早的终端是由teletype公司生产的一种电传打字机，它将从穿孔纸带读取的程序代码传送给计算机，将计算机的输出以纸质形式打印出来。tty是teletype的缩写，后来便成了终端设备的代名词。<a id="more"></a></p>
+<h1 id="串行端口终端"><a href="#串行端口终端" class="headerlink" title="串行端口终端"></a>串行端口终端</h1><p>&emsp;&emsp;与计算机串行端口（RS-232）连接的终端设备，对应的设备文件名称为/dev/tty（或/dev/cu）+类型+设备编号，如/dev/ttyS0，S表示设备类型，0为指定类型下的设备编号。这里的串行端口可以是通过硬件或软件模拟的，如USB转串口，虚拟串口。<br><img src="1.png"></p>
+<h1 id="伪终端"><a href="#伪终端" class="headerlink" title="伪终端"></a>伪终端</h1><p>&emsp;&emsp;成对存在的逻辑设备，包括主、从设备，可以为主、从设备上的应用程序提供一种双向通信管道，从设备上的应用进程可以像使用真实终端一样从伪终端读入数据（或输出信息）。Linux支持BSD和system V两种风格的伪终端设备，BSD风格下伪终端是系统预创建的，**/dev/ptyXY表示主设备，/dev/ttyXY表示从设备，**其中，X、Y分别属于字符集{{p-z},{a-e}}和{{0-9},{a-f}}。system V风格（又称为UNIX 98）下伪终端是动态创建的，所有的主设备对应的设备文件都是/dev/ptmx（主设备号为5，次设备号为2），而从设备对应的设备文件都位于/dev/pts/目录下，以设备的数字编号命名（如/dev/pts/0）。<br><img src="2.png"><br><img src="3.png"></p>
+<h1 id="控制台终端"><a href="#控制台终端" class="headerlink" title="控制台终端"></a>控制台终端</h1><p>&emsp;&emsp;提供系统管理接口的终端设备，读取管理员的操作指令，输出系统运行信息（应用程序、系统程序、内核等）。控制台对应的设备文件名称为**/dev/console<strong>，Linux系统中可以在内核启动时</strong>指定控制台对应的终端设备（比如ttyS0）**，对console文件的操作会转义为对实际终端设备的操作。控制台是可选的Linux内核配置项，大多数嵌入式系统并不支持控制台（比如手机），在系统启动后直接提供一个用户操作界面。<br>&emsp;&emsp;控制台只允许单用户登录，一些类UNIX系统（如BSD、Linux、UnixWare等）中引入了虚拟控制台，也称为虚拟终端（VT），允许多个用户同时从不同的VT登录，创建相互隔离的系统会话。现行的Linux发行版本中一般会创建7个虚拟控制台，对应的设备文件依次为/dev/tty1-tty7，另外/dev/tty0指示当前虚拟控制台，用户可以通过按键Alt+F1-7进行控制台切换。虚拟控制台以显示器与键盘作为IO设备，linux系统缺省控制台为tty0，因此默认情况下，系统启动信息会在显示器上输出，用户从键盘输入登录信息。Linux系统允许将多个设备指定为控制台，此时系统信息会在指定的多个设备上同时输出，但输入只能从最后指定的终端设备上读取。</p>
+<h1 id="控制终端"><a href="#控制终端" class="headerlink" title="控制终端"></a>控制终端</h1><p>&emsp;&emsp;<strong>任何系统会话都基于一个特定终端，即为会话发起进程的控制终端。</strong>发起会话的进程为会话的头进程，头进程的进程组ID与会话ID都等于头进程的PID，通过fork调用生成的子进程会继承父进程的会话ID、进程组ID和控制终端属性。/dev/tty表示当前进程的控制终端，主设备号为5，次设备号0。</p>
+<p>&emsp;&emsp;tty命令可以查看当前会话所使用的实际终端设备，ps ax命令可以查看系统中所有进程的控制终端（如果程序没有控制终端，如内核线程、守护进程，TTY一栏显示为“？”）。<br><img src="4.png"></p>
+<p>通过ioctl调用对/dev/tty设置TIOCNOTTY标记将使得调用进程与其控制终端脱离，如果调用进程为会话头进程，当前会话的所有进程都会丢失控制终端，在后台运行的守护进程需要使用这种调用。setsid调用可以使调用进程（不能是头进程）在新会话中运行，与当前会话控制终端脱离，并成为新会话的头进程，此时调用进程将不具有控制终端。当系统会话因外部原因异常终止时（如网络故障导致telnet连接断开），会话关联的所有进程将失去控制终端。</p>
+]]></content>
+      <categories>
+        <category>Linux基础知识</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>linux学习笔记—基础知识</title>
     <url>/2018/08/30/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
     <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;操作系统为所运行的程序提供服务，典型服务有：</p>
 <blockquote>
@@ -71,7 +86,7 @@
       </categories>
   </entry>
   <entry>
-    <title>Unix笔记4—标准I/O</title>
+    <title>linux学习笔记—标准I/O</title>
     <url>/2018/09/21/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A0%87%E5%87%86IO/</url>
     <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;本文学习标准I/O库，不仅是Unix，很多其它操作系统都实现了标准I/O，标准I/O库处理了很多细节，如缓冲区分配，已优化的块长度执行I/O等，用户无需担心使用正确的块长度，方便用户使用。<a id="more"></a></p>
 <h1 id="二、流和FILE对象"><a href="#二、流和FILE对象" class="headerlink" title="二、流和FILE对象"></a>二、流和FILE对象</h1><p>&emsp;&emsp;①对于标准I/O库而言，所有操作都围绕”流”进行，当用标准I/O库打开一个文件时，那么一个流将与一个文件关联。<br>&emsp;&emsp;②对于ASCII字符集，一个字符用一个字节表示，对于国际字符集（宽字符集），一个字符可用多个字节表示，标准I/O文件可用于单字符集或宽字符集，流的定向决定了所读、写的字符类型，当一个流初次创建时并没有被定向，只有两个函数可以改变流的定向：</p>
@@ -169,7 +184,7 @@
       </categories>
   </entry>
   <entry>
-    <title>Unix笔记2—系统I/O</title>
+    <title>linux学习笔记—系统I/O</title>
     <url>/2018/09/02/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B3%BB%E7%BB%9FIO/</url>
     <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;①可用的 <strong>文件I/O函数</strong> ：打开文件、读文件、写文件。<br>&emsp;&emsp;②常用5个函数： <strong>open、read、write、lseek、close</strong> （不同缓冲长度影响将不同）。<br>&emsp;&emsp;③ <strong>不带缓冲I/O</strong> 是指每个read、write都调用内核中的一个系统函数，需要传入缓存区参数。<br>&emsp;&emsp;④ <strong>原子操作</strong> 及 <strong>dup、fcntl、sync、fsync、ioctl</strong> 函数。 <a id="more"></a></p>
 <h1 id="二、文件描述符"><a href="#二、文件描述符" class="headerlink" title="二、文件描述符 "></a>二、文件描述符 </h1><p>&emsp;&emsp;①当打开一个现有文件或创建一个新文件时，内核向进程返回一个 <strong>文件描述符</strong> ，文件描述符（file descriptor）是内核为了高效管理已被打开的文件所创建的 <strong>索引</strong> ，其值是一个非负整数，用于指代被打开的文件，所有执行I/O操作的系统调用都通过文件描述符，程序刚刚启动的时候：</p>
@@ -237,7 +252,7 @@
       </categories>
   </entry>
   <entry>
-    <title>Unix笔记3—文件与目录</title>
+    <title>linux学习笔记—文件与目录</title>
     <url>/2018/09/05/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95/</url>
     <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。<a id="more"></a></p>
 <h1 id="二、函数stat、fstat、fstatat和lstat"><a href="#二、函数stat、fstat、fstatat和lstat" class="headerlink" title="二、函数stat、fstat、fstatat和lstat"></a>二、函数stat、fstat、fstatat和lstat</h1><p>&emsp;&emsp;①函数原型：  </p>
