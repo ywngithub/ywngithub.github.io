@@ -8,8 +8,8 @@ categories: Linux基础知识
 
 命令  | 描述
 ------------- | -------------
- vi etc/rc.local | 开机会自动执行的脚本 |
- /etc/init.d/S90** | imx6ull |
+ vi etc/rc.local | 开机会自动执行的脚本
+ /etc/init.d/S90** | imx6ull
 <!-- more -->
 
 
