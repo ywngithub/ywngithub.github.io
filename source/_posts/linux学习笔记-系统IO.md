@@ -1,5 +1,5 @@
 ---
-title: Unix笔记2—系统I/O
+title: linux学习笔记—系统I/O
 date: 2018-09-02 12:00:00
 categories: Linux编程
 ---

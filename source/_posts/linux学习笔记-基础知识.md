@@ -1,5 +1,5 @@
 ---
-title: Unix笔记1—基础知识
+title: linux学习笔记—基础知识
 date: 2018-08-30 20:15:34
 categories: Linux编程
 ---

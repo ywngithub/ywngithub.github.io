@@ -1,5 +1,5 @@
 ---
-title: Unix笔记3—文件与目录
+title: linux学习笔记—文件与目录
 date: 2018-09-05 12:00:00
 categories: Linux编程
 ---

@@ -1,5 +1,5 @@
 ---
-title: Unix笔记4—标准I/O
+title: linux学习笔记—标准I/O
 date: 2018-09-21 21:58:07
 categories: Linux编程
 ---
