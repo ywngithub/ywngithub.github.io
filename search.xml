@@ -799,4 +799,25 @@ export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</code></p
         <tag>安卓环境搭建</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ubuntu16.04与win10双系统引导处理</title>
+    <url>/2021/03/20/ubuntu16-04%E4%B8%8Ewin10%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%BC%95%E5%AF%BC%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<p>&emsp;&emsp;系统环境：只有一块硬盘，且win10系统装在硬盘的前面，ubuntu16.04在后面。<br> <a id="more"></a></p>
+<p>&emsp;&emsp;win系统重装后系统引导会被破坏，导致开机只能进入win系统，此时可以用u盘制作一个Ubuntu安装盘，从U盘启动后进入Ubuntu试用，启动系统，打开终端，输入命令:</p>
+<blockquote>
+<p>sudo add-apt-repository ppa:yannubuntu/boot-repair<br>sudo apt-get update<br>sudo apt-get install -y boot-repair &amp;&amp; boot-repair</p>
+</blockquote>
+<p>安装boot-repair工具，软件截图如下：<br><img src="1.png"><br>选择第一项根据提示修复，修复成功后大概率win系统不在grub引导中，此时进入Ubuntu系统，打开终端，输入命令：  </p>
+<blockquote>
+<p>sudo update-grub<br>sudo grub-install /dev/sda  </p>
+</blockquote>
+<p>修复win系统引导即可。</p>
+]]></content>
+      <categories>
+        <category>系统问题</category>
+      </categories>
+      <tags>
+        <tag>双系统引导</tag>
+      </tags>
+  </entry>
 </search>
