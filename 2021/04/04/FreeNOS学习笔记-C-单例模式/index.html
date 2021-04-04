@@ -23,21 +23,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="本文仅在Ubuntu16.04下测试通过，其它版本没有验证。">
+<meta name="description" content="一、什么是单例模式&amp;emsp;&amp;emsp;在设计或开发中，肯定会有这么一种情况，一个类只能有一个对象被创建，如果有多个对象的话，可能会导致状态的混乱和不一致。这种情况下，单例模式是最恰当的解决办法。它有很多种实现方式，各自的特性不相同，使用的情形也不相同。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="qtcreator-安卓环境搭建">
-<meta property="og:url" content="http://example.com/2021/02/21/qtcreator-%E5%AE%89%E5%8D%93%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:title" content="FreeNOS学习笔记(3)-C++单例模式">
+<meta property="og:url" content="http://example.com/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="严薇南的博客">
-<meta property="og:description" content="本文仅在Ubuntu16.04下测试通过，其它版本没有验证。">
+<meta property="og:description" content="一、什么是单例模式&amp;emsp;&amp;emsp;在设计或开发中，肯定会有这么一种情况，一个类只能有一个对象被创建，如果有多个对象的话，可能会导致状态的混乱和不一致。这种情况下，单例模式是最恰当的解决办法。它有很多种实现方式，各自的特性不相同，使用的情形也不相同。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-21T03:44:43.000Z">
-<meta property="article:modified_time" content="2021-02-21T04:24:42.926Z">
+<meta property="article:published_time" content="2021-04-04T13:24:09.000Z">
+<meta property="article:modified_time" content="2021-04-04T13:44:57.334Z">
 <meta property="article:author" content="严薇南">
-<meta property="article:tag" content="安卓环境搭建">
+<meta property="article:tag" content="FreeNOS笔记">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2021/02/21/qtcreator-%E5%AE%89%E5%8D%93%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+<link rel="canonical" href="http://example.com/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
 
 
 <script class="page-configurations">
@@ -49,7 +49,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>qtcreator-安卓环境搭建 | 严薇南的博客</title>
+<title>FreeNOS学习笔记(3)-C++单例模式 | 严薇南的博客</title>
   
 
 
@@ -186,7 +186,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Java-JDK"><span class="nav-number">1.</span> <span class="nav-text">一、Java JDK</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Android-SDK-amp-NDK"><span class="nav-number">2.</span> <span class="nav-text">二、Android SDK&amp;NDK</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81qtcreator%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">三、qtcreator配置</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">一、什么是单例模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8D%95%E4%BE%8B%E6%A8%A1%E6%9D%BF%E7%B1%BB%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">二、单例模板类实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">三、测试代码</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -257,7 +257,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/21/qtcreator-%E5%AE%89%E5%8D%93%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -270,7 +270,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          qtcreator-安卓环境搭建
+          FreeNOS学习笔记(3)-C++单例模式
         </h1>
 
         <div class="post-meta-container">
@@ -282,7 +282,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2021-02-21 11:44:43 / 修改时间：12:24:42" itemprop="dateCreated datePublished" datetime="2021-02-21T11:44:43+08:00">2021-02-21</time>
+      <time title="创建时间：2021-04-04 21:24:09 / 修改时间：21:44:57" itemprop="dateCreated datePublished" datetime="2021-04-04T21:24:09+08:00">2021-04-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -290,7 +290,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/qtcreator%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">qtcreator使用</span></a>
+          <a href="/categories/FreeNOS/" itemprop="url" rel="index"><span itemprop="name">FreeNOS</span></a>
         </span>
     </span>
 
@@ -304,52 +304,140 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>本文仅在Ubuntu16.04下测试通过，其它版本没有验证。<br> <a id="more"></a></p>
-<h1 id="一、Java-JDK"><a href="#一、Java-JDK" class="headerlink" title="一、Java JDK"></a>一、Java JDK</h1><p>文件：jdk-8u201-linux-x64.tar.gz</p>
-<p>描述：jdk的是java development kit的缩写，是java语言的软件开发工具包，主要用于移动设备、嵌入式设备上的java应用程序，jdk是整个java开发的核心，它包含了java的运行环境，java工具和java基础的类库。</p>
-<p>安装：</p>
+        <h1 id="一、什么是单例模式"><a href="#一、什么是单例模式" class="headerlink" title="一、什么是单例模式"></a>一、什么是单例模式</h1><p>&emsp;&emsp;在设计或开发中，肯定会有这么一种情况，一个类只能有一个对象被创建，如果有多个对象的话，可能会导致状态的混乱和不一致。这种情况下，单例模式是最恰当的解决办法。它有很多种实现方式，各自的特性不相同，使用的情形也不相同。<a id="more"></a><br>&emsp;&emsp;通过单例模式，可以做到:</p>
 <blockquote>
-<p>sudo tar -zxvf jdk-8u201-linux-x64.tar.gz</p>
+<ol>
+<li>确保一个类只有一个实例被建立 </li>
+<li>提供了一个对对象的全局访问指针 </li>
+<li>在不影响单例类的客户端的情况下允许将来有多个实例</li>
+</ol>
 </blockquote>
-<blockquote>
-<p>sudo chown make:make jdk1.8.0/</p>
-</blockquote>
-<blockquote>
-<p>sudo chmod -R 777 jdk1.8.0/</p>
-</blockquote>
-<blockquote>
-<p>sudo mv jdk1.8.0/ jdk</p>
-</blockquote>
-<blockquote>
-<p>cd /usr/local</p>
-</blockquote>
-<blockquote>
-<p>sudo vi /etc/profile（添加以下代码到文件尾端）</p>
-</blockquote>
-<pre><code>export JAVA_HOME=/usr/local/jdk
-export CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar
-export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin</code></pre>
-<blockquote>
-<p>source /etc/profile</p>
-</blockquote>
-<h1 id="二、Android-SDK-amp-NDK"><a href="#二、Android-SDK-amp-NDK" class="headerlink" title="二、Android SDK&amp;NDK"></a>二、Android SDK&amp;NDK</h1><p>文件：android-sdk-r24.4.1 &amp; android-ndk-r19c</p>
-<p>描述：android sdk（Android Software Development Kit,即Android软件开发工具包）,可以说只要你使用java去开发Android这个东西就必须用到，它包含了SDK Manager 和 AVD Manage。而ndk（Native Development Kit）跟sdk差不多的是他也是一个开发工具包，用它开发c/c++是很方便的。为什么会有一个ndk？很早以前android是只有sdk的，并没有ndk。这就意味着一旦android的开发者要使用c/c++的三方库或者需要用到c/c++就必须使用非官方的法子。用java的jni去调用c/c++。耍小聪明走后门一样。而ndk的出现就意味着jni调用的这种方法转正了变成官方了以后你不需要再走后面大路正面随你走。可是这样还是没有说到为什么要有ndk啊。是的我只想说的就是如果你要操作底层直接操作内存。操作地址那你不得不去使用c/c++因为java这块想做这些。那恐怕有点困难。所以ndk是必须需要出现的。而这个sdk和ndk并不是完全不相溶的2门语言。对于android来说是同种语言的2种不同时期的必须品。</p>
-<p>安装：下载后解压到自己指定的路径下，我的如下</p>
-<pre><code>/usr/Android/android-sdk-linux
-/usr/Android/android-ndk-r19c</code></pre>
-<blockquote>
-<p>sudo gedit /etc/profile（添加以下代码到文件尾端）    </p>
-</blockquote>
-<pre><code>NDK_HOME=/usr/Android/android-ndk-r19c
-export NDK_HOME
-export PATH=$PATH:$NDK_HOME
-ANDROID_SDK_ROOT=/usr/Android/android-sdk-linux
-export ANDROID_SDK_ROOT
-export ANDROID_HOME=/usr/Android/android-sdk-linux
-export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/tools
-export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</code></pre>
-<h1 id="三、qtcreator配置"><a href="#三、qtcreator配置" class="headerlink" title="三、qtcreator配置"></a>三、qtcreator配置</h1><p>进入 <strong>工具-&gt;选项-&gt;Android</strong> 选项卡：</p>
-<p>&emsp;&emsp;分别指定JDK、Android SDK和Android NDK的路径，如果报错不通过则进入sdk目录，使用<strong>android</strong>命令（SDK管理）更新tools和sdk即可。</p>
+<p>&emsp;&emsp;本文介绍FreeNOS中一种实现单例模式的方法，用户类通过继承预先设计好的单例模板类可轻松实现类的单例，与常见的单例实现方法稍微有些不同。</p>
+<h1 id="二、单例模板类实现"><a href="#二、单例模板类实现" class="headerlink" title="二、单例模板类实现"></a>二、单例模板类实现</h1><p>&emsp;&emsp;单例模板类设计为一个头文件，具体内容<strong>Singleton.h</strong>如下：  </p>
+<pre><code>/**
+ * 单例设计模式
+ */
+
+#ifndef _SINGLETON_H
+#define _SINGLETON_H
+
+/**
+ * 单例设计模式：只有一个实例被允许
+ * - 永远只有一个实例
+ * - 这个实例不能被覆盖
+ * - 这个实例在首次调用时创建
+ * - 用户类必须提供一个没有参数的默认构造函数
+ */
+template &lt;class T&gt; class StrictSingleton
+&#123;
+public:
+    static inline T *instance()
+    &#123;
+        static T obj;
+        return &amp;obj;
+    &#125;
+&#125;;
+
+/**
+ * 单例设计模式：只有一个实例被允许
+ * - 永远只有一个实例
+ * - 这个实例可以被覆盖
+ * - 这个实例在任何时候都可以为0
+ */
+template &lt;class T&gt; class WeakSingleton
+&#123;
+public:
+    /**
+     * 构造函数
+     * 
+     * @param obj 新的实例
+     */
+    WeakSingleton&lt;T&gt;(T* obj)
+    &#123;
+        m_instance = obj;
+    &#125;
+
+    /**
+     * 返回实例
+     */
+    static inline T *instance()
+    &#123;
+        return m_instance;
+    &#125;
+
+private:
+    /** 只有单例 */
+    static T *m_instance;
+&#125;;
+/* 初始化静态成员变量 */
+template &lt;class T&gt; T* WeakSingleton&lt;T&gt;::m_instance = 0;
+
+#endif</code></pre>
+<h1 id="三、测试代码"><a href="#三、测试代码" class="headerlink" title="三、测试代码"></a>三、测试代码</h1><pre><code>#include &lt;iostream&gt;
+#include &quot;Singleton.h&quot; 
+
+using namespace std;
+
+class myClassStrictSingleton : public StrictSingleton&lt;myClassStrictSingleton&gt;
+&#123;
+public:
+    myClassStrictSingleton() : m_count(0)
+    &#123;
+
+    &#125;
+    ~myClassStrictSingleton()
+    &#123;
+
+    &#125;
+    void myFunction()
+    &#123;
+        m_count++;
+        cout &lt;&lt; &quot;m_count: &quot; &lt;&lt; m_count &lt;&lt; endl;
+    &#125;
+
+private:
+    int m_count;
+&#125;;
+
+class myClassWeakSingleton : public WeakSingleton&lt;myClassWeakSingleton&gt;
+&#123;
+public:
+    myClassWeakSingleton() : WeakSingleton&lt;myClassWeakSingleton&gt;(this), m_count(0)
+    &#123;
+
+    &#125;
+    ~myClassWeakSingleton() 
+    &#123;
+
+    &#125;
+    void myFunction()
+    &#123;
+        m_count++;
+        cout &lt;&lt; &quot;m_count: &quot; &lt;&lt; m_count &lt;&lt; endl;
+    &#125;
+
+private:
+    int m_count;    
+&#125;;
+
+int main(int argc, char** argv) 
+&#123;
+    myClassStrictSingleton c1;    // 非必要 
+    myClassStrictSingleton::instance()-&gt;myFunction();    // m_count = 1 
+    myClassStrictSingleton::instance()-&gt;myFunction();    // m_count = 2 
+
+    myClassStrictSingleton c2;    // 注意：实例不会被覆盖 
+    myClassStrictSingleton::instance()-&gt;myFunction();    // m_count = 3 
+
+
+    myClassWeakSingleton c3;    // 第一个创建是必要的 
+    myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 1 
+    myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 2
+
+    myClassWeakSingleton c4;    // 注意：实例将会被覆盖 
+    myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 1
+    return 0;
+&#125;</code></pre>
 
     </div>
 
@@ -359,21 +447,18 @@ export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</code></p
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%AE%89%E5%8D%93%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag"># 安卓环境搭建</a>
+              <a href="/tags/FreeNOS%E7%AC%94%E8%AE%B0/" rel="tag"># FreeNOS笔记</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-proc%E7%9B%AE%E5%BD%95/" rel="prev" title="linux学习笔记(7)-proc目录">
-                  <i class="fa fa-chevron-left"></i> linux学习笔记(7)-proc目录
+                <a href="/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-FreeNOS%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/" rel="prev" title="FreeNOS学习笔记(2)-FreeNOS安装和使用">
+                  <i class="fa fa-chevron-left"></i> FreeNOS学习笔记(2)-FreeNOS安装和使用
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/03/20/ubuntu16-04%E4%B8%8Ewin10%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%BC%95%E5%AF%BC%E5%A4%84%E7%90%86/" rel="next" title="ubuntu16.04与win10双系统引导处理">
-                  ubuntu16.04与win10双系统引导处理 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

@@ -894,4 +894,149 @@ export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</code></p
         <tag>FreeNOS笔记</tag>
       </tags>
   </entry>
+  <entry>
+    <title>FreeNOS学习笔记(3)-C++单例模式</title>
+    <url>/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="一、什么是单例模式"><a href="#一、什么是单例模式" class="headerlink" title="一、什么是单例模式"></a>一、什么是单例模式</h1><p>&emsp;&emsp;在设计或开发中，肯定会有这么一种情况，一个类只能有一个对象被创建，如果有多个对象的话，可能会导致状态的混乱和不一致。这种情况下，单例模式是最恰当的解决办法。它有很多种实现方式，各自的特性不相同，使用的情形也不相同。<a id="more"></a><br>&emsp;&emsp;通过单例模式，可以做到:</p>
+<blockquote>
+<ol>
+<li>确保一个类只有一个实例被建立 </li>
+<li>提供了一个对对象的全局访问指针 </li>
+<li>在不影响单例类的客户端的情况下允许将来有多个实例</li>
+</ol>
+</blockquote>
+<p>&emsp;&emsp;本文介绍FreeNOS中一种实现单例模式的方法，用户类通过继承预先设计好的单例模板类可轻松实现类的单例，与常见的单例实现方法稍微有些不同。</p>
+<h1 id="二、单例模板类实现"><a href="#二、单例模板类实现" class="headerlink" title="二、单例模板类实现"></a>二、单例模板类实现</h1><p>&emsp;&emsp;单例模板类设计为一个头文件，具体内容<strong>Singleton.h</strong>如下：  </p>
+<pre><code>/**
+ * 单例设计模式
+ */
+
+#ifndef _SINGLETON_H
+#define _SINGLETON_H
+
+/**
+ * 单例设计模式：只有一个实例被允许
+ * - 永远只有一个实例
+ * - 这个实例不能被覆盖
+ * - 这个实例在首次调用时创建
+ * - 用户类必须提供一个没有参数的默认构造函数
+ */
+template &lt;class T&gt; class StrictSingleton
+&#123;
+public:
+    static inline T *instance()
+    &#123;
+        static T obj;
+        return &amp;obj;
+    &#125;
+&#125;;
+
+/**
+ * 单例设计模式：只有一个实例被允许
+ * - 永远只有一个实例
+ * - 这个实例可以被覆盖
+ * - 这个实例在任何时候都可以为0
+ */
+template &lt;class T&gt; class WeakSingleton
+&#123;
+public:
+    /**
+     * 构造函数
+     * 
+     * @param obj 新的实例
+     */
+    WeakSingleton&lt;T&gt;(T* obj)
+    &#123;
+        m_instance = obj;
+    &#125;
+
+    /**
+     * 返回实例
+     */
+    static inline T *instance()
+    &#123;
+        return m_instance;
+    &#125;
+
+private:
+    /** 只有单例 */
+    static T *m_instance;
+&#125;;
+/* 初始化静态成员变量 */
+template &lt;class T&gt; T* WeakSingleton&lt;T&gt;::m_instance = 0;
+
+#endif</code></pre>
+<h1 id="三、测试代码"><a href="#三、测试代码" class="headerlink" title="三、测试代码"></a>三、测试代码</h1><pre><code>#include &lt;iostream&gt;
+#include &quot;Singleton.h&quot; 
+
+using namespace std;
+
+class myClassStrictSingleton : public StrictSingleton&lt;myClassStrictSingleton&gt;
+&#123;
+public:
+    myClassStrictSingleton() : m_count(0)
+    &#123;
+
+    &#125;
+    ~myClassStrictSingleton()
+    &#123;
+
+    &#125;
+    void myFunction()
+    &#123;
+        m_count++;
+        cout &lt;&lt; &quot;m_count: &quot; &lt;&lt; m_count &lt;&lt; endl;
+    &#125;
+
+private:
+    int m_count;
+&#125;;
+
+class myClassWeakSingleton : public WeakSingleton&lt;myClassWeakSingleton&gt;
+&#123;
+public:
+    myClassWeakSingleton() : WeakSingleton&lt;myClassWeakSingleton&gt;(this), m_count(0)
+    &#123;
+
+    &#125;
+    ~myClassWeakSingleton() 
+    &#123;
+
+    &#125;
+    void myFunction()
+    &#123;
+        m_count++;
+        cout &lt;&lt; &quot;m_count: &quot; &lt;&lt; m_count &lt;&lt; endl;
+    &#125;
+
+private:
+    int m_count;    
+&#125;;
+
+int main(int argc, char** argv) 
+&#123;
+    myClassStrictSingleton c1;    // 非必要 
+    myClassStrictSingleton::instance()-&gt;myFunction();    // m_count = 1 
+    myClassStrictSingleton::instance()-&gt;myFunction();    // m_count = 2 
+
+    myClassStrictSingleton c2;    // 注意：实例不会被覆盖 
+    myClassStrictSingleton::instance()-&gt;myFunction();    // m_count = 3 
+
+
+    myClassWeakSingleton c3;    // 第一个创建是必要的 
+    myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 1 
+    myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 2
+
+    myClassWeakSingleton c4;    // 注意：实例将会被覆盖 
+    myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 1
+    return 0;
+&#125;</code></pre>
+]]></content>
+      <categories>
+        <category>FreeNOS</category>
+      </categories>
+      <tags>
+        <tag>FreeNOS笔记</tag>
+      </tags>
+  </entry>
 </search>
