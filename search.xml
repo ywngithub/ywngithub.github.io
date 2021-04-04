@@ -82,7 +82,7 @@
 <h1 id="十二、小结"><a href="#十二、小结" class="headerlink" title="十二、小结"></a>十二、小结</h1><p>&emsp;&emsp;本文快速浏览了unix系统的全局，对Unix系统有了一个基本印象。</p>
 ]]></content>
       <categories>
-        <category>Linux编程</category>
+        <category>Linux学习笔记</category>
       </categories>
   </entry>
   <entry>
@@ -180,11 +180,11 @@
 <h1 id="十三、-小结"><a href="#十三、-小结" class="headerlink" title="十三、    小结"></a>十三、    小结</h1><p>&emsp;&emsp;大多数Unix应用程序都是用标准I/O库，它使用缓冲技术，而他正是产生许多问题，引起许多混淆的地方。</p>
 ]]></content>
       <categories>
-        <category>Linux编程</category>
+        <category>Linux学习笔记</category>
       </categories>
   </entry>
   <entry>
-    <title>linux学习笔记(3)—系统I/O</title>
+    <title>linux学习笔记(2)—系统I/O</title>
     <url>/2018/09/02/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B3%BB%E7%BB%9FIO/</url>
     <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;①可用的 <strong>文件I/O函数</strong> ：打开文件、读文件、写文件。<br>&emsp;&emsp;②常用5个函数： <strong>open、read、write、lseek、close</strong> （不同缓冲长度影响将不同）。<br>&emsp;&emsp;③ <strong>不带缓冲I/O</strong> 是指每个read、write都调用内核中的一个系统函数，需要传入缓存区参数。<br>&emsp;&emsp;④ <strong>原子操作</strong> 及 <strong>dup、fcntl、sync、fsync、ioctl</strong> 函数。 <a id="more"></a></p>
 <h1 id="二、文件描述符"><a href="#二、文件描述符" class="headerlink" title="二、文件描述符 "></a>二、文件描述符 </h1><p>&emsp;&emsp;①当打开一个现有文件或创建一个新文件时，内核向进程返回一个 <strong>文件描述符</strong> ，文件描述符（file descriptor）是内核为了高效管理已被打开的文件所创建的 <strong>索引</strong> ，其值是一个非负整数，用于指代被打开的文件，所有执行I/O操作的系统调用都通过文件描述符，程序刚刚启动的时候：</p>
@@ -248,11 +248,11 @@
 <h1 id="十六、小结"><a href="#十六、小结" class="headerlink" title="十六、小结"></a>十六、小结</h1><p>&emsp;&emsp;本文学习了文件描述符的定义和基本作用，以及Unix系统提供的基本I/O函数。在多个进程读取文件时，了解了文件共享机制，为了防止多个进程同时写同一文件带来的干扰，学习了原子操作，最后还学习了fcntl和ioctl函数。</p>
 ]]></content>
       <categories>
-        <category>Linux编程</category>
+        <category>Linux学习笔记</category>
       </categories>
   </entry>
   <entry>
-    <title>linux学习笔记(2)—文件与目录</title>
+    <title>linux学习笔记(3)—文件与目录</title>
     <url>/2018/09/05/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95/</url>
     <content><![CDATA[<h1 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h1><p>&emsp;&emsp;本文将学习文件系统的其它性质和文件的性质，将从stat函数开始，逐个学习stat结构和的每一个成员以了解文件的所有属性，学习修改这些属性的各个函数（更改所有者，更改权限等）和Unix文件系统的结构以及符号链接。<a id="more"></a></p>
 <h1 id="二、函数stat、fstat、fstatat和lstat"><a href="#二、函数stat、fstat、fstatat和lstat" class="headerlink" title="二、函数stat、fstat、fstatat和lstat"></a>二、函数stat、fstat、fstatat和lstat</h1><p>&emsp;&emsp;①函数原型：  </p>
@@ -406,7 +406,7 @@
 <h1 id="二十二、小结"><a href="#二十二、小结" class="headerlink" title="二十二、小结"></a>二十二、小结</h1><p>&emsp;&emsp;本文围绕stat函数，学习了stat结构中的每一个成员，了解了Unix文件和目录的各个属性，学习了有关于文件和目录的大部分函数。</p>
 ]]></content>
       <categories>
-        <category>Linux编程</category>
+        <category>Linux学习笔记</category>
       </categories>
   </entry>
   <entry>
@@ -821,8 +821,77 @@ export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</code></p
       </tags>
   </entry>
   <entry>
-    <title>FreeNOS学习笔记-初识FreeNOS</title>
+    <title>FreeNOS学习笔记(1)-初识FreeNOS</title>
     <url>/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%88%9D%E8%AF%86FreeNOS/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="一、项目简介"><a href="#一、项目简介" class="headerlink" title="一、项目简介"></a>一、项目简介</h1><p>&emsp;&emsp;FreeNOS是一款用C++实现的微内核实验性操作系统，用于学习和探索计算机系统，各种宏内核中的服务作为一个独立的services在微内核中，基于消息的通信方式。 <a id="more"></a><br><strong>官方地址：<a href="http://www.freenos.org/">http://www.freenos.org/</a></strong></p>
+<h1 id="二、项目强调"><a href="#二、项目强调" class="headerlink" title="二、项目强调"></a>二、项目强调</h1><p>&emsp;&emsp;FreeNOS强调关注以下内容：</p>
+<blockquote>
+<p>代码可读性：这是首要原则，从具有不可读代码的系统中学习非常困难。<br>文档：所有源代码都有文档，文档对于理解操作系统运行很重要。<br>可访问性：在不同的主机操作系统上使用各种编译器试用FreeNOS很容易。</p>
+</blockquote>
+<h1 id="三、学习该项目的好处"><a href="#三、学习该项目的好处" class="headerlink" title="三、学习该项目的好处"></a>三、学习该项目的好处</h1><p>&emsp;&emsp;可以学习操作系统的知识，它除了是一个操作系统的实现，另外从中也能很好的学习到OOP的设计方式，整个代码风格特别好，完全基于面相对象，还有一些常见的设计模式，在接触了这个开源项目之后才了解，代码风格、注释、doxygen、scons和设计模式。</p>
+]]></content>
+      <categories>
+        <category>FreeNOS</category>
+      </categories>
+      <tags>
+        <tag>FreeNOS笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FreeNOS学习笔记(2)-FreeNOS安装和使用</title>
+    <url>/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-FreeNOS%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="一、测试平台"><a href="#一、测试平台" class="headerlink" title="一、测试平台"></a>一、测试平台</h1><p>虚拟机： VMware14.0.0<br>操作系统：Ubuntu16.04<br>FreeNOS：v1.0.3</p>
+<a id="more"></a>
+
+<h1 id="二、环境设置"><a href="#二、环境设置" class="headerlink" title="二、环境设置"></a>二、环境设置</h1><p>Ubuntu中执行以下命令：</p>
+<blockquote>
+<p>$ sudo apt-get update<br>$ sudo apt-get install build-essential scons genisoimage xorriso qemu-system binutils-multiarch u-boot-tools liblz4-tool  </p>
+</blockquote>
+<p>如果Ubuntu是64-bit系统，还需要安装GCC multilib软件包以针对32位架构进行交叉编译：</p>
+<blockquote>
+<p>$ sudo apt-get install gcc-multilib g ++-multilib  </p>
+</blockquote>
+<p>也可以安装LLVM / Clang编译器：</p>
+<blockquote>
+<p>$ sudo apt-get install clang  </p>
+</blockquote>
+<h1 id="三、构建FreeNOS"><a href="#三、构建FreeNOS" class="headerlink" title="三、构建FreeNOS"></a>三、构建FreeNOS</h1><p>运行以下命令下载源代码，用FreeNOS的版本替换“ xxx”：</p>
+<blockquote>
+<p>$ wget <a href="http://www.freenos.org/pub/FreeNOS/source/FreeNOS-xxxtar.gz">http://www.FreeNOS.org/pub/FreeNOS/source/FreeNOS-xxxtar.gz</a><br>$ tar zxf FreeNOS-xxxtar.gz  </p>
+</blockquote>
+<p>也可以使用git命令下载最新源代码：</p>
+<blockquote>
+<p>$ git clone <a href="https://github.com/nieklinnenbank/FreeNOS">https://github.com/nieklinnenbank/FreeNOS</a></p>
+</blockquote>
+<p>要使用默认设置（Intel，在启用调试的情况下使用GCC）构建FreeNOS，执行以下命令：</p>
+<blockquote>
+<p>$ scons</p>
+</blockquote>
+<p><strong>什么是scons？</strong><br>&emsp;&emsp;scons是一个Python写的自动化构建工具，从构建这个角度说，它跟GNU make是同一类的工具，是一种改进，并跨平台的gnu make替代工具，其集成功能类似于autoconf/automake 。scons是一个更简便，更可靠，更高效的编译软件。</p>
+<p>要清理您的构建目录，请使用：</p>
+<blockquote>
+<p>$ scons -c</p>
+</blockquote>
+<h1 id="三、运行FreeNOS"><a href="#三、运行FreeNOS" class="headerlink" title="三、运行FreeNOS"></a>三、运行FreeNOS</h1><p>在宿主机上自动测试FreeNOS，执行：</p>
+<blockquote>
+<p>$ scons test</p>
+</blockquote>
+<p>在qemu虚拟机上自动测试FreeNOS，执行：</p>
+<blockquote>
+<p>$ scons qemu_test</p>
+</blockquote>
+<p>开始在qemu虚拟机上通过串行终端运行FreeNOS，执行：</p>
+<blockquote>
+<p>$ scons qemu</p>
+</blockquote>
+<p>&emsp;&emsp;此时进入FreeNOS命令行终端，如下图：<br><img src="1.png"><br>输入任意用户名，密码为空即可进入。</p>
+<p><strong>注意：</strong> 在虚拟机中运行的Ubuntu默认是不开启KVM中，此时qemu无法运行，会提示：找不到或者不支持KVM，此时将vmware处理器选项中的虚拟化技术打开即可，如图所示：<br><img src="2.png">  </p>
+]]></content>
+      <categories>
+        <category>FreeNOS</category>
+      </categories>
+      <tags>
+        <tag>FreeNOS笔记</tag>
+      </tags>
   </entry>
 </search>
