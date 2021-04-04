@@ -1,7 +1,7 @@
 ---
 title: linux学习笔记(4)—标准I/O
 date: 2018-09-21 21:58:07
-categories: Linux编程
+categories: Linux学习笔记
 ---
 
 一、引言

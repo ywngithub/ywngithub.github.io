@@ -1,7 +1,7 @@
 ---
-title: linux学习笔记(3)—系统I/O
+title: linux学习笔记(2)—系统I/O
 date: 2018-09-02 12:00:00
-categories: Linux编程
+categories: Linux学习笔记
 ---
 一、引言
 =====

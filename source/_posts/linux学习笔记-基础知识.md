@@ -1,7 +1,7 @@
 ---
 title: linux学习笔记(1)—基础知识
 date: 2018-08-30 20:15:34
-categories: Linux编程
+categories: Linux学习笔记
 ---
 一、引言
 =====

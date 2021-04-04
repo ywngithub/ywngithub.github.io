@@ -1,7 +1,7 @@
 ---
-title: linux学习笔记(2)—文件与目录
+title: linux学习笔记(3)—文件与目录
 date: 2018-09-05 12:00:00
-categories: Linux编程
+categories: Linux学习笔记
 ---
 一、引言
 =====
