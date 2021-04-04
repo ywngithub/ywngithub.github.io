@@ -1,7 +1,7 @@
 ---
-title: linux基础知识-终端
+title: linux学习笔记(5)-终端
 date: 2021-02-21 09:57:48
-categories: Linux基础知识
+categories: Linux学习笔记
 ---
 概述
 =====

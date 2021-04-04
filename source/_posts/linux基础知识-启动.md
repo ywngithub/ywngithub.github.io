@@ -1,7 +1,7 @@
 ---
-title: linux基础知识-启动
+title: linux学习笔记(6)-启动
 date: 2021-02-21 10:53:50
-categories: Linux基础知识
+categories: Linux学习笔记
 ---
 初始化相关
 =====

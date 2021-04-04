@@ -1,7 +1,7 @@
 ---
-title: linux基础知识-proc目录
+title: linux学习笔记(7)-proc目录
 date: 2021-02-21 11:29:32
-categories: Linux基础知识
+categories: Linux学习笔记
 ---
 /proc目录
 =====
