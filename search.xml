@@ -884,8 +884,9 @@ export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</code></p
 <blockquote>
 <p>$ scons qemu</p>
 </blockquote>
-<p>&emsp;&emsp;此时进入FreeNOS命令行终端，如下图：<br><img src="1.png"><br>输入任意用户名，密码为空即可进入。</p>
-<p><strong>注意：</strong> 在虚拟机中运行的Ubuntu默认是不开启KVM中，此时qemu无法运行，会提示：找不到或者不支持KVM，此时将vmware处理器选项中的虚拟化技术打开即可，如图所示：<br><img src="2.png">  </p>
+<p>&emsp;&emsp;此时进入FreeNOS命令行终端，如下图：<br><img src="1.png"></p>
+<p>输入任意用户名，密码为空即可进入。</p>
+<p><strong>注意：</strong> 在虚拟机中运行的Ubuntu默认是不开启KVM中，此时qemu无法运行，会提示：找不到或者不支持KVM，此时将vmware处理器选项中的虚拟化技术打开即可，如图所示：<br><img src="2.png"></p>
 ]]></content>
       <categories>
         <category>FreeNOS</category>
@@ -1030,6 +1031,190 @@ int main(int argc, char** argv)
     myClassWeakSingleton c4;    // 注意：实例将会被覆盖 
     myClassWeakSingleton::instance()-&gt;myFunction();    // m_count = 1
     return 0;
+&#125;</code></pre>
+]]></content>
+      <categories>
+        <category>FreeNOS</category>
+      </categories>
+      <tags>
+        <tag>FreeNOS笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FreeNOS学习笔记(4)-C++工厂模式</title>
+    <url>/2021/04/05/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="一、什么是工厂模式"><a href="#一、什么是工厂模式" class="headerlink" title="一、什么是工厂模式"></a>一、什么是工厂模式</h1><p>&emsp;&emsp;这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。<a id="more"></a> 简单来说，工厂模式使用了C++多态的特性，将存在继承关系的类，通过一个工厂类创建对应的子类（派生类）对象。在项目复杂的情况下，可以便于子类对象的创建。</p>
+<p>&emsp;&emsp;本文介绍FreeNOS中一种工厂模式的设计方法，并通过实例来学习工厂模式。</p>
+<h1 id="二、工厂模式模板类实现"><a href="#二、工厂模式模板类实现" class="headerlink" title="二、工厂模式模板类实现"></a>二、工厂模式模板类实现</h1><p>&emsp;&emsp;工厂模式模板类设计为一个头文件，具体内容<strong>Factory.h</strong>如下： </p>
+<pre><code>/**
+ * 工厂设计模式
+ */
+#ifndef _FACTORY_H
+#define _FACTORY_H
+
+/**
+ * 工厂设计模式：提供一个标准的创建函数
+ */
+template &lt;class T&gt; class Factory
+&#123;
+public:
+    static T* create()
+    &#123;
+        return new T();
+    &#125;
+&#125;;
+
+/**
+ * 抽象工厂设计模式：提供一个创建函数定义
+ */
+template &lt;class T&gt; class AbstractFactory
+&#123;
+public:
+    static T* create();
+&#125;;
+
+#endif</code></pre>
+<h1 id="三、测试代码"><a href="#三、测试代码" class="headerlink" title="三、测试代码"></a>三、测试代码</h1><pre><code>#include &lt;iostream&gt;
+#include &quot;Factory.h&quot; 
+
+using namespace std;
+
+/**
+ * 抽象产品角色 
+ */
+class MobilePhone
+&#123;
+public:
+    virtual ~MobilePhone()
+    &#123;
+
+    &#125;;
+    virtual void show() = 0;
+&#125;;
+
+/**
+ * 具体产品角色1 
+ */
+class HuaweiMobilePhone : public MobilePhone
+&#123;
+public:
+    HuaweiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;华为手机已创建&quot; &lt;&lt; endl;
+    &#125;
+    ~HuaweiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;华为手机已报废&quot; &lt;&lt; endl;
+    &#125;    
+    void show()
+    &#123;
+        cout &lt;&lt; &quot;我是华为手机&quot; &lt;&lt; endl;
+    &#125;
+&#125;;
+
+/**
+ * 具体产品角色2 
+ */
+class XiaomiMobilePhone : public MobilePhone
+&#123;
+public:
+    XiaomiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;小米手机已创建&quot; &lt;&lt; endl;
+    &#125;
+    ~XiaomiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;小米手机已报废&quot; &lt;&lt; endl;
+    &#125;    
+    void show()
+    &#123;
+        cout &lt;&lt; &quot;我是小米手机&quot; &lt;&lt; endl;
+    &#125;
+&#125;;
+
+/**
+ * 具体手机工厂1
+ * 缺点：增加产品时，这里还要增加新的创建方法
+ */ 
+class MobilePhoneFactory : public Factory&lt;MobilePhoneFactory&gt;
+&#123;
+public:
+    MobilePhoneFactory()
+    &#123;
+        cout &lt;&lt; &quot;手机工厂已创建&quot; &lt;&lt; endl;    
+    &#125;
+    ~MobilePhoneFactory()
+    &#123;
+        cout &lt;&lt; &quot;手机工厂已破产&quot; &lt;&lt; endl;
+    &#125;
+
+    // 提供创建产品方法 
+    MobilePhone* createHuaweiMobilePhone()
+    &#123;
+        return new HuaweiMobilePhone();
+    &#125;
+    MobilePhone* createXiaomiMobilePhone()
+    &#123;
+        return new XiaomiMobilePhone();
+    &#125;
+&#125;;
+
+/**
+ * 具体高级工厂2
+ * 特点：增加产品时，无需修改这里
+ * @param T1 产品抽象类
+ * @param T2 产品具体类 
+ */ 
+template &lt;class T1, class T2&gt; class AdvanceFactory : public Factory&lt;AdvanceFactory&lt;T1, T2&gt;&gt;
+&#123;
+public:
+    AdvanceFactory()
+    &#123;
+        cout &lt;&lt; &quot;高级工厂已创建&quot; &lt;&lt; endl;
+    &#125;
+    ~AdvanceFactory()
+    &#123;
+        cout &lt;&lt; &quot;高级工厂已破产&quot; &lt;&lt; endl;
+    &#125;
+    T1* createProduct()
+    &#123;
+        return new T2;
+    &#125; 
+&#125;; 
+typedef AdvanceFactory&lt;MobilePhone, HuaweiMobilePhone&gt; HuaweiFactory_t;
+typedef AdvanceFactory&lt;MobilePhone, XiaomiMobilePhone&gt; XiaomiFactory_t;     
+
+int main(int argc, char** argv) 
+&#123;
+    // 创建工厂 
+    MobilePhoneFactory *pMobilePhoneFactory = MobilePhoneFactory::create();
+
+    // 创建和报废产品1 
+    MobilePhone *pMobilePhone1 = pMobilePhoneFactory-&gt;createHuaweiMobilePhone();
+    pMobilePhone1-&gt;show();
+    delete pMobilePhone1;
+
+    // 创建和报废产品2 
+    MobilePhone *pMobilePhone2 = pMobilePhoneFactory-&gt;createXiaomiMobilePhone();
+    pMobilePhone2-&gt;show();
+    delete pMobilePhone2;
+
+    // 工厂破产 
+    delete pMobilePhoneFactory;
+
+    /********************************分割线**********************************/
+
+    HuaweiFactory_t *pHuaweiFactory = HuaweiFactory_t::create();
+    MobilePhone *pMobilePhone3 = pHuaweiFactory-&gt;createProduct();
+    pMobilePhone3-&gt;show();
+    delete pMobilePhone3;
+    delete pHuaweiFactory;
+
+    XiaomiFactory_t *pXiaomiFactory = XiaomiFactory_t::create();
+    MobilePhone *pMobilePhone4 = pXiaomiFactory-&gt;createProduct();
+    pMobilePhone4-&gt;show();
+    delete pMobilePhone4;
+    delete pHuaweiFactory;
 &#125;</code></pre>
 ]]></content>
       <categories>

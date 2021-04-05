@@ -23,26 +23,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="概述&amp;emsp;&amp;emsp;终端是一种特殊的字符设备，用来向计算机输入数据和显示计算机的输出，最早的终端是由teletype公司生产的一种电传打字机，它将从穿孔纸带读取的程序代码传送给计算机，将计算机的输出以纸质形式打印出来。tty是teletype的缩写，后来便成了终端设备的代名词。">
+<meta name="description" content="一、什么是工厂模式&amp;emsp;&amp;emsp;这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux学习笔记(5)-终端">
-<meta property="og:url" content="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/index.html">
+<meta property="og:title" content="FreeNOS学习笔记(4)-C++工厂模式">
+<meta property="og:url" content="http://example.com/2021/04/05/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="严薇南的博客">
-<meta property="og:description" content="概述&amp;emsp;&amp;emsp;终端是一种特殊的字符设备，用来向计算机输入数据和显示计算机的输出，最早的终端是由teletype公司生产的一种电传打字机，它将从穿孔纸带读取的程序代码传送给计算机，将计算机的输出以纸质形式打印出来。tty是teletype的缩写，后来便成了终端设备的代名词。">
+<meta property="og:description" content="一、什么是工厂模式&amp;emsp;&amp;emsp;这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/1.png">
-<meta property="og:image" content="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/2.png">
-<meta property="og:image" content="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/3.png">
-<meta property="og:image" content="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/4.png">
-<meta property="article:published_time" content="2021-02-21T01:57:48.000Z">
-<meta property="article:modified_time" content="2021-04-04T02:41:13.676Z">
+<meta property="article:published_time" content="2021-04-05T06:36:04.000Z">
+<meta property="article:modified_time" content="2021-04-05T06:51:51.458Z">
 <meta property="article:author" content="严薇南">
-<meta property="article:tag" content="关键字">
+<meta property="article:tag" content="FreeNOS笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/1.png">
 
 
-<link rel="canonical" href="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/">
+<link rel="canonical" href="http://example.com/2021/04/05/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
 
 
 <script class="page-configurations">
@@ -54,7 +49,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>linux学习笔记(5)-终端 | 严薇南的博客</title>
+<title>FreeNOS学习笔记(4)-C++工厂模式 | 严薇南的博客</title>
   
 
 
@@ -191,7 +186,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E7%AB%AF%E5%8F%A3%E7%BB%88%E7%AB%AF"><span class="nav-number">2.</span> <span class="nav-text">串行端口终端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%AA%E7%BB%88%E7%AB%AF"><span class="nav-number">3.</span> <span class="nav-text">伪终端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%BB%88%E7%AB%AF"><span class="nav-number">4.</span> <span class="nav-text">控制台终端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E7%BB%88%E7%AB%AF"><span class="nav-number">5.</span> <span class="nav-text">控制终端</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">一、什么是工厂模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E6%A8%A1%E6%9D%BF%E7%B1%BB%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">二、工厂模式模板类实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">三、测试代码</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -262,7 +257,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%88%E7%AB%AF/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/05/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -275,7 +270,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          linux学习笔记(5)-终端
+          FreeNOS学习笔记(4)-C++工厂模式
         </h1>
 
         <div class="post-meta-container">
@@ -285,23 +280,17 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-02-21 09:57:48" itemprop="dateCreated datePublished" datetime="2021-02-21T09:57:48+08:00">2021-02-21</time>
+      <time title="创建时间：2021-04-05 14:36:04 / 修改时间：14:51:51" itemprop="dateCreated datePublished" datetime="2021-04-05T14:36:04+08:00">2021-04-05</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-04-04 10:41:13" itemprop="dateModified" datetime="2021-04-04T10:41:13+08:00">2021-04-04</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Linux学习笔记</span></a>
+          <a href="/categories/FreeNOS/" itemprop="url" rel="index"><span itemprop="name">FreeNOS</span></a>
         </span>
     </span>
 
@@ -315,13 +304,179 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>&emsp;&emsp;终端是一种特殊的字符设备，用来向计算机输入数据和显示计算机的输出，最早的终端是由teletype公司生产的一种电传打字机，它将从穿孔纸带读取的程序代码传送给计算机，将计算机的输出以纸质形式打印出来。tty是teletype的缩写，后来便成了终端设备的代名词。<a id="more"></a></p>
-<h1 id="串行端口终端"><a href="#串行端口终端" class="headerlink" title="串行端口终端"></a>串行端口终端</h1><p>&emsp;&emsp;与计算机串行端口（RS-232）连接的终端设备，对应的设备文件名称为/dev/tty（或/dev/cu）+类型+设备编号，如/dev/ttyS0，S表示设备类型，0为指定类型下的设备编号。这里的串行端口可以是通过硬件或软件模拟的，如USB转串口，虚拟串口。<br><img src="1.png"></p>
-<h1 id="伪终端"><a href="#伪终端" class="headerlink" title="伪终端"></a>伪终端</h1><p>&emsp;&emsp;成对存在的逻辑设备，包括主、从设备，可以为主、从设备上的应用程序提供一种双向通信管道，从设备上的应用进程可以像使用真实终端一样从伪终端读入数据（或输出信息）。Linux支持BSD和system V两种风格的伪终端设备，BSD风格下伪终端是系统预创建的，**/dev/ptyXY表示主设备，/dev/ttyXY表示从设备，**其中，X、Y分别属于字符集{{p-z},{a-e}}和{{0-9},{a-f}}。system V风格（又称为UNIX 98）下伪终端是动态创建的，所有的主设备对应的设备文件都是/dev/ptmx（主设备号为5，次设备号为2），而从设备对应的设备文件都位于/dev/pts/目录下，以设备的数字编号命名（如/dev/pts/0）。<br><img src="2.png"><br><img src="3.png"></p>
-<h1 id="控制台终端"><a href="#控制台终端" class="headerlink" title="控制台终端"></a>控制台终端</h1><p>&emsp;&emsp;提供系统管理接口的终端设备，读取管理员的操作指令，输出系统运行信息（应用程序、系统程序、内核等）。控制台对应的设备文件名称为**/dev/console<strong>，Linux系统中可以在内核启动时</strong>指定控制台对应的终端设备（比如ttyS0）**，对console文件的操作会转义为对实际终端设备的操作。控制台是可选的Linux内核配置项，大多数嵌入式系统并不支持控制台（比如手机），在系统启动后直接提供一个用户操作界面。<br>&emsp;&emsp;控制台只允许单用户登录，一些类UNIX系统（如BSD、Linux、UnixWare等）中引入了虚拟控制台，也称为虚拟终端（VT），允许多个用户同时从不同的VT登录，创建相互隔离的系统会话。现行的Linux发行版本中一般会创建7个虚拟控制台，对应的设备文件依次为/dev/tty1-tty7，另外/dev/tty0指示当前虚拟控制台，用户可以通过按键Alt+F1-7进行控制台切换。虚拟控制台以显示器与键盘作为IO设备，linux系统缺省控制台为tty0，因此默认情况下，系统启动信息会在显示器上输出，用户从键盘输入登录信息。Linux系统允许将多个设备指定为控制台，此时系统信息会在指定的多个设备上同时输出，但输入只能从最后指定的终端设备上读取。</p>
-<h1 id="控制终端"><a href="#控制终端" class="headerlink" title="控制终端"></a>控制终端</h1><p>&emsp;&emsp;<strong>任何系统会话都基于一个特定终端，即为会话发起进程的控制终端。</strong>发起会话的进程为会话的头进程，头进程的进程组ID与会话ID都等于头进程的PID，通过fork调用生成的子进程会继承父进程的会话ID、进程组ID和控制终端属性。/dev/tty表示当前进程的控制终端，主设备号为5，次设备号0。</p>
-<p>&emsp;&emsp;tty命令可以查看当前会话所使用的实际终端设备，ps ax命令可以查看系统中所有进程的控制终端（如果程序没有控制终端，如内核线程、守护进程，TTY一栏显示为“？”）。<br><img src="4.png"></p>
-<p>通过ioctl调用对/dev/tty设置TIOCNOTTY标记将使得调用进程与其控制终端脱离，如果调用进程为会话头进程，当前会话的所有进程都会丢失控制终端，在后台运行的守护进程需要使用这种调用。setsid调用可以使调用进程（不能是头进程）在新会话中运行，与当前会话控制终端脱离，并成为新会话的头进程，此时调用进程将不具有控制终端。当系统会话因外部原因异常终止时（如网络故障导致telnet连接断开），会话关联的所有进程将失去控制终端。</p>
+        <h1 id="一、什么是工厂模式"><a href="#一、什么是工厂模式" class="headerlink" title="一、什么是工厂模式"></a>一、什么是工厂模式</h1><p>&emsp;&emsp;这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。<a id="more"></a> 简单来说，工厂模式使用了C++多态的特性，将存在继承关系的类，通过一个工厂类创建对应的子类（派生类）对象。在项目复杂的情况下，可以便于子类对象的创建。</p>
+<p>&emsp;&emsp;本文介绍FreeNOS中一种工厂模式的设计方法，并通过实例来学习工厂模式。</p>
+<h1 id="二、工厂模式模板类实现"><a href="#二、工厂模式模板类实现" class="headerlink" title="二、工厂模式模板类实现"></a>二、工厂模式模板类实现</h1><p>&emsp;&emsp;工厂模式模板类设计为一个头文件，具体内容<strong>Factory.h</strong>如下： </p>
+<pre><code>/**
+ * 工厂设计模式
+ */
+#ifndef _FACTORY_H
+#define _FACTORY_H
+
+/**
+ * 工厂设计模式：提供一个标准的创建函数
+ */
+template &lt;class T&gt; class Factory
+&#123;
+public:
+    static T* create()
+    &#123;
+        return new T();
+    &#125;
+&#125;;
+
+/**
+ * 抽象工厂设计模式：提供一个创建函数定义
+ */
+template &lt;class T&gt; class AbstractFactory
+&#123;
+public:
+    static T* create();
+&#125;;
+
+#endif</code></pre>
+<h1 id="三、测试代码"><a href="#三、测试代码" class="headerlink" title="三、测试代码"></a>三、测试代码</h1><pre><code>#include &lt;iostream&gt;
+#include &quot;Factory.h&quot; 
+
+using namespace std;
+
+/**
+ * 抽象产品角色 
+ */
+class MobilePhone
+&#123;
+public:
+    virtual ~MobilePhone()
+    &#123;
+
+    &#125;;
+    virtual void show() = 0;
+&#125;;
+
+/**
+ * 具体产品角色1 
+ */
+class HuaweiMobilePhone : public MobilePhone
+&#123;
+public:
+    HuaweiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;华为手机已创建&quot; &lt;&lt; endl;
+    &#125;
+    ~HuaweiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;华为手机已报废&quot; &lt;&lt; endl;
+    &#125;    
+    void show()
+    &#123;
+        cout &lt;&lt; &quot;我是华为手机&quot; &lt;&lt; endl;
+    &#125;
+&#125;;
+
+/**
+ * 具体产品角色2 
+ */
+class XiaomiMobilePhone : public MobilePhone
+&#123;
+public:
+    XiaomiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;小米手机已创建&quot; &lt;&lt; endl;
+    &#125;
+    ~XiaomiMobilePhone()
+    &#123;
+        cout &lt;&lt; &quot;小米手机已报废&quot; &lt;&lt; endl;
+    &#125;    
+    void show()
+    &#123;
+        cout &lt;&lt; &quot;我是小米手机&quot; &lt;&lt; endl;
+    &#125;
+&#125;;
+
+/**
+ * 具体手机工厂1
+ * 缺点：增加产品时，这里还要增加新的创建方法
+ */ 
+class MobilePhoneFactory : public Factory&lt;MobilePhoneFactory&gt;
+&#123;
+public:
+    MobilePhoneFactory()
+    &#123;
+        cout &lt;&lt; &quot;手机工厂已创建&quot; &lt;&lt; endl;    
+    &#125;
+    ~MobilePhoneFactory()
+    &#123;
+        cout &lt;&lt; &quot;手机工厂已破产&quot; &lt;&lt; endl;
+    &#125;
+
+    // 提供创建产品方法 
+    MobilePhone* createHuaweiMobilePhone()
+    &#123;
+        return new HuaweiMobilePhone();
+    &#125;
+    MobilePhone* createXiaomiMobilePhone()
+    &#123;
+        return new XiaomiMobilePhone();
+    &#125;
+&#125;;
+
+/**
+ * 具体高级工厂2
+ * 特点：增加产品时，无需修改这里
+ * @param T1 产品抽象类
+ * @param T2 产品具体类 
+ */ 
+template &lt;class T1, class T2&gt; class AdvanceFactory : public Factory&lt;AdvanceFactory&lt;T1, T2&gt;&gt;
+&#123;
+public:
+    AdvanceFactory()
+    &#123;
+        cout &lt;&lt; &quot;高级工厂已创建&quot; &lt;&lt; endl;
+    &#125;
+    ~AdvanceFactory()
+    &#123;
+        cout &lt;&lt; &quot;高级工厂已破产&quot; &lt;&lt; endl;
+    &#125;
+    T1* createProduct()
+    &#123;
+        return new T2;
+    &#125; 
+&#125;; 
+typedef AdvanceFactory&lt;MobilePhone, HuaweiMobilePhone&gt; HuaweiFactory_t;
+typedef AdvanceFactory&lt;MobilePhone, XiaomiMobilePhone&gt; XiaomiFactory_t;     
+
+int main(int argc, char** argv) 
+&#123;
+    // 创建工厂 
+    MobilePhoneFactory *pMobilePhoneFactory = MobilePhoneFactory::create();
+
+    // 创建和报废产品1 
+    MobilePhone *pMobilePhone1 = pMobilePhoneFactory-&gt;createHuaweiMobilePhone();
+    pMobilePhone1-&gt;show();
+    delete pMobilePhone1;
+
+    // 创建和报废产品2 
+    MobilePhone *pMobilePhone2 = pMobilePhoneFactory-&gt;createXiaomiMobilePhone();
+    pMobilePhone2-&gt;show();
+    delete pMobilePhone2;
+
+    // 工厂破产 
+    delete pMobilePhoneFactory;
+
+    /********************************分割线**********************************/
+
+    HuaweiFactory_t *pHuaweiFactory = HuaweiFactory_t::create();
+    MobilePhone *pMobilePhone3 = pHuaweiFactory-&gt;createProduct();
+    pMobilePhone3-&gt;show();
+    delete pMobilePhone3;
+    delete pHuaweiFactory;
+
+    XiaomiFactory_t *pXiaomiFactory = XiaomiFactory_t::create();
+    MobilePhone *pMobilePhone4 = pXiaomiFactory-&gt;createProduct();
+    pMobilePhone4-&gt;show();
+    delete pMobilePhone4;
+    delete pHuaweiFactory;
+&#125;</code></pre>
 
     </div>
 
@@ -330,19 +485,19 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FreeNOS%E7%AC%94%E8%AE%B0/" rel="tag"># FreeNOS笔记</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2018/09/21/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A0%87%E5%87%86IO/" rel="prev" title="linux学习笔记(4)—标准I/O">
-                  <i class="fa fa-chevron-left"></i> linux学习笔记(4)—标准I/O
+                <a href="/2021/04/04/FreeNOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-C-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="prev" title="FreeNOS学习笔记(3)-C++单例模式">
+                  <i class="fa fa-chevron-left"></i> FreeNOS学习笔记(3)-C++单例模式
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/02/21/linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%90%AF%E5%8A%A8/" rel="next" title="linux学习笔记(6)-启动">
-                  linux学习笔记(6)-启动 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
