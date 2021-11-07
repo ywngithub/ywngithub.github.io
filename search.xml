@@ -1263,4 +1263,100 @@ int main(int argc, char** argv)
         <tag>LLVM</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Linux段错误调试跟踪记录</title>
+    <url>/2021/07/26/Linux%E6%AE%B5%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E8%B7%9F%E8%B8%AA%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>&emsp;&emsp;有些时候我们在实现一段C/C++代码的时候，由于对一个非法内存进行了误操作，在程序运行的过程中，出现了”段错误”。这种问题很多人经常遇到。遇到这种问题是非常无语的，只是提示了”段错误”，接着什么都没有，如果我们一味的去看代码找太疼苦了，因为我们都相信自己写的代码没问题，现实就是现实。下面介绍一种方法，可以有效的定位出现”段错误的地方”。 <a id="more"></a><br>&emsp;&emsp;当我们的程序崩溃时，内核有可能把该程序当前内存映射到core文件里，方便程序员找到程序出现问题的地方。<br>&emsp;&emsp;什么是core dump?<br>&emsp;&emsp;core的意思是内存，dump的意思是扔出来，堆出来。<br>&emsp;&emsp;使用Linux core文件调试段错误的命令如下：<br><img src="1.jpeg"><br>其中参数含义：  </p>
+<blockquote>
+<p>ulimit -c unlimited         设置core文件生成的大小，当前设置为“无穷大”，设置为0表示不生成<br>echo “core-%e-%p-%t” &gt; /proc/sys/kernel/core_pattern  设置core文件生成的格式，%e表示进程/线程名称，%p表示进程号，%t表示生成时间（UTC格式）  </p>
+</blockquote>
+<p>&emsp;&emsp;当程序出现段错误时，在本地目录会生成一个core开头的文件，如下：<br><img src="2.jpeg">  </p>
+<p>&emsp;&emsp;把这个文件拷贝到Ubuntu上，使用命令arm-linux-gnueabihf-gdb 【程序文件】 【core文件】<br>即可找到出错的位置。<br><img src="4.jpeg"><br><img src="5.jpeg">  </p>
+<p>&emsp;&emsp;注意：Debug版本才可以记录行的位置，Release版本只能记录函数名称。</p>
+]]></content>
+      <categories>
+        <category>调试</category>
+      </categories>
+      <tags>
+        <tag>段错误</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>USB相关</title>
+    <url>/2021/08/14/USB%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<h1 id="USB分层"><a href="#USB分层" class="headerlink" title="USB分层"></a>USB分层</h1><p>USB在逻辑上被分为三层：信号层、协议层、数据传输层<a id="more"></a><br><img src="1.png">  </p>
+<p>信号层  </p>
+<blockquote>
+<p>1.设备速度的检测<br>2.信号的编码  </p>
+</blockquote>
+<p>协议层<br>&emsp;&emsp;包是USB系统中信息传输的基本单位，所有的数据都是经过打包后再总线上传输的。<br>每个包由6部分组成：同步字段(SYNC)、包标识符(PID)、地址字段(ADDR)、数据字段(DATA，包括帧号)、检验字段(CRC)、包结束(EOP)。<br><img src="2.png">  </p>
+<p>数据传输层<br>USB提供4种传输方式  </p>
+<blockquote>
+<p>控制传输(control transfers):突发，非周期性，由主机发起，用于命令和状态的传输<br>同步传输(isochronous transfers):周期性，持续性的传输，用于传输与时效相关的信息，并且在数据中保存时间戳的信息<br>中断传输(interrput transfers):周期性，低频率，允许有限延迟的通信<br>  大容量数据传输(bulk transfers):非周期性，大容量突发数据的通信，数据可以占用任意带宽，并容忍延迟   </p>
+</blockquote>
+<p>USB枚举过程<br><img src="3.png">  </p>
+<p>USB HID通信<br>&emsp;&emsp;USB<strong>报告描述符</strong>是HID设备的一个描述符，USB HID设备通过<strong>报告</strong>来传输数据，报告有<strong>输入报告和输出报告</strong>，输入报告是USB设备发送给主机的，输出报告是主机发送给USB设备的，报告是一个数据包，输入报告是通过中断输入端点输入的，而输出报告有点区别，当没有中断输出端点时，可以通过控制输出端点0 发送，当有中断输出端点时，通过中断输出端点发出。<br>&emsp;&emsp;主机使用获取报告<strong>描述符命令</strong>来获取报告描述符，<strong>一个报告描述符可以描述多个报告</strong>，不同的报告通过<strong>报告ID</strong> 来识别，报告ID 在报告最前面，即第一个字节。当报告描述符中没有规定报告ID 时，报告中就没有ID 字段，开始就是数据。  </p>
+]]></content>
+      <categories>
+        <category>USB相关</category>
+      </categories>
+      <tags>
+        <tag>USB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>cmake基础</title>
+    <url>/2021/07/15/cmake%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>&emsp;&emsp;Make是一个跨平台的安装（编译）工具，可以用简单的语句来描述所有平台的安装(编译过程)。他能够输出各种各样的makefile或者project文件，能测试编译器所支持的C++特性,类似UNIX下的automake。 <a id="more"></a></p>
+<h1 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h1><blockquote>
+<p>模块模式：<br>（1）先到CMAKE_MODULE_PATH目录中查找Find<name>.cmake文件。<br>（2）再到自己的模块目录<CMAKE_ROOT>/share/cmake-x.y/Modules/查找。<br>配置模式：<br>（1）如果模块模式找不到，则会查找 <Name>Config.cmake 或者<lower-case-name>-config.cmake文件。  </p>
+</blockquote>
+<p>不管使用哪一种模式，只要找到包，就会定义下面这些变量：  </p>
+<blockquote>
+<p>NAME_FOUND<br>   &emsp;&emsp;NAME_INCLUDE_DIRS or NAME_INCLUDES<br>   &emsp;&emsp;NAME_LIBRARIES or NAME_LIBRARIES or NAME_LIBS<br>   &emsp;&emsp;NAME_DEFINITIONS<br>这些都在 Findname.cmake 文件中。  </p>
+</blockquote>
+<p>&emsp;&emsp;现在，在你的代码的顶层目录中的 CMakeLists.txt 文件中，我们检查变量<NAME>_FOUND 来确定包是否被找到 。如果找到这个包，我们用 NAME_INCLUDE_DIRS 调用 include_directories() 命令，用 NAME_LIBRARIES 调用 target_link_libraries() 命令。  </p>
+]]></content>
+      <categories>
+        <category>cmake</category>
+      </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>conan基础</title>
+    <url>/2021/08/07/conan%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><blockquote>
+<p>pip install conan</p>
+</blockquote>
+<h1 id="2-获取远程列表"><a href="#2-获取远程列表" class="headerlink" title="2.获取远程列表"></a>2.获取远程列表</h1><blockquote>
+<p>conan remote list</p>
+</blockquote>
+<h1 id="3-增加远程库"><a href="#3-增加远程库" class="headerlink" title="3.增加远程库"></a>3.增加远程库</h1><blockquote>
+<p>conan remote add conan-transit <a href="https://conan-transit.bintray.com/">https://conan-transit.bintray.com</a></p>
+</blockquote>
+<h1 id="4-管理依赖包"><a href="#4-管理依赖包" class="headerlink" title="4.管理依赖包"></a>4.管理依赖包</h1><p>包的命令规则：包名/版本@用户/渠道  </p>
+<blockquote>
+<p>conan install glog/0.4.0@bincrafters/stable -r conan-center<br>conan remove glog/0.4.0@bincrafters/stable  </p>
+</blockquote>
+<p>自动拉取依赖  </p>
+<blockquote>
+<p>conan install ..  </p>
+</blockquote>
+<blockquote>
+<p>-pr = profile<br>–build=missing 服务器上没有的话就编译，一般有源码  </p>
+</blockquote>
+<p>在库这里改完代码验证  </p>
+<blockquote>
+<p>conan create -s build_type=Release -o clients=True . “mosquitto/2.0.10@screenshare/stable” –profile=t31-mips-linux  </p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>conan构建</category>
+      </categories>
+      <tags>
+        <tag>conan</tag>
+      </tags>
+  </entry>
 </search>
