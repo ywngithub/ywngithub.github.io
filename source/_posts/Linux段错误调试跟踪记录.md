@@ -20,7 +20,7 @@ categories: 调试
 
 &emsp;&emsp;把这个文件拷贝到Ubuntu上，使用命令arm-linux-gnueabihf-gdb 【程序文件】 【core文件】
 即可找到出错的位置。
+![](3.jpeg)  
 ![](4.jpeg)  
-![](5.jpeg)  
 
 &emsp;&emsp;注意：Debug版本才可以记录行的位置，Release版本只能记录函数名称。
