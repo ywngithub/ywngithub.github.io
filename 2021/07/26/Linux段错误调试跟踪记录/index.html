@@ -32,10 +32,10 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2021/07/26/Linux%E6%AE%B5%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E8%B7%9F%E8%B8%AA%E8%AE%B0%E5%BD%95/1.jpeg">
 <meta property="og:image" content="http://example.com/2021/07/26/Linux%E6%AE%B5%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E8%B7%9F%E8%B8%AA%E8%AE%B0%E5%BD%95/2.jpeg">
+<meta property="og:image" content="http://example.com/2021/07/26/Linux%E6%AE%B5%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E8%B7%9F%E8%B8%AA%E8%AE%B0%E5%BD%95/3.jpeg">
 <meta property="og:image" content="http://example.com/2021/07/26/Linux%E6%AE%B5%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E8%B7%9F%E8%B8%AA%E8%AE%B0%E5%BD%95/4.jpeg">
-<meta property="og:image" content="http://example.com/2021/07/26/Linux%E6%AE%B5%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E8%B7%9F%E8%B8%AA%E8%AE%B0%E5%BD%95/5.jpeg">
 <meta property="article:published_time" content="2021-07-26T12:15:09.000Z">
-<meta property="article:modified_time" content="2021-11-07T15:01:10.337Z">
+<meta property="article:modified_time" content="2021-11-07T15:19:29.209Z">
 <meta property="article:author" content="严薇南">
 <meta property="article:tag" content="段错误">
 <meta name="twitter:card" content="summary">
@@ -312,7 +312,7 @@
 <p>ulimit -c unlimited         设置core文件生成的大小，当前设置为“无穷大”，设置为0表示不生成<br>echo “core-%e-%p-%t” &gt; /proc/sys/kernel/core_pattern  设置core文件生成的格式，%e表示进程/线程名称，%p表示进程号，%t表示生成时间（UTC格式）  </p>
 </blockquote>
 <p>&emsp;&emsp;当程序出现段错误时，在本地目录会生成一个core开头的文件，如下：<br><img src="2.jpeg">  </p>
-<p>&emsp;&emsp;把这个文件拷贝到Ubuntu上，使用命令arm-linux-gnueabihf-gdb 【程序文件】 【core文件】<br>即可找到出错的位置。<br><img src="4.jpeg"><br><img src="5.jpeg">  </p>
+<p>&emsp;&emsp;把这个文件拷贝到Ubuntu上，使用命令arm-linux-gnueabihf-gdb 【程序文件】 【core文件】<br>即可找到出错的位置。<br><img src="3.jpeg"><br><img src="4.jpeg">  </p>
 <p>&emsp;&emsp;注意：Debug版本才可以记录行的位置，Release版本只能记录函数名称。</p>
 
     </div>

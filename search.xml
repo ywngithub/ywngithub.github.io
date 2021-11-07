@@ -1271,7 +1271,7 @@ int main(int argc, char** argv)
 <p>ulimit -c unlimited         设置core文件生成的大小，当前设置为“无穷大”，设置为0表示不生成<br>echo “core-%e-%p-%t” &gt; /proc/sys/kernel/core_pattern  设置core文件生成的格式，%e表示进程/线程名称，%p表示进程号，%t表示生成时间（UTC格式）  </p>
 </blockquote>
 <p>&emsp;&emsp;当程序出现段错误时，在本地目录会生成一个core开头的文件，如下：<br><img src="2.jpeg">  </p>
-<p>&emsp;&emsp;把这个文件拷贝到Ubuntu上，使用命令arm-linux-gnueabihf-gdb 【程序文件】 【core文件】<br>即可找到出错的位置。<br><img src="4.jpeg"><br><img src="5.jpeg">  </p>
+<p>&emsp;&emsp;把这个文件拷贝到Ubuntu上，使用命令arm-linux-gnueabihf-gdb 【程序文件】 【core文件】<br>即可找到出错的位置。<br><img src="3.jpeg"><br><img src="4.jpeg">  </p>
 <p>&emsp;&emsp;注意：Debug版本才可以记录行的位置，Release版本只能记录函数名称。</p>
 ]]></content>
       <categories>
@@ -1327,7 +1327,8 @@ int main(int argc, char** argv)
   <entry>
     <title>conan基础</title>
     <url>/2021/08/07/conan%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><blockquote>
+    <content><![CDATA[<a id="more"></a>  
+<h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><blockquote>
 <p>pip install conan</p>
 </blockquote>
 <h1 id="2-获取远程列表"><a href="#2-获取远程列表" class="headerlink" title="2.获取远程列表"></a>2.获取远程列表</h1><blockquote>
