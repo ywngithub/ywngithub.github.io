@@ -1294,8 +1294,16 @@ int main(int argc, char** argv)
 <blockquote>
 <p>控制传输(control transfers):突发，非周期性，由主机发起，用于命令和状态的传输<br>同步传输(isochronous transfers):周期性，持续性的传输，用于传输与时效相关的信息，并且在数据中保存时间戳的信息<br>中断传输(interrput transfers):周期性，低频率，允许有限延迟的通信<br>  大容量数据传输(bulk transfers):非周期性，大容量突发数据的通信，数据可以占用任意带宽，并容忍延迟   </p>
 </blockquote>
-<p>USB枚举过程<br><img src="3.png">  </p>
-<p>USB HID通信<br>&emsp;&emsp;USB<strong>报告描述符</strong>是HID设备的一个描述符，USB HID设备通过<strong>报告</strong>来传输数据，报告有<strong>输入报告和输出报告</strong>，输入报告是USB设备发送给主机的，输出报告是主机发送给USB设备的，报告是一个数据包，输入报告是通过中断输入端点输入的，而输出报告有点区别，当没有中断输出端点时，可以通过控制输出端点0 发送，当有中断输出端点时，通过中断输出端点发出。<br>&emsp;&emsp;主机使用获取报告<strong>描述符命令</strong>来获取报告描述符，<strong>一个报告描述符可以描述多个报告</strong>，不同的报告通过<strong>报告ID</strong> 来识别，报告ID 在报告最前面，即第一个字节。当报告描述符中没有规定报告ID 时，报告中就没有ID 字段，开始就是数据。  </p>
+<h1 id="USB枚举"><a href="#USB枚举" class="headerlink" title="USB枚举"></a>USB枚举</h1><p><img src="3.png">  </p>
+<h1 id="USB-HID通信"><a href="#USB-HID通信" class="headerlink" title="USB HID通信"></a>USB HID通信</h1><p>&emsp;&emsp;USB<strong>报告描述符</strong>是HID设备的一个描述符，USB HID设备通过<strong>报告</strong>来传输数据，报告有<strong>输入报告和输出报告</strong>，输入报告是USB设备发送给主机的，输出报告是主机发送给USB设备的，报告是一个数据包，输入报告是通过中断输入端点输入的，而输出报告有点区别，当没有中断输出端点时，可以通过控制输出端点0 发送，当有中断输出端点时，通过中断输出端点发出。<br>&emsp;&emsp;主机使用获取报告<strong>描述符命令</strong>来获取报告描述符，<strong>一个报告描述符可以描述多个报告</strong>，不同的报告通过<strong>报告ID</strong> 来识别，报告ID 在报告最前面，即第一个字节。当报告描述符中没有规定报告ID 时，报告中就没有ID 字段，开始就是数据。  </p>
+<h1 id="USB接口速度"><a href="#USB接口速度" class="headerlink" title="USB接口速度"></a>USB接口速度</h1><blockquote>
+<p>低速1.5M<br>全速12M<br>高速480M</p>
+</blockquote>
+<p>&emsp;&emsp;使用命令<strong>cat /sys/kernel/debug/usb/devices</strong>查看速度<br><img src="4.png">  </p>
+<h1 id="USB主机控制器"><a href="#USB主机控制器" class="headerlink" title="USB主机控制器"></a>USB主机控制器</h1><blockquote>
+<p>• UHCI: Universal Host Controller Interface (通用主机控制接口, USB1.0/1.1)<br>• OHCI: Open Host Controller Interface (开放主机控制接口,USB1.0/1.1)<br>• EHCI: Enhanced Host Controller Interface (用于USB2.0高速设备的“增强主机控制接口”)   </p>
+</blockquote>
+<p>&emsp;&emsp;根据D+,D-上的电阻来区分是全速设备还是低速设备。<br><img src="5.png"><br>&emsp;&emsp;高速设备初始是以一个全速设备的身份出现的，即和全速设备一样，D+线上有一个1.5k的上拉电阻。USB2.0的hub把它当作一个全速设备，之后，<strong>hub和设备通过一系列握手信号确认双方的身份</strong>。在这里对速度的检测是双向的，比如高速的hub需要检测所挂上来的设备是高速、全速还是低速，高速的设备需要检测所连上的hub是USB2.0的还是1.x的，如果是前者，就进行一系列动作切到高速模式工作，如果是后者，就以全速模式工作。</p>
 ]]></content>
       <categories>
         <category>USB相关</category>
@@ -1327,7 +1335,8 @@ int main(int argc, char** argv)
   <entry>
     <title>conan基础</title>
     <url>/2021/08/07/conan%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<a id="more"></a>  
+    <content><![CDATA[<p>&emsp;&emsp;Conan是一个分散的包管理器，具有客户端 - 服务器架构。这意味着客户端可以从不同的服务器（“远程”）获取软件包以及上传软件包，类似于git远程控制器的“git”推拉模型。</p>
+<a id="more"></a>  
 <h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h1><blockquote>
 <p>pip install conan</p>
 </blockquote>
@@ -1358,6 +1367,96 @@ int main(int argc, char** argv)
       </categories>
       <tags>
         <tag>conan</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>h264协议相关</title>
+    <url>/2021/10/18/h264%E5%8D%8F%E8%AE%AE%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<p>&emsp;&emsp;H.264，同时也是MPEG-4第十部分，是由ITU-T视频编码专家组（VCEG）和ISO/IEC动态图像专家组（MPEG）联合组成的联合视频组（JVT，Joint Video Team）提出的高度压缩数字视频编解码器标准。这个标准通常被称之为H.264/AVC（或者AVC/H.264或者H.264/MPEG-4 AVC或MPEG-4/H.264 AVC）而明确的说明它两方面的开发者。<br> <a id="more"></a></p>
+<p>&emsp;&emsp;H264结构中，一个视频图像编码后的数据叫做一帧，一帧由一个片（slice）或多个片组成，一个片由一个或多个宏块（MB）组成，一个宏块由16x16的yuv数据组成。宏块作为H264编码的基本单位。<br><img src="1.png">   </p>
+<blockquote>
+<p>SPS:序列参数集（Sequence parameter set）SPS中保存了⼀组编码视频序列(Coded video sequence)的全局参数。<br>PPS：图像参数集(Picture parameter set) ，对应的是一个序列中某一幅图像或者某几幅图像的参数。<br>I帧：帧内编码帧，可独立解码生成完整的图片。<br>P帧: 前向预测编码帧，需要参考其前面的一个I 或者B 来生成一张完整的图片。<br>B帧: 双向预测内插编码帧，则要参考其前一个I或者P帧及其后面的一个P帧来生成一张完整的图片。  </p>
+</blockquote>
+<p><strong>发I帧之前，至少要发一次SPS和PPS。</strong></p>
+<p>3字节的0x000001只有一种场合下使用，就是一个完整的帧被编为多个slice（片）的时候，包含这些slice的NALU 使用3字节起始码。其余场合都是4字节0x00000001的。  </p>
+]]></content>
+      <categories>
+        <category>h264协议相关</category>
+      </categories>
+      <tags>
+        <tag>h264</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux知识随机</title>
+    <url>/2021/09/07/linux%E7%9F%A5%E8%AF%86%E9%9A%8F%E8%AE%B0/</url>
+    <content><![CDATA[<p>&emsp;&emsp;一些linux相关知识，持续更新…<br> <a id="more"></a></p>
+<h1 id="Linux命令行参数前加双杠–-单杠-和不加杠-的区别"><a href="#Linux命令行参数前加双杠–-单杠-和不加杠-的区别" class="headerlink" title="Linux命令行参数前加双杠–,单杠-和不加杠-的区别"></a>Linux命令行参数前加双杠–,单杠-和不加杠-的区别</h1><p>①　参数前单杠的表明后面的参数是字符形式；<br>②　参数前双杠的则表明后面的参数是单词形式。<br>①　参数前有杠的是System V风格。<br>②　参数前没有杠的是BSD风格。<br>System V和BSD两种风格的区别主要是：<br>系统启动过程中 kernel 最后一步调用的是 init 程序，init 程序的执行有两种风格，即 System V 和 BSD。<br>System V 风格中 init 调用 /etc/inittab，BSD 风格调用 /etc/rc，它们的目的相同，都是根据 runlevel 执行一系列的程序。<br> <br>Linux 系统把 /lib 和 /usr/lib 两个目录作为默认的库搜索路径<br>===========<br>设置库文件的搜索路径有两种方法：<br>01.在环境变量 LD_LIBRARY_PATH 中指明库的搜索路径。<br>02.在 /etc/ld.so.conf 文件中添加库的搜索路径。然后运行 ldconfig 命令更新 /etc/ld.so.cache 文件之后才可以将自己可能存放库文件的路径都加入到/etc/ld.so.conf中是明智的选择，<br>添加方法也极其简单，将库文件的绝对路径直接写进去就OK了，一行一个。<br> <br>socat是一个netcat(nc)的替代产品，可以称得上nc++。<br>===============<br>socat的地址类型很多，有ip, tcp, udp, ipv6,pipe,exec,system,open,proxy,openssl等<br> <br>1、socat串口转发<br>socat udp4-listen:11161,reuseaddr,fork UDP:[监控服务器IP]:161<br> <br>udp4-listen：在本地建立的是一个udp ipv4协议的监听端口；<br>reuseaddr，绑定本地一个端口；<br>fork，设定多链接模式，即当一个链接被建立后，自动复制一个同样的端口再进行监听<br> <br>AT串口/dev/ttyUSB1映射到5555端口：<br>sudo socat -d -d /dev/ttyUSB0,raw,nonblock,ignoreeof,cr,echo=0 TCP4-LISTEN:5555,reuseaddr(实测可用，创建了一个TCP服务器。端口5555)<br>sudo socat file:/dev/ttyS0,b115200,inlcr=1  tcp-listen:5555<br>转发到minicom终端： socat /dev/ttyUSB1,raw,nonblock,ignoreeof,cr,echo=0 /dev/ttyS1,raw<br>转发到终端(电脑端)： socat /dev/ttyUSB1,raw,nonblock,ignoreeof,cr,echo=0 /dev/tty,raw<br> <br>2、网络转发<br>socat TCP4-LISTEN:188,reuseaddr,fork TCP4:192.168.1.22:123 &amp;<br> <br>（在本地监听188端口，并将请求转发至192.168.1.22的123端口）<br> <br>TCP4-LISTEN：在本地建立的是一个TCP ipv4协议的监听端口；<br>reuseaddr：绑定本地一个端口；<br>fork：设定多链接模式，即当一个链接被建立后，自动复制一个同样的端口再进行监听<br> <br>socat启动监听模式会在前端占用一个shell，因此需使其在后台执行。<br> <br>3、终端绑定<br>Setting up two serial lines<br>now on a terminal window run socat<br>socat -d -d PTY PTY:<br>The output should look like the following one:<br>2013/09/20 14:07:10 socat[6871] N PTY is /dev/pts/5<br>2013/09/20 14:07:10 socat[6871] N PTY is /dev/pts/6<br>2013/09/20 14:07:10 socat[6871] N starting data transfer loop with FDs [3,3] and [5,5]<br>Now you have two “serial” ports connected back to back<br>Testing the ports<br>open a new terminal and issue the following command<br>sudo cat /dev/pts/5<br>open a new terminal and issue the following command<br>sudo echo “Hello World” &gt; /dev/pts/6<br>On the first terminal you should see the string “Hello World”.<br> <br>终端<br>=============<br>一般ttyS0对应com1，ttyS1对应com2<br>查看串口驱动：cat /proc/tty/drivers/serial<br>查看串口设备：dmesg | grep ttyS*<br>查看USB信息：dmesg | tail<br> <br>sh首次链接出现yes/no提示<br>================<br>首次进行ssh链接时，出现以下提示：<br>The authenticity of host ‘58.221.186.137 (58.221.186.137)’ can’t be established.  RSA key fingerprint is   a0:00:d3:33:54:96:40:03:ff:ad:15:a9:59:22:f4:2a.<br>Are you sure you want to continue connecting (yes/no)?<br>修改文件： /etc/ssh/ssh_config<br>在文件中添加如下信息：StrictHostKeyChecking no<br> <br>段错误位置寻找<br>===================<br>ulimit -c unlimited<br>echo “core-%e-%p-%t” &gt; /proc/sys/kernel/core_pattern<br>/usr/gdbserver/bin/arm-linux-gnueabihf-gdb DNYS-4G_APP core        // 复制到Ubuntu执行<br>where/bt         // gdb窗口输入<br> <br>.gdbinit文件设置gdb配置<br>set auto-load safe-path /<br>set solib-search-path /home/ywn/code/dnys-2d_app/DNYS-2D_APP_Qt/DNYS-4G_APP/Expand/lib/ARM<br>set solib-search-path /usr/local/Qt5.12_arm/lib/<br> <br>去除可执行文件中的符号信号<br>=================<br>strip  a.out  </p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>rtp协议相关</title>
+    <url>/2021/10/02/rtp%E5%8D%8F%E8%AE%AE%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<p>&emsp;&emsp;实时传输协议（Real-time Transport Protocol或简写RTP）是一个网络传输协议，它是由IETF的多媒体传输工作小组1996年在RFC 1889中公布的。<br> <a id="more"></a></p>
+<p>RTP头部协议格式图<br><img src="1.png"><br>版本号（V）：2比特，用来标志使用的RTP版本。<br>填充位（P）：1比特，如果该位置位，则该RTP包的尾部就包含附加的填充字节。<br>扩展位（X）：1比特，如果该位置位的话，RTP固定头部后面就跟有一个扩展头部。<br>CSRC计数器（CC）：4比特，含有固定头部后面跟着的CSRC的数目。<br>标记位（M）：1比特,该位的解释由配置文档（Profile）来承担.<br>载荷类型（PT）：7比特，标识了RTP载荷的类型。<br>序列号（SN）：16比特，发送方在每发送完一个RTP包后就将该域的值增加1，接收方可以由该域检测包的丢失及恢复包序列。序列号的初始值是随机的。<br>时间戳：32比特，记录了该包中数据的第一个字节的采样时刻。在一次会话开始时，时间戳初始化成一个初始值。即使在没有信号发送时，时间戳的数值也要随时间而不断地增加（时间在流逝嘛）。时间戳是去除抖动和实现同步不可缺少的。<br>同步源标识符(SSRC)：32比特，同步源就是指RTP包流的来源。在同一个RTP会话中不能有两个相同的SSRC值。该标识符是随机选取的 RFC1889推荐了MD5随机算法。<br>贡献源列表（CSRC List）：0～15项，每项32比特，用来标志对一个RTP混合器产生的新包有贡献的所有RTP包的源。由混合器将这些有贡献的SSRC标识符插入表中。SSRC标识符都被列出来，以便接收端能正确指出交谈双方的身份。  </p>
+<p>RTP载荷H264码流：红色RTP协议头，黄色H264码流。<br><img src="2.png"><br>NAL全称Network Abstract Layer，即网络抽象层。在H.264/AVC视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL）。其中，前者负责有效表示视频数据的内容，而后者则负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL单元是NAL的基本语法结构，它包含一个字节的头信息和一系列来自VCL的称为原始字节序列载荷（RBSP）的字节流。  </p>
+<p>如果NALU对应的Slice为一帧的开始，则用4字节表示，即0x00000001；否则用3字节表示，0x000001。  </p>
+<p>每帧数据就是一个NAL单元（SPS与PPS除外）。在实际的H264数据帧中，往往帧前面带有00 00 00 01 或 00 00 01分隔符，一般来说编码器编出的首帧数据为PPS与SPS，接着为I帧……  </p>
+<p>NAL以NALU（NAL unit）为单元来支持编码数据在基于分组交换技术网络中传输。<br>NALU：定义了可用于基于分组和基于比特流系统的基本格式。<br>RTP封装：只针对基于NAL单元的本地NAL接口。  </p>
+]]></content>
+      <categories>
+        <category>rtp协议</category>
+      </categories>
+      <tags>
+        <tag>rtp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vim学习记录</title>
+    <url>/2021/03/25/vim%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>&emsp;&emsp;vim是一个字符终端编辑器，熟练使用可提高工作效率。<br> <a id="more"></a></p>
+<h1 id="单个单词命令"><a href="#单个单词命令" class="headerlink" title="单个单词命令"></a>单个单词命令</h1><blockquote>
+</blockquote>
+<p>x          删除<br>i           插入<br>a          增加<br>0          回到行首<br>h          光标左移<br>j           光标下移<br>k          光标上移<br>l           光标右移<br>%         跳括号（用于查找括号是否匹配）<br>y          复制命令<br>v          可视模式<br>A          调到行尾输入<br>I           跳到行首输入<br>=          缩进  </p>
+<h1 id="组合命令"><a href="#组合命令" class="headerlink" title="组合命令"></a>组合命令</h1><blockquote>
+</blockquote>
+<p>助记：d(delete)      w(word)       $(行末)<br>dd[p]      删除一行[粘贴]<br>de          删除到行末（保留最后字符）<br>dw         删除单词<br>d$          删除到行末（包含最后字符）  </p>
+<blockquote>
+</blockquote>
+<p>助记：c(change)      w(word)       $(行末)<br>cw          替换一个单词<br>c$           替换光标至行末<br>ce           替换单词（待比较与cw的区别）  </p>
+<blockquote>
+</blockquote>
+<p>u              撤销<br>U             撤销一行<br>Ctrl + r     前进  </p>
+<blockquote>
+</blockquote>
+<p>:行号        跳转到指定行  </p>
+<blockquote>
+</blockquote>
+<p>/  + n/N     搜索字符，向下/向上<br>? + n/N     搜索字符，向上/向下  </p>
+<blockquote>
+</blockquote>
+<p>Ctrl + o      跳向旧位置<br>Ctrl +  i      跳向新位置  </p>
+<h1 id="替换相关"><a href="#替换相关" class="headerlink" title="替换相关"></a>替换相关</h1><blockquote>
+</blockquote>
+<p>:%s/old/new/g  </p>
+<h1 id="其它辅助命令"><a href="#其它辅助命令" class="headerlink" title="其它辅助命令"></a>其它辅助命令</h1><blockquote>
+</blockquote>
+<p>grep -nr keyword *<br>vim +linenumbers filepath     例如：vim +8 src/comm_handler.h<br>:sp       上下分割窗口<br>:vs        左右分割窗口<br>ctrl+w    切换窗口<br>:only         关闭其它窗口保留主窗口<br>shirt + *     向下查找相同的单词<br>shirt + #     向上查找相同的单词<br>:! cmd       在vim中执行命令  </p>
+<h1 id="自动补全设置"><a href="#自动补全设置" class="headerlink" title="自动补全设置"></a>自动补全设置</h1><blockquote>
+</blockquote>
+<p>sudo apt-get install vim-addon-manager<br>sudo apt-get install vim-youcompleteme<br>vim-addons install youcompleteme  </p>
+]]></content>
+      <categories>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>vim</tag>
       </tags>
   </entry>
 </search>
